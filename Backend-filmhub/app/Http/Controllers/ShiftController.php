@@ -10,14 +10,19 @@ class ShiftController extends Controller
 {
     public function index()
     {
-        return Shift::all();
+        try {
+            $shift = Shift::all();
+            return response()->json(['message' => 'Successfully fetching shift', 'data' => $shift], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error fetching shift', 'error' => $e->getMessage()], 500);
+        }
     }
 
     public function show($shift_id)
     {
         try {
             $shift = Shift::findOrFail($shift_id);
-            return response()->json($shift, 200);
+            return response()->json(['message' => 'Successfully fetching shift', 'data' => $shift], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Error fetching shift', 'error' => $e->getMessage()], 500);
         }
