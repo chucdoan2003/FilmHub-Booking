@@ -1,0 +1,30 @@
+#trapezoid {
+  border-bottom: 100px solid red;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  height: 0;
+  width: 100px;
+}
+
+.ghe{
+    width: 35px;
+    height: 35px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 15px;
+    background-color: rgb(123, 122,122);
+    color: white;
+}
+
+.gheDaDat{
+    background-color: rgb(232, 76,76);
+    cursor: no-drop;
+}
+
+.gheDangDat{
+    background-color: rgb(18,176,18) !important;
+}
+
+.gheVip{
+    background-color: rgb(228, 74,8);
+}

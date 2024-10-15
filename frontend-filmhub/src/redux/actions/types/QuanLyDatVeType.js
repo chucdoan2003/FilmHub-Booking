@@ -1,0 +1,3 @@
+export const SET_CHI_TIET_PHONG_VE = 'SET_CHI_TIET_PHONG_VE';
+export const LAY_CHI_TIET_LICH_CHIEU = 'LAY_CHI_TIET_LICH_CHIEU';
+export const DAT_VE = 'DAT_VE';
