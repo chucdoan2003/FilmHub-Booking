@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AdminShiftController;
+use App\Http\Controllers\admin\AdminShiftController;
 use Illuminate\Support\Facades\Route;
 
 /*
