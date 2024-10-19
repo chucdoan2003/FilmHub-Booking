@@ -87,23 +87,19 @@ class UserController extends Controller
             ->first()
             ;
             if ($user) {
-                dd('user found'); // Không có dữ liệu
+               return response()->json([
+                    "message"=>"Get user succed",
+                    "RC"=>0,
+                    "data"=>UserResource::collection($user)
+                ], Response::HTTP_OK);
             } else {
-                dd('no User found'); // Có dữ liệu
+                return response()->json([
+                    "message"=>"Get user fails",
+                    "RC"=>-1,
+                ], Response::HTTP_NOT_FOUND);
             }
-                // return response()->json([
-                //     "message"=>"Get user succed",
-                //     "RC"=>0,
-                //     "data"=>UserResource::collection($user)
-                // ], Response::HTTP_OK);
-            // else{
-
-            //     return response()->json([
-            //         "message"=>"Get user fails",
-            //         "RC"=>-1,
-            //     ], Response::HTTP_NOT_FOUND);
                 
-            // }
+            
             
         } catch (\Throwable $th) {
              Log::error(__CLASS__ ."@".__FUNCTION__,[
@@ -125,7 +121,35 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $user = User::query()->update([
+                "name"=>$request->name,
+                "email"=>$request->email,
+                
+            ]);
+            if(!$user){
+                return response()->json([
+                    "message"=>"Update User is fails",
+                    "RC"=>-1
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }else{
+                return response()->json([
+                    "message"=>"Add User succed",
+                    "RC"=>0,
+                    "data"=>$user
+                ], Response::HTTP_OK);
+
+            }
+        } catch (\Throwable $th) {
+            Log::error(__CLASS__ . "@". __FUNCTION__,[
+                "line"=>$th->getLine(),
+                "message"=>$th->getMessage()
+            ]);
+            return response()->json([
+                    "message"=>"Add User is fails",
+                    "RC"=>-1
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -143,7 +167,8 @@ class UserController extends Controller
             }else{
                 return response()->json([
                     "message"=>"Delete User Succed",
-                    "RC"=>0
+                    "RC"=>0,
+
                 ]);
             }
             
