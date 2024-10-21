@@ -44,3 +44,6 @@ Route::prefix('theaters')->group(function () {
     });
 });
 
+
+
+

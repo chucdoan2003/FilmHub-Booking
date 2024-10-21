@@ -9,8 +9,9 @@ class Room extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['room_name', 'capacity'];
+    protected $fillable = ['room_name', 'theater_id', 'capacity'];
 
+    protected $primaryKey = 'room_id';
     public function theater()
     {
         return $this->belongsTo(Theater::class, 'theater_id');
