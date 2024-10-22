@@ -13,13 +13,13 @@ class AdminShiftController extends Controller
     public function index()
     {
         $shifts = Shift::all();
-        return view('shifts.index', compact('shifts'));
+        return view('admin.shifts.index', compact('shifts'));
     }
 
     // Hiển thị form tạo một shift mới
     public function create()
     {
-        return view('shifts.create');
+        return view('admin.shifts.create');
     }
 
     // Lưu shift mới
@@ -39,14 +39,14 @@ class AdminShiftController extends Controller
     public function show($shift_id)
     {
         $shift = Shift::findOrFail($shift_id);
-        return view('shifts.show', compact('shift'));
+        return view('admin.shifts.show', compact('shift'));
     }
 
     // Hiển thị form chỉnh sửa một shift
     public function edit($shift_id)
     {
         $shift = Shift::findOrFail($shift_id);
-        return view('shifts.edit', compact('shift'));
+        return view('admin.shifts.edit', compact('shift'));
     }
 
     // Cập nhật thông tin một shift
