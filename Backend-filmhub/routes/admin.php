@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminOrderController;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\admin\AdminShiftController;
+use App\Http\Controllers\admin\ShowtimeController;
+use App\Http\Controllers\MovieController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,11 +16,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('admin')->as('admin.')->middleware('auth')->group(function() {
+Route::prefix('admin')->as('admin.')->group(function () {
     Route::get('/', function () {
         return view('admin.dashboard');
     })->name('dashboard');
-    Route::resource('categories', CategoryController::class);
-    Route::resource('products', ProductController::class);
-    Route::resource('orders', AdminOrderController::class);
 });

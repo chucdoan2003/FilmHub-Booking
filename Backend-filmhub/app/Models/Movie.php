@@ -9,16 +9,18 @@ class Movie extends Model
 {
     use HasFactory;
 
-    protected $table = 'movies';
     protected $primaryKey = 'movie_id';
+    protected $table = 'movies';
     protected $fillable = [
         'title',
         'description',
         'duration',
         'release_date',
-        'genre',    
         'rating',
         'poster_url',
     ];
-
+    public function genres()
+    {
+        return $this->belongsToMany(Genre::class, 'genre_movie', 'movie_id', 'genre_id');
+    }
 }

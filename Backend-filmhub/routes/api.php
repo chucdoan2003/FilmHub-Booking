@@ -27,7 +27,6 @@ Route::prefix('theaters')->group(function () {
     Route::put('/{theater}', [TheaterController::class, 'update']);
     Route::delete('/{theater}', [TheaterController::class, 'destroy']);
 
-
     Route::prefix('/{theater}/shifts')->group(function () {
         Route::get('/', [ShiftController::class, 'index']);
         Route::post('/', [ShiftController::class, 'store']);

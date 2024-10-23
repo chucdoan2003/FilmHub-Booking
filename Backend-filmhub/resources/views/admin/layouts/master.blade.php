@@ -115,6 +115,7 @@
 <script src="{{asset('theme/admin/js/demo/chart-pie-demo.js')}}"></script>
 
 <script src="https://kit.fontawesome.com/be9ed8669f.js" crossorigin="anonymous"></script>
+
 @yield('script-libs')
 
 </body>

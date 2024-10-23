@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\MovieController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('admin', function () {
     return view('admin.dashboard');
+});
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('/movies', MovieController::class);
 });

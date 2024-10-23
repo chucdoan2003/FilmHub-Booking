@@ -17,7 +17,7 @@ class MovieController extends Controller
     public function index()
     {
         $movie = Movie::all();
-        return response()->json($movie, 200);
+        return response()->json(['message' => 'Movie get All successfully', 'data' => $movie], 200);
     }
 
     /**
@@ -56,8 +56,8 @@ class MovieController extends Controller
     public function show($movie_id)
     {
         try {
-            $movies = Movie::find($movie_id);
-            return response()->json($movies, 200);
+            $movie = Movie::find($movie_id);
+            return response()->json(['message' => 'Movie get one successfully', 'data' => $movie], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Error fetching movie', 'error' => $e->getMessage()], 500);
         }
