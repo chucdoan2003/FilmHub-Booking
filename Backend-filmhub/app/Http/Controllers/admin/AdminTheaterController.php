@@ -44,12 +44,12 @@ class AdminTheaterController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'location' => 'required|string|max:255',
-            'number_of_rooms' => 'required|integer|min:1',
-            'number_of_shifts' => 'required|integer|min:1',
-            'shift_start_time' => 'required|array',
-            'shift_start_time.*' => 'date_format:H:i',
-            'shift_end_time' => 'required|array',
-            'shift_end_time.*' => 'date_format:H:i',
+            // 'number_of_rooms' => 'required|integer|min:1',
+            // 'number_of_shifts' => 'required|integer|min:1',
+            // 'shift_start_time' => 'required|array',
+            // 'shift_start_time.*' => 'date_format:H:i',
+            // 'shift_end_time' => 'required|array',
+            // 'shift_end_time.*' => 'date_format:H:i',
         ]);
 
         // Lưu theater
@@ -58,24 +58,24 @@ class AdminTheaterController extends Controller
             'location' => $request->location,
         ]);
 
-        // Thêm phòng vào bảng rooms
-        for ($i = 1; $i <= $request->number_of_rooms; $i++) {
-            $room_name = 'Phòng ' . $i; // Tạo tên phòng
-            $theater->rooms()->create([
-                'room_name' => $room_name,
+        // // Thêm phòng vào bảng rooms
+        // for ($i = 1; $i <= $request->number_of_rooms; $i++) {
+        //     $room_name = 'Phòng ' . $i; // Tạo tên phòng
+        //     $theater->rooms()->create([
+        //         'room_name' => $room_name,
 
-            ]);
-        }
+        //     ]);
+        // }
 
-        // Lưu thời gian ca chiếu vào bảng shifts
-        for ($i = 1; $i <= $request->number_of_shifts; $i++) {
-            $shift_name = 'Ca ' . $i; // Tên ca chiếu
-            $theater->shifts()->create([
-                'start_time' => $request->shift_start_time[$i - 1],
-                'end_time' => $request->shift_end_time[$i - 1],
-                'shift_name' => $shift_name,
-            ]);
-        }
+        // // Lưu thời gian ca chiếu vào bảng shifts
+        // for ($i = 1; $i <= $request->number_of_shifts; $i++) {
+        //     $shift_name = 'Ca ' . $i; // Tên ca chiếu
+        //     $theater->shifts()->create([
+        //         'start_time' => $request->shift_start_time[$i - 1],
+        //         'end_time' => $request->shift_end_time[$i - 1],
+        //         'shift_name' => $shift_name,
+        //     ]);
+        // }
 
         return redirect()->route('admin.theaters.index')->with('success', 'Thêm mới rạp thành công');
     }

@@ -23,14 +23,20 @@
         <h4>{{session('message')}}</h4>
     @endif
 
+
     <a href="{{route('admin.theaters.create')}}" class="mb-3">
         <button class="btn btn-success">Tạo mới</button>
     </a>
+    <form action="{{ route('vnpay_payment') }}" method="POST">
+        @csrf
+        <button type="submit" name="redirect" class="btn btn-success">Thanh toan VNPAY </button>
+    </form>
     <!-- DataTales Example -->
     <div class="card shadow mb-4 mt-3">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Danh sách rạp phim</h6>
         </div>
+
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

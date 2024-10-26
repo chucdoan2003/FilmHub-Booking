@@ -23,6 +23,9 @@
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
+    <a href="{{route('theaters.createRoom')}}" class="mb-3">
+        <button class="btn btn-success">Tạo mới</button>
+    </a>
 
     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
         @foreach($theaters as $theater)

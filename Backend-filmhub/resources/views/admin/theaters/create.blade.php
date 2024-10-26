@@ -1,60 +1,30 @@
 @extends('admin.layouts.master')
 
-@section('title', 'Danh sách phòng')
-
-@section('style-libs')
-    <!-- Plugins css -->
-    <link href="{{ asset('theme/admin/libs/dropzone/dropzone.css') }}" rel="stylesheet" type="text/css"/>
-@endsection
-
-@section('script-libs')
-    <!-- ckeditor -->
-    <script src="{{ asset('theme/admin/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
-    <!-- dropzone js -->
-    <script src="{{ asset('theme/admin/libs/dropzone/dropzone-min.js') }}"></script>
-
-    <script src="{{ asset('theme/admin/js/create-product.init.js') }}"></script>
+@section('title')
+    Chỉnh sửa rạp chiếu
 @endsection
 
 @section('content')
-<div class="container">
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+<form action="{{ route('admin.theaters.store') }}" method="POST">
+    @csrf
 
-    @foreach($theaters as $theater)
-        <h3>{{ $theater->name }}</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Tên phòng</th>
-                    <th>Sức chứa</th>
-                    <th>Hành động</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if($theater->rooms->isEmpty())
-                    <tr>
-                        <td colspan="3">Không có phòng nào.</td>
-                    </tr>
-                @else
-                    @foreach($theater->rooms as $room)
-                        <tr>
-                            <td>{{ $room->room_name }}</td>
-                            <td>{{ $room->capacity }}</td>
-                            <td>
-                                <a href="{{ route('theaters.editRoom', $room->id) }}" class="btn btn-warning">Sửa</a>
-                                <form action="{{ route('theaters.destroyRoom', $room->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">Xóa</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                @endif
-            </tbody>
-        </table>
-    @endforeach
-</div>
+
+    <div class="mb-3">
+        <label for="theater-name" class="form-label">Tên rạp</label>
+        <input type="text" class="form-control" id="theater-name" name="name"  required>
+    </div>
+    <div class="mb-3">
+        <label for="theater-location" class="form-label">Địa điểm</label>
+        <input type="text" class="form-control" id="theater-location" name="location"  required>
+    </div>
+
+
+
+
+    <button type="submit" class="btn btn-primary">Thêm</button>
+</form>
+
+
+
+
 @endsection

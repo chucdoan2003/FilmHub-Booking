@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\AdminTheaterController;
 /*
@@ -36,3 +37,6 @@ Route::put('/theaters/rooms/{id}', [AdminTheaterController::class, 'updateRoom']
 Route::delete('/theaters/rooms/{room}', [AdminTheaterController::class, 'destroyRoom'])->name('theaters.destroyRoom');
 
 
+
+// Payment
+Route::post('/vnpay_payment' ,[PaymentController::class,'vnpay_payment'])->name('vnpay_payment');;

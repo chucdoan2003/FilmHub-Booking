@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\TheaterController;
 use App\Http\Controllers\ShiftController;
-use App\Http\Controllers\RoomController;
+
 
 
 Route::prefix('theaters')->group(function () {
@@ -35,13 +35,7 @@ Route::prefix('theaters')->group(function () {
         Route::delete('/{shift}', [ShiftController::class, 'destroy']);
     });
 
-    Route::prefix('/{theater}/rooms')->group(function () {
-        Route::get('/', [RoomController::class, 'index']);
-        Route::post('/', [RoomController::class, 'store']);
-        Route::get('/{room}', [RoomController::class, 'show']);
-        Route::put('/{room}', [RoomController::class, 'update']);
-        Route::delete('/{room}', [RoomController::class, 'destroy']);
-    });
+
 });
 
 
