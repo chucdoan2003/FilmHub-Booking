@@ -90,7 +90,7 @@ class UserController extends Controller
                return response()->json([
                     "message"=>"Get user succed",
                     "RC"=>0,
-                    "data"=>UserResource::collection($user)
+                    "data"=>new UserResource($user)
                 ], Response::HTTP_OK);
             } else {
                 return response()->json([
@@ -122,7 +122,7 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $user = User::query()->update([
+            $user = User::query()->where('id', $id)->update([
                 "name"=>$request->name,
                 "email"=>$request->email,
                 

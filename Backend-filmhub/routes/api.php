@@ -44,4 +44,5 @@ Route::prefix('theaters')->group(function () {
         Route::delete('/{room}', [RoomController::class, 'destroy']);
     });
 });
+Route::apiResource("users", UserController::class);
 
