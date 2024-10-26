@@ -1,19 +1,21 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom"; // Thay Router bằng BrowserRouter
-import "./App.css";
-import Layout from "./layout"; // Đảm bảo đường dẫn đến Layout là chính xác
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Sửa ở đây
+import About from './interface/about-2';
+import Footer from './footer/Footer';
+import Header from './header/Header';
+import Home2 from './layout/Layout';
 
-function App() {
-    return (
-        <>
-            <Router>
-                <Routes> {/* Thay Route bên trong Router bằng Routes */}
-                    <Route path="/" element={<Layout />}>
-                        <Route index element={<h1>Home</h1>} />
-                    </Route>
-                </Routes>
-            </Router>
-        </>
-    );
+const App = () => {
+  return (
+    <Router>
+        <Header/>
+      <Routes>
+      <Route path="/" element={<Home2 />} />
+        <Route path="/about" element={<About />} />
+        {/* Các route khác */}
+      </Routes>
+      <Footer />
+    </Router>
+  );
 }
 
 export default App;
