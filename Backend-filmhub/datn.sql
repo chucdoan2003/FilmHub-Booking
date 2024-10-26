@@ -27,11 +27,14 @@ SET time_zone = "+00:00";
 -- Table structure for table `bookings`
 --
 
-CREATE TABLE `bookings` (
-  `booking_id` int NOT NULL,
+CREATE TABLE `tikckets` (
+  `ticket_id` int NOT NULL,
   `user_id` int NOT NULL,
   `showtime_id` int NOT NULL,
+  `seats_id` int NOT NULL,
   `total_price` decimal(10,2) NOT NULL,
+  `status_ticket` tinyint NOT NULL DEFAULT '1',
+  `status_payments` tinyint NOT NULL DEFAULT '1',
   `booking_time` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -40,12 +43,6 @@ CREATE TABLE `bookings` (
 --
 -- Table structure for table `booking_seats`
 --
-
-CREATE TABLE `booking_seats` (
-  `booking_id` int NOT NULL,
-  `seat_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
 -- --------------------------------------------------------
 
 --
@@ -174,17 +171,28 @@ CREATE TABLE `users` (
 --
 -- Indexes for table `bookings`
 --
-ALTER TABLE `bookings`
-  ADD PRIMARY KEY (`booking_id`),
+ALTER TABLE `tikckets`
+  ADD PRIMARY KEY (`ticket_id`),
   ADD KEY `user_id` (`user_id`),
-  ADD KEY `showtime_id` (`showtime_id`);
+  ADD KEY `showtime_id` (`showtime_id`),
+  ADD KEY `tickets_ibfk_3` (`seats_id`);
 
 --
--- Indexes for table `booking_seats`
+-- AUTO_INCREMENT for dumped tables
 --
-ALTER TABLE `booking_seats`
-  ADD PRIMARY KEY (`booking_id`,`seat_id`),
-  ADD KEY `seat_id` (`seat_id`);
+
+--
+-- AUTO_INCREMENT for table `tikckets`
+--
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `tikckets`
+--
+
+
 
 --
 -- Indexes for table `movies`
@@ -248,8 +256,8 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT for table `bookings`
 --
-ALTER TABLE `bookings`
-  MODIFY `booking_id` int NOT NULL AUTO_INCREMENT;
+ALTER TABLE `tikckets`
+  MODIFY `ticket_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `movies`
@@ -306,16 +314,11 @@ ALTER TABLE `users`
 --
 -- Constraints for table `bookings`
 --
-ALTER TABLE `bookings`
-  ADD CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `bookings_ibfk_2` FOREIGN KEY (`showtime_id`) REFERENCES `showtimes` (`showtime_id`) ON DELETE CASCADE;
-
---
--- Constraints for table `booking_seats`
---
-ALTER TABLE `booking_seats`
-  ADD CONSTRAINT `booking_seats_ibfk_1` FOREIGN KEY (`booking_id`) REFERENCES `bookings` (`booking_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `booking_seats_ibfk_2` FOREIGN KEY (`seat_id`) REFERENCES `seats` (`seat_id`) ON DELETE CASCADE;
+ALTER TABLE `tikckets`
+  ADD CONSTRAINT `tickets_ibfk_3` FOREIGN KEY (`seats_id`) REFERENCES `seats` (`seat_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+  ADD CONSTRAINT `tikckets_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `tikckets_ibfk_2` FOREIGN KEY (`showtime_id`) REFERENCES `showtimes` (`showtime_id`) ON DELETE CASCADE;
+COMMIT;
 
 --
 -- Constraints for table `payments`

@@ -30,11 +30,4 @@ Route::prefix('admin/shifts')->group(function () {
     Route::delete('/{shift_id}', [AdminShiftController::class, 'destroy'])->name('admin.shifts.destroy'); // Xóa một shift
 });
 
-Route::prefix('admin/showtimes')->group(function () {
-    Route::get('/', [ShowtimeController::class, 'index'])->name('admin.showtimes.index'); // Lấy danh sách tất cả showtimes
-    Route::get('/create', [ShowtimeController::class, 'create'])->name('admin.showtimes.create'); // Tạo một showtime mới
-    Route::post('/', [ShowtimeController::class, 'store'])->name('admin.showtimes.store'); // Lưu showtime mới
-    Route::get('/{showtime_id}/edit', [ShowtimeController::class, 'edit'])->name('admin.showtimes.edit'); // Chỉnh sửa một showtime
-    Route::put('/{showtime_id}', [ShowtimeController::class, 'update'])->name('admin.showtimes.update'); // Cập nhật một showtime
-    Route::delete('/{showtime_id}', [ShowtimeController::class, 'destroy'])->name('admin.showtimes.destroy'); // Xóa một showtime
-});
+
