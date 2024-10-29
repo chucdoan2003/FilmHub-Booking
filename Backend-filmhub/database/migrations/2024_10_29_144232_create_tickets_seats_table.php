@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('booking_seats', function (Blueprint $table) {
-            $table->unsignedBigInteger('booking_id');
+        Schema::create('tickets_seats', function (Blueprint $table) {
+            $table->unsignedBigInteger('ticket_id');
             $table->unsignedBigInteger('seat_id');
 
             // Indexes
-            $table->primary(['booking_id', 'seat_id']);
-            $table->foreign('booking_id')->references('booking_id')->on('bookings')->onDelete('cascade');
+            $table->primary(['ticket_id', 'seat_id']);
+            $table->foreign('ticket_id')->references('ticket_id')->on('tickets')->onDelete('cascade');
             $table->foreign('seat_id')->references('seat_id')->on('seats')->onDelete('cascade');
         });
 

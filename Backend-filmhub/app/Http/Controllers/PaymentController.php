@@ -74,7 +74,7 @@ class PaymentController extends Controller
     } else {
         // Lưu thông báo vào session khi thanh toán thành công
         session()->flash('message', 'Thanh toán thành công!');
-        return redirect()->route('admin.theaters.index');
+        return redirect()->route('admin.theaters.index')->with('success', 'Thành toán thành công');
     }
         // vui lòng tham khảo thêm tại code demo
 
