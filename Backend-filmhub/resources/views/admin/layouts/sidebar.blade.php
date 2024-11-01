@@ -43,6 +43,39 @@
         </div>
     </li>
 
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMovies"
+            aria-expanded="true" aria-controls="collapseMovies">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Quản lý phim</span>
+        </a>
+        <div id="collapseMovies" class="collapse" aria-labelledby="headingMovies" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Danh sách chức năng</h6>
+                <a class="collapse-item" href="{{ route('admin.movies.index') }}">Danh sách</a>
+                <a class="collapse-item" href="{{ route('admin.movies.create') }}">Tạo mới</a>
+            </div>
+        </div>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseShowtimes"
+           aria-expanded="true" aria-controls="collapseShowtimes">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Quản lý lịch chiếu</span>
+        </a>
+        <div id="collapseShowtimes" class="collapse" aria-labelledby="headingOrders"
+             data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">List function</h6>
+                <a class="collapse-item" href="{{ route('showtimes.index') }}">Danh sách lịch chiếu</a>
+                <a class="collapse-item" href="{{ route('bookings.index') }}">Test đặt vé</a>
+
+
+            </div>
+        </div>
+    </li>
+
     <!-- Nav Item - Utilities Collapse Menu -->
     {{-- <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"

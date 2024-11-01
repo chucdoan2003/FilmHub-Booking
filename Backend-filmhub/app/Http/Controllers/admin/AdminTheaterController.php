@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Models\Shift;
 use App\Models\Room;
+use App\Models\Seat;
 use Illuminate\Support\Facades\Log;
 
 class AdminTheaterController extends Controller
@@ -196,11 +197,20 @@ class AdminTheaterController extends Controller
 
 
 
-        Room::create([
+        $room = Room::create([
             'room_name' => $request->room_name,
             'theater_id' => $request->theater_id,
             'capacity' => $request->capacity,
         ]);
+
+
+        for ($i = 1; $i <= $request->capacity; $i++) {
+            Seat::create([
+                'room_id' => $room->room_id,
+                'seat_number' => $i,
+
+            ]);
+        }
 
 
         return redirect()->route('theaters.createRoom')->with('success', 'Thêm phòng thành công');
