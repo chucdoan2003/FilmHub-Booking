@@ -1,7 +1,10 @@
 <?php
 
+
 use App\Http\Controllers\admin\AdminShiftController;
-// use App\Http\Controllers\admin\TicketController;
+use App\Http\Controllers\Admin\AdminOrderController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
 
 Route::prefix('admin')->as('admin.')->group(function () {
     Route::get('/', function () {
@@ -30,11 +34,11 @@ Route::prefix('admin/shifts')->group(function () {
     Route::delete('/{shift_id}', [AdminShiftController::class, 'destroy'])->name('admin.shifts.destroy'); // Xóa một shift
 });
 
-// Route::prefix('admin/tickets')->group(function () {
-//     Route::get('/', [TicketController::class, 'index'])->name('admin.tickets.index'); // Lấy danh sách tất cả shifts
-//     Route::delete('/{id}', [TicketController::class, 'destroy'])->name('admin.tickets.destroy');
-//     Route::get('/tickets/{id}', [TicketController::class, 'show'])->name('admin.tickets.show');
-//     // Route cho trang lọc vé
-//     Route::get('/filter', [TicketController::class, 'filter'])->name('admin.tickets.filter');
-//     Route::get('/get-seats', [TicketController::class, 'getSeatsByTicket'])->name('admin.tickets.get-seats');
-// });
+Route::prefix('admin')->as('admin.')->middleware('auth')->group(function() {
+    Route::get('/', function () {
+        return view('admin.dashboard');
+    })->name('dashboard');
+    Route::resource('categories', CategoryController::class);
+    Route::resource('products', ProductController::class);
+    Route::resource('orders', AdminOrderController::class);
+});

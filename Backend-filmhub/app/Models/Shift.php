@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Shift extends Model
 {
     use HasFactory;
+
     protected $table = 'shifts'; // Tên bảng
     protected $primaryKey = 'shift_id'; // Khóa chính
     public $incrementing = false; // Nếu shift_id không tự động tăng
@@ -16,4 +17,15 @@ class Shift extends Model
         'start_time',
         'end_time',
     ];
+    public function theater()
+    {
+        return $this->belongsTo(Theater::class, 'theater_id');
+    }
 }
+
+
+
+    
+
+
+
