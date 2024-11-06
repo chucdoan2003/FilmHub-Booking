@@ -101,7 +101,7 @@
                     <!-- Card Body -->
                     
                     <div class="card-body">
-                        <select name="room" id=""  >
+                        <select name="room" id="room_id"  >
                             @foreach ($rooms as $item)
                                 <option value="{{ $item->id }}"
                                     @if(in_array($item->id, $room_over) && $item->id != $showtime->room_id )
@@ -127,7 +127,7 @@
                     <!-- Card Body -->
                     
                     <div class="card-body">
-                        <select name="shift" id="" >
+                        <select name="shift" id="shift_id" >
                             @foreach ($shifts as $item)
                                 <option value="{{ $item->id }}"
                                     @if (in_array($item->id, $shiftInroomBook) && $item->id != $showtime->shift_id )
@@ -162,4 +162,55 @@
     select4.disabled = false;  // Kích hoạt lại trước khi submit
   });
 </script>
+
+<script>
+    $(document).ready(function () {
+        // Xử lý sự kiện submit form
+        $(document).on('change', function(){
+            let datetime= $('#datetime').val()
+            let room_id = $('#room_id').val()
+            console.log("Datetime đã chọn:", datetime); 
+            console.log("Phòng đã chọn:", room_id); 
+            $.ajax({
+                url: "{{ route('showtimes.getAPI') }}",  // Route Laravel
+                type: 'POST',
+                data: {
+                    datetime: datetime,
+                    room_id: room_id
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // CSRF Token
+                },
+                
+                success: function (response) {
+                    let room = "";
+                    for (let i = 0; i < response.rooms.length; i++) {
+                        room+=`
+                        <option value="${response.rooms[i].id}"${response.rooms[i].id ==response.room_selected ? "selected":"" } ${response.rooms[i].isDisable ? "disabled": ""}>${response.rooms[i].name}</option>
+                        `
+                    }
+                    let shift = ""
+                    for (let i = 0; i < response.shifts.length; i++) {
+                        shift+=`
+                        <option value="${response.shifts[i].id}" ${response.shifts[i].isDisable ? "disabled": ""}>${response.shifts[i].name}</option>
+                        `
+                    }
+                    console.log(shift)
+                    
+                    
+                    $('#room_id').html(room);
+                    $('#shift_id').html(shift);
+
+                    // $('#myForm')[0].reset();  // Reset form sau khi thêm thành công
+                    console.log(response)
+                },
+                error: function (xhr) {
+                    alert('Có lỗi xảy ra. Vui lòng thử lại.');
+                }
+            });
+        })
+        
+    });
+</script>
+
 @endsection

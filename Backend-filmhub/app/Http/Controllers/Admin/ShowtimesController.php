@@ -131,11 +131,58 @@ class ShowtimesController extends Controller
         }
     }
     function getAPI(Request $request){
-        $showtimes = DB::table('showtimes')->get();
+        $movies = DB::table('movies')->get();
+        $rooms = DB::table('rooms')->get();
+        $shifts = DB::table('shifts')->get();
+        $showtimes=DB::table('showtimes')
+        ->select('room_id', DB::raw('COUNT(*) as total_showtimes'))
+        ->whereDate('datetime', $request->datetime)
+        ->groupBy('room_id')
+        ->get();
+        $room_over=[];
+        foreach($showtimes as $item){
+            if($item->total_showtimes == count($shifts)){
+                $room_over[]= $item->room_id;
+            }
+        }
+        $rooms2=[];
+        foreach($rooms as $room){
+            $room->isDisable = in_array($room->id, $room_over);
+            // Thêm room vào mảng $rooms2
+            $rooms2[] = $room;
+        }
+        $showtimes2=  DB::table('showtimes')
+        ->where('datetime', $request->datetime)
+        ->where('room_id', $request->room_id)
+        ->get();
+        ;
+
+       $shiftInroom = [];
+       
+       foreach($showtimes2 as $item){
+        $shiftInroom[]=$item->shift_id;
+       }
+       $shift2=[];
+
+       foreach($shifts as $shift){
+        $shift->isDisable = in_array($shift->id, $shiftInroom);
+        // Thêm room vào mảng $rooms2
+        $shift2[] = $shift;
+    }
+        
+       
 
         return response()->json([
             "message"=> "get data success",
-            "data"=>$showtimes
+            "data"=>$request->datetime,
+            "room_over"=>$room_over,
+            "movies"=>$movies,
+            "rooms"=>$rooms2,
+            "shifts"=>$shift2,
+            "shiftInroom"=>$shiftInroom,
+            "showtimes"=>$showtimes2,
+            "room_selected"=>$request->room_id,
+
         ]);
     }
 }
