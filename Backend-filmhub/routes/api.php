@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\api\ShiftController;
+use App\Http\Controllers\api\ShowtimeController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -44,4 +46,6 @@ Route::prefix('theaters')->group(function () {
         Route::delete('/{room}', [RoomController::class, 'destroy']);
     });
 });
+Route::apiResource('shifts', ShiftController::class);
+
 
