@@ -35,9 +35,9 @@
         </a>
         <div id="collapseShift" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                {{--                <h6 class="collapse-header">Custom Components:</h6> --}}
-                <a class="collapse-item" href="{{ route('admin.shifts.index') }}">List</a>
-                <a class="collapse-item" href="{{ route('admin.shifts.create') }}">Create New</a>    
+{{--                <h6 class="collapse-header">Custom Components:</h6>--}}
+<a class="collapse-item" href="{{ route('admin.shifts.index') }}">List</a>
+<a class="collapse-item" href="{{ route('admin.shifts.create') }}">Create New</a>  
             </div>
         </div>
     </li>
@@ -70,6 +70,39 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Danh sách chức năng</h6>
                 <a class="collapse-item" href="">Danh sách</a>
+
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsers"
+           aria-expanded="true" aria-controls="collapseUsers">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Manage Users</span>
+        </a>
+        <div id="collapseUsers" class="collapse" aria-labelledby="headingOrders"
+             data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">List function</h6>
+                <a class="collapse-item" href="{{ route('users.index') }}">List users</a>
+                
+
+            </div>
+        </div>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseShowtimes"
+           aria-expanded="true" aria-controls="collapseShowtimes">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Manage showtimes</span>
+        </a>
+        <div id="collapseShowtimes" class="collapse" aria-labelledby="headingOrders"
+             data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">List function</h6>
+                <a class="collapse-item" href="{{ route('showtimes.index') }}">List showtimes</a>
+                
 
             </div>
         </div>
