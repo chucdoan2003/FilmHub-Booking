@@ -27,16 +27,17 @@
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-           aria-expanded="true" aria-controls="collapseTwo">
+
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseShift"
+            aria-expanded="true" aria-controls="collapseShift">
             <i class="fas fa-fw fa-cog"></i>
-            <span>Quản lý danh mục</span>
+            <span>Shift Manage</span>
         </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseShift" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-        {{--           <h6 class="collapse-header">Custom Components:</h6>--}}
-                <a class="collapse-item" href="">Danh sách</a>
-                <a class="collapse-item" href="">Tạo mới</a>
+{{--                <h6 class="collapse-header">Custom Components:</h6>--}}
+<a class="collapse-item" href="{{ route('admin.shifts.index') }}">List</a>
+<a class="collapse-item" href="{{ route('admin.shifts.create') }}">Create New</a>  
             </div>
         </div>
     </li>

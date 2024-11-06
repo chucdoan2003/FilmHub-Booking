@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\api\ShiftController;
+use App\Http\Controllers\api\ShowtimeController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -17,7 +18,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 use App\Http\Controllers\TheaterController;
-use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\RoomController;
 
 
@@ -45,10 +45,4 @@ Route::prefix('theaters')->group(function () {
         Route::delete('/{room}', [RoomController::class, 'destroy']);
     });
 });
-Route::apiResource("users", UserController::class);
-
-    Route::post('auth/login', [AuthController::class, 'login']);
-    Route::post('auth/logout', [AuthController::class, 'logout']);
-    Route::get('auth/profile', [AuthController::class, 'profile']);
-    Route::post('auth/register', [AuthController::class, 'register']);
 

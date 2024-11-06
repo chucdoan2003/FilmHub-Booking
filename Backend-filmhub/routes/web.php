@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\MovieController;
 use App\Http\Controllers\Admin\ShowtimesController;
 use App\Http\Controllers\Admin\UserController;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------

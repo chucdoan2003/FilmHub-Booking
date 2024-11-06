@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use PHPUnit\Framework\Attributes\Ticket;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -18,20 +19,15 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array<int, string>
      */
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
     protected $table="users"; 
+    protected $primaryKey = 'user_id';
     
     protected $fillable = [
         'name',
         'email',
         'password',
+        'phone_number',
+        'role',
     ];
 
     /**
@@ -53,4 +49,14 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
+
+
+
+    // Mối quan hệ với model Ticket
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'user_id');
+    }
 }
