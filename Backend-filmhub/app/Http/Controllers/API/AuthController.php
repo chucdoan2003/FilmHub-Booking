@@ -44,7 +44,8 @@ class AuthController extends Controller
         return response()->json(['message' => 'Logout successful']);
     }
     public function profile(){
-        return response()->json(auth('api')->user());
+
+        return response()->json(auth()->user());
     }
 
   
@@ -60,7 +61,7 @@ class AuthController extends Controller
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }else{
                 return response()->json([
-                    "message"=>"Add User succed",
+                    "message"=>"Register User succed",
                     "RC"=>0,
                     "data"=>$user
                 ], Response::HTTP_OK);
@@ -75,9 +76,6 @@ class AuthController extends Controller
                     "message"=>"Add User is fails",
                     "RC"=>-1
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-        
-        
-        
+        }   
     }
 }

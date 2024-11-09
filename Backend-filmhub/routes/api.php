@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\ShiftController;
-use App\Http\Controllers\api\ShowtimeController;
+use App\Http\Controllers\api\ApiShowtimes;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -50,4 +50,5 @@ Route::post('auth/login', [AuthController::class, 'login' ]);
 Route::get('auth/profile', [AuthController::class, 'profile' ]);
 Route::post('auth/logout', [AuthController::class, 'logout' ]);
 Route::post('auth/register', [AuthController::class, 'register' ]);
+Route::get('showtime/{id}', [ApiShowtimes::class, 'showtime' ])->name('showtime');
 
