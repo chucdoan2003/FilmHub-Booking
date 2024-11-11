@@ -25,7 +25,6 @@ return new class extends Migration
             $table->string('trailer')->nullable();
             $table->timestamps();
         });
-
     }
 
     /**

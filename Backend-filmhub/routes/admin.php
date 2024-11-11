@@ -1,7 +1,10 @@
 <?php
 
+
 use App\Http\Controllers\admin\AdminShiftController;
-// use App\Http\Controllers\admin\TicketController;
+use App\Http\Controllers\Admin\AdminOrderController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +17,14 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+
+
+Route::prefix('admin')->as('admin.')->group(function () {
+    Route::get('/', function () {
+        return view('admin.dashboard');
+    })->name('dashboard');
+});
 
 Route::prefix('admin/shifts')->group(function () {
     Route::get('/', [AdminShiftController::class, 'index'])->name('admin.shifts.index'); // Lấy danh sách tất cả shifts

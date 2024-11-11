@@ -29,19 +29,31 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
             aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Quản lý rạp chiếu</span>
-        </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Custom Components:</h6>
-                <a class="collapse-item" href="{{ route('admin.theaters.index') }}">Danh sách</a>
 
-                <a class="collapse-item" href="{{ route('theaters.indexRoom') }}">Danh sách phòng</a>
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseShift"
+                aria-expanded="true" aria-controls="collapseShift">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Quản lý rạp chiếu</span>
+            </a>
 
-            </div>
-        </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Custom Components:</h6>
+                    <a class="collapse-item" href="{{ route('admin.theaters.index') }}">Danh sách</a>
+
+                    <a class="collapse-item" href="{{ route('theaters.indexRoom') }}">Danh sách phòng</a>
+
+
+                    <div id="collapseShift" class="collapse" aria-labelledby="headingOne"
+                        data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            {{--                <h6 class="collapse-header">Custom Components:</h6> --}}
+                            <a class="collapse-item" href="{{ route('admin.shifts.index') }}">List</a>
+                            <a class="collapse-item" href="{{ route('admin.shifts.create') }}">Create New</a>
+                        </div>
+                    </div>
     </li>
+
 
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMovies"
@@ -94,6 +106,8 @@
 
     <!-- Nav Item - Utilities Collapse Menu -->
     {{-- <li class="nav-item">
+    <!-- Nav Item - Utilities Collapse Menu -->
+    <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
            aria-expanded="true" aria-controls="collapseUtilities">
             <i class="fas fa-fw fa-wrench"></i>
@@ -123,6 +137,11 @@
 
             </div>
         </div>
+    </li> --}}
+
+{{-- 
+    </div>
+    </div>
     </li> --}}
 
     {{--    <!-- Divider --> --}}
