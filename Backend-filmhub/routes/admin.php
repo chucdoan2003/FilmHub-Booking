@@ -15,12 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('admin')->as('admin.')->group(function () {
-    Route::get('/', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
-});
-
 Route::prefix('admin/shifts')->group(function () {
     Route::get('/', [AdminShiftController::class, 'index'])->name('admin.shifts.index'); // Lấy danh sách tất cả shifts
     Route::get('/create', [AdminShiftController::class, 'create'])->name('admin.shifts.create'); // Tạo một shift mới
@@ -30,11 +24,3 @@ Route::prefix('admin/shifts')->group(function () {
     Route::delete('/{shift_id}', [AdminShiftController::class, 'destroy'])->name('admin.shifts.destroy'); // Xóa một shift
 });
 
-// Route::prefix('admin/tickets')->group(function () {
-//     Route::get('/', [TicketController::class, 'index'])->name('admin.tickets.index'); // Lấy danh sách tất cả shifts
-//     Route::delete('/{id}', [TicketController::class, 'destroy'])->name('admin.tickets.destroy');
-//     Route::get('/tickets/{id}', [TicketController::class, 'show'])->name('admin.tickets.show');
-//     // Route cho trang lọc vé
-//     Route::get('/filter', [TicketController::class, 'filter'])->name('admin.tickets.filter');
-//     Route::get('/get-seats', [TicketController::class, 'getSeatsByTicket'])->name('admin.tickets.get-seats');
-// });

@@ -17,14 +17,10 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $table = 'users';
-    protected $primaryKey = 'user_id'; // Đảm bảo sử dụng user_id thay vì id
     protected $fillable = [
         'name',
         'email',
         'password',
-        'phone_number',
-        'role',
     ];
 
     /**
@@ -47,13 +43,8 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-
-
-
-
-    // Mối quan hệ với model Ticket
     public function tickets()
     {
-        return $this->hasMany(Ticket::class, 'user_id');
+        return $this->hasMany(Ticket::class);
     }
 }
