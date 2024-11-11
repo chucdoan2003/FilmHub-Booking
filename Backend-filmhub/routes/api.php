@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ApiSeatController;
+use App\Http\Controllers\api\ApiSeatController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

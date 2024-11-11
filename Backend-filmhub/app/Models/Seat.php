@@ -12,7 +12,18 @@ class Seat extends Model
     protected $fillable = [
         'room_id',
         'seat_number',
-        'seat_type',
+        'row_id',
+        'type_id',
         'status',
     ];
+    public function rooms() {
+        return $this->belongsTo(Room::class, 'room_id');
+    }
+    public function rows() {
+        return $this->belongsTo(Row::class, 'row_id');
+    }
+    public function types() {
+        return $this->belongsTo(Type::class, 'type_id');
+    }
+   
 }
