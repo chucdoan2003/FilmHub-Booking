@@ -14,19 +14,16 @@ class Room extends Model
 
     protected $primaryKey = 'room_id';
 
-    protected $fillable = ['room_name', 'capacity'];
-
-
     public function theater()
     {
         return $this->belongsTo(Theater::class, 'theater_id');
     }
 
-    public function seats() {
+    public function seats()
+    {
 
         return $this->hasMany(Seat::class, 'room_id');
 
         return $this->hasMany(Seat::class);
     }
 }
-

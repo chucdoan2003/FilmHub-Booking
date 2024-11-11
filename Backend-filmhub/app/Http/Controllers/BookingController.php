@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Showtime;
 use App\Models\Movie;
 use App\Models\Ticket;
+use Illuminate\Support\Facades\DB;
 
 class BookingController extends Controller
 {
@@ -47,7 +48,7 @@ public function purchaseTicket(Request $request)
         // Thêm thông tin ghế đã chọn vào bảng ticket_seats
         $selectedSeats = explode(',', $request->selected_seats);
         foreach ($selectedSeats as $seatId) {
-            \DB::table('ticket_seats')->insert([
+            DB::table('ticket_seats')->insert([
                 'ticket_id' => $ticket->id,
                 'seat_id' => $seatId,
                 'created_at' => now(),

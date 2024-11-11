@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
@@ -36,7 +37,7 @@ class PaymentController extends Controller
         // Lưu thông tin ghế đã chọn vào bảng ticket_seats
         $selectedSeats = explode(',', $data['selected_seats']);
         foreach ($selectedSeats as $seatId) {
-            \DB::table('tickets_seats')->insert([
+            DB::table('tickets_seats')->insert([
                 'ticket_id' => $ticket->ticket_id, // Sử dụng ticket_id thay vì id
                 'seat_id' => $seatId,
                 'showtime_id' => $data['showtime_id'],
