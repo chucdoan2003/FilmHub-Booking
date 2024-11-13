@@ -9,6 +9,7 @@ class Ticket extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'ticket_id';
     protected $fillable = [
         'user_id',
         'showtime_id',

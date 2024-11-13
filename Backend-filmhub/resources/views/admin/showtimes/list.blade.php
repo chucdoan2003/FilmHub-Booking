@@ -47,6 +47,7 @@
                                 <th>Movie</th>
                                 <th>Room</th>
                                 <th>Shift</th>
+                                <th>Date</th>
                                 <th>Start time</th>
                                 <th>End time</th>
                                 <th>Giá tiền</th>
@@ -60,8 +61,9 @@
                                     <td>{{ $item->movie_name }}</td>
                                     <td>{{ $item->room_name }}</td>
                                     <td>{{ $item->shift_name }}</td>
-                                    <td>{{ $item->start_time}}</td>
-                                    <td>{{ $item->end_time}}</td>
+                                    <td>{{ $item->datetime}}</td>
+                                    <td>{{ $item->shift_start_time}}</td>
+                                    <td>{{ $item->shift_end_time}}</td>
                                     <td>{{ number_format($item->value, 0, ',', '.') }} VND</td>
 
                                     <td>

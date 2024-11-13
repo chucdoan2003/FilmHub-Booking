@@ -55,12 +55,10 @@
                         <!-- Card Body -->
 
                         <div class="card-body">
-                            <input type="datetime-local" name="start_time" id="start_time" value="{{ $showtime->start_time }}" >
+                            <input type="date" name="start_time" id="datetime" value="{{ $showtime->datetime }}" >
                         </div>
 
-                        <div class="card-body">
-                            <input type="datetime-local" name="end_time" id="end_time" value="{{ $showtime->end_time }}" >
-                        </div>
+
 
                 </div>
 
@@ -133,7 +131,7 @@
                                     @if ($item->shift_id == $showtime->shift_id)
                                     @selected(true)
                                     @endif
-                                    >{{ $item->shift_name }}</option>
+                                    >{{ $item->shift_name }} - {{ $item->start_time }} - {{ $item->end_time }}</option>
                             @endforeach
                         </select>
                     </div>

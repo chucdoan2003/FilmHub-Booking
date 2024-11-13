@@ -1,5 +1,12 @@
 <?php
 
+use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\api\ShiftController;
+use App\Http\Controllers\api\ApiShowtimes;
+use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\api\ApiRowController;
+use App\Http\Controllers\api\ApiSeatController;
+use App\Http\Controllers\api\ApiTypeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,9 +21,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-use App\Http\Controllers\TheaterController;
-use App\Http\Controllers\ShiftController;
-
+use App\Http\Controllers\api\TheaterController;
+use App\Http\Controllers\RoomController;
 
 
 Route::prefix('theaters')->group(function () {
@@ -27,17 +33,33 @@ Route::prefix('theaters')->group(function () {
     Route::delete('/{theater}', [TheaterController::class, 'destroy']);
 
 
-    Route::prefix('/{theater}/shifts')->group(function () {
-        Route::get('/', [ShiftController::class, 'index']);
-        Route::post('/', [ShiftController::class, 'store']);
-        Route::get('/{shift}', [ShiftController::class, 'show']);
-        Route::put('/{shift}', [ShiftController::class, 'update']);
-        Route::delete('/{shift}', [ShiftController::class, 'destroy']);
-    });
+    // Route::prefix('/{theater}/shifts')->group(function () {
+    //     Route::get('/', [ShiftController::class, 'index']);
+    //     Route::post('/', [ShiftController::class, 'store']);
+    //     Route::get('/{shift}', [ShiftController::class, 'show']);
+    //     Route::put('/{shift}', [ShiftController::class, 'update']);
+    //     Route::delete('/{shift}', [ShiftController::class, 'destroy']);
+    // });
 
-
+    // Route::prefix('/{theater}/rooms')->group(function () {
+    //     Route::get('/', [RoomController::class, 'index']);
+    //     Route::post('/', [RoomController::class, 'store']);
+    //     Route::get('/{room}', [RoomController::class, 'show']);
+    //     Route::put('/{room}', [RoomController::class, 'update']);
+    //     Route::delete('/{room}', [RoomController::class, 'destroy']);
+    // });
 });
+Route::post('auth/login', [AuthController::class, 'login' ]);
+Route::get('auth/profile', [AuthController::class, 'profile' ]);
+Route::post('auth/logout', [AuthController::class, 'logout' ]);
+Route::post('auth/register', [AuthController::class, 'register' ]);
+Route::get('showtime/{id}', [ApiShowtimes::class, 'showtime' ])->name('showtime');
 
+Route::apiResource('shifts', ShiftController::class);
 
-
-
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+Route::resource('seat', ApiSeatController::class);
+Route::resource('row', ApiRowController::class);
+Route::resource('type', ApiTypeController::class);

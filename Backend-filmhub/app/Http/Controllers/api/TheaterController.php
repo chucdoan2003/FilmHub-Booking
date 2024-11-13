@@ -1,23 +1,22 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\api;
 
 use App\Models\Room;
 use App\Models\Theater;
 use Illuminate\Http\Request;
-
+use App\Http\Controllers\Controller;
 class TheaterController extends Controller
 {
 
     public function index()
     {
-        $theaters = Theater::with(['rooms', 'shifts'])
+        $theaters = Theater::with('rooms')
             ->get()
             ->map(function($theater) {
                 return [
                     'theater' => $theater,
                     'number_of_rooms' => $theater->rooms->count(),
-                    'number_of_shifts' => $theater->shifts->count(),
                 ];
             });
 
@@ -27,7 +26,7 @@ class TheaterController extends Controller
 
     public function show($id)
 {
-    $theater = Theater::with(['rooms', 'shifts'])->find($id);
+    $theater = Theater::with('rooms')->find($id); // chỉ lấy rooms, không lấy shifts
 
     if (!$theater) {
         return response()->json(['message' => 'Theater not found'], 404);
@@ -36,7 +35,6 @@ class TheaterController extends Controller
     $theaterData = [
         'theater' => $theater,
         'number_of_rooms' => $theater->rooms->count(),
-        'number_of_shifts' => $theater->shifts->count(),
     ];
 
     return response()->json($theaterData);

@@ -31,18 +31,22 @@
                         <!-- Card Header - Dropdown -->
                         <div
                             class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-primary">Date</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Movie</h6>
                         </div>
 
                         <!-- Card Body -->
 
                         <div class="card-body">
-                            <label for="start_time">Thời gian bắt đầu:</label>
-                            <input type="datetime-local" name="start_time" value="{{ $start_time }}" disabled>
-                        </div>
-                        <div class="card-body">
-                            <label for="end_time">Thời gian kết thúc:</label>
-                            <input type="datetime-local" name="end_time" value="{{ $end_time }}" disabled>
+                            <input type="date" name="datetime" id="datetime" value="{{ $datetime }}" disabled>
+
+
+
+
+
+
+
+
+
                         </div>
 
                 </div>
@@ -59,10 +63,12 @@
                     <div class="card-body">
                         <select name="movie" id="" disabled>
                             @foreach ($movies as $item)
-                                <option value="{{ $item->movie_id }}" @if ($item->movie_id == $movie_id) @selected(true) @endif>{{ $item->title }}</option>
+                                <option value="{{ $item->movie_id }}" @if ($item->movie_id == $movie_id)
+                                    @selected(true)
+
+                                @endif>{{ $item->title }}</option>
                             @endforeach
                         </select>
-
 
 
 
@@ -110,14 +116,15 @@
                     <!-- Card Body -->
 
                     <div class="card-body">
-                        <select name="shift" id="" >
+                        <select name="shift" id="">
                             @foreach ($shifts as $item)
                                 <option value="{{ $item->shift_id }}"
                                     @if (in_array($item->shift_id, $shiftInroomBook))
-                                    @disabled(true)
-
+                                        @disabled(true)
                                     @endif
-                                    >{{ $item->shift_name }}</option>
+                                >
+                                    {{ $item->shift_name }} ({{ $item->start_time }} - {{ $item->end_time }})
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -134,24 +141,19 @@
                     </div>
                 </div>
 
-
-
             <button class="btn btn-primary btn-user btn-block">
                         Submit
             </button>
         </form>
     </div>
     <script>
- document.getElementById('myForm').addEventListener('submit', function() {
+  document.getElementById('myForm').addEventListener('submit', function() {
     const select1 = document.querySelector('select[name="movie"]');
     const select2 = document.querySelector('select[name="room"]');
-    const startTime = document.querySelector('input[name="start_time"]');
-    const endTime = document.querySelector('input[name="end_time"]');
-
+    const select3 = document.querySelector('input[name="datetime"]');
     select1.disabled = false;  // Kích hoạt lại trước khi submit
     select2.disabled = false;  // Kích hoạt lại trước khi submit
-    startTime.disabled = false; // Bỏ disabled cho start_time
-    endTime.disabled = false;   // Bỏ disabled cho end_time
-});
+    select3.disabled = false;  // Kích hoạt lại trước khi submit
+  });
 </script>
 @endsection

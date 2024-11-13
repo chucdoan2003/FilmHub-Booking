@@ -55,11 +55,15 @@
                         <!-- Card Body -->
 
                         <div class="card-body">
-                            <label for="start_time">Thời gian bắt đầu:</label>
-                            <input type="datetime-local" name="start_time">
-<br>
-                            <label for="end_time">Thời gian kết thúc:</label>
-                            <input type="datetime-local" name="end_time">
+                            <input type="date" name="datetime">
+
+
+
+
+
+
+
+
 
                         </div>
 

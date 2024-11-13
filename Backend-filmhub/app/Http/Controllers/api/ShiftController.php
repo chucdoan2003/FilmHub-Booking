@@ -1,53 +1,78 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\api;
 
+use App\Http\Controllers\Controller;
 use App\Models\Shift;
-use App\Models\Theater;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ShiftController extends Controller
 {
-
-    public function index(Theater $theater) {
-        $shifts = $theater->shifts;
-        return response()->json($shifts);
+    public function index()
+    {
+        try {
+            $shift = Shift::all();
+            return response()->json(['message' => 'Successfully fetching shift', 'data' => $shift], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error fetching shift', 'error' => $e->getMessage()], 500);
+        }
     }
 
-
-    public function show(Theater $theater, Shift $shift) {
-        return response()->json($shift);
+    public function show($shift_id)
+    {
+        try {
+            $shift = Shift::findOrFail($shift_id);
+            return response()->json(['message' => 'Successfully fetching shift', 'data' => $shift], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error fetching shift', 'error' => $e->getMessage()], 500);
+        }
     }
 
+    public function store(Request $request)
+    {
+        try {
+            Log::info($request->all()); // Ghi lại dữ liệu nhận được
 
-    public function store(Request $request, Theater $theater) {
-        $validatedData = $request->validate([
-            'shift_name' => 'required|string',
-            'start_time' => 'required',
-            'end_time' => 'required'
-        ]);
+            $request->validate([
+                'shift_name' => 'required|string|max:255',
+                'start_time' => 'required|date_format:H:i',
+                'end_time' => 'required|date_format:H:i|after:start_time',
+            ]);
 
-        $shift = $theater->shifts()->create($validatedData);
-        return response()->json($shift, 201);
+            $shift = Shift::create($request->all());
+            return response()->json(['message' => 'Shift created successfully', 'data' => $shift], 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error creating shift', 'error' => $e->getMessage()], 500);
+        }
     }
 
+    public function update(Request $request, $shift_id)
+    {
+        try {
+            $shift = Shift::findOrFail($shift_id);
 
-    public function update(Request $request, Theater $theater, Shift $shift) {
-        $validatedData = $request->validate([
-            'shift_name' => 'sometimes|required|string',
-            'start_time' => 'sometimes|required',
-            'end_time' => 'sometimes|required'
-        ]);
+            $this->validate($request, [
+                'shift_name' => 'sometimes|required|string|max:255',
+                'start_time' => 'sometimes|required|date_format:H:i',
+                'end_time' => 'sometimes|required|date_format:H:i|after:start_time',
+            ]);
 
-        $shift->update($validatedData);
-        return response()->json($shift);
+            $shift->update($request->all());
+            return response()->json(['message' => 'Shift updated successfully', 'data' => $shift], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error updating shift', 'error' => $e->getMessage()], 500);
+        }
     }
 
-
-    public function destroy(Theater $theater, Shift $shift) {
-        $shift->delete();
-        return response()->json(null, 204);
+    public function destroy($shift_id)
+    {
+        try {
+            $shift = Shift::findOrFail($shift_id);
+            $shift->delete();
+            return response()->json(['message' => 'Shift deleted successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error deleting shift', 'error' => $e->getMessage()], 500);
+        }
     }
 }
-
-

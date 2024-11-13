@@ -42,18 +42,27 @@
     }
 </style>
    <div class="col-xl-12 col-lg-7">
-    <form action="{{ route('showtimes.store2') }}" method="POST" class="user" id="myForm">
-        @csrf
-        @method("POST")
+        <form action="{{ route('showtimes.store2') }}" method="POST" class="user" id="myForm">
+            @csrf
+            @method("POST")
+                <div class="card shadow mb-4">
+                        <!-- Card Header - Dropdown -->
+                        <div
+                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Movie</h6>
+                        </div>
 
-        <div class="card-body">
-            <label for="start_time">Thời gian bắt đầu:</label>
-            <input type="datetime-local" name="start_time" value="{{ $start_time }}" disabled>
-        </div>
-        <div class="card-body">
-            <label for="end_time">Thời gian kết thúc:</label>
-            <input type="datetime-local" name="end_time" value="{{ $end_time }}" disabled>
-        </div>
+                        <!-- Card Body -->
+
+                        <div class="card-body">
+                            <input type="date" name="datetime" value="{{ $datetime }}" disabled>
+
+
+
+
+                        </div>
+
+                </div>
 
                 <div class="card shadow mb-4">
                     <!-- Card Header - Dropdown -->
@@ -113,16 +122,13 @@
     </div>
 
 <script>
- document.getElementById('myForm').addEventListener('submit', function() {
-    const select1 = document.querySelector('select[name="movie"]');
-    const select2 = document.querySelector('select[name="room"]');
-    const startTime = document.querySelector('input[name="start_time"]');
-    const endTime = document.querySelector('input[name="end_time"]');
-
-    select1.disabled = false;  // Kích hoạt lại trước khi submit
-    select2.disabled = false;  // Kích hoạt lại trước khi submit
-    startTime.disabled = false; // Bỏ disabled cho start_time
-    endTime.disabled = false;   // Bỏ disabled cho end_time
-});
+  document.getElementById('myForm').addEventListener('submit', function() {
+    // const select1 = document.querySelector('select[name="movie"]');
+    // const select2 = document.querySelector('select[name="room"]');
+    const select3 = document.querySelector('input[name="datetime"]');
+    // select1.disabled = false;  // Kích hoạt lại trước khi submit
+    // select2.disabled = false;  // Kích hoạt lại trước khi submit
+    select3.disabled = false;  // Kích hoạt lại trước khi submit
+  });
 </script>
 @endsection

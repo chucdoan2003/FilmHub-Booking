@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminOrderController;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\admin\RowController;
+use App\Http\Controllers\admin\SeatController;
+use App\Http\Controllers\admin\TypeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,11 +16,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('admin')->as('admin.')->middleware('auth')->group(function() {
+Route::prefix('admin')->as('admin.')->group(function() {
     Route::get('/', function () {
         return view('admin.dashboard');
     })->name('dashboard');
-    Route::resource('categories', CategoryController::class);
-    Route::resource('products', ProductController::class);
-    Route::resource('orders', AdminOrderController::class);
+    Route::resource('seats', SeatController::class);
+    Route::resource('rows', RowController::class);
+    Route::resource('types', TypeController::class);
+    Route::get('rooms/{room_id}/seats', [SeatController::class, 'filterSeatByRoom'])->name('filterSeatByRoom');
 });

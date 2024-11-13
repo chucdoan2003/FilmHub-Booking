@@ -11,7 +11,7 @@ class Showtime extends Model
 
 
     protected $table = 'showtimes';
-
+    protected $primaryKey = 'showtime_id';
 
     protected $fillable = [
         'movie_id',
@@ -33,14 +33,16 @@ class Showtime extends Model
     }
 
     public function shift()
-    {
-        return $this->belongsTo(Shift::class);
-    }
+{
+    return $this->belongsTo(Shift::class, 'shift_id');
+}
 
     public function tickets()
     {
         return $this->hasMany(Ticket::class);
     }
+
+
 
 
 }
