@@ -16,20 +16,21 @@ class ApiSeatController extends Controller
     public function index()
     {
         try {
+            // Lấy tất cả các bản ghi trong CSDL
             $data = Seat::all();
-            $arr = [
+            return response()->json([
                 'status' =>true,
                 'message' =>"Get seat list successfully",
                 'data' =>$data
-            ];
-            return response()->json($arr, status:200);
-        } catch (Exception $ex) {
+            ], 200);
+        } catch (Exception $e) {
+            // Bắt lỗi và trả về phản hồi lỗi
             $arr = [
                 'status' =>false,
                 'message' =>"Database connection error",
-                'data' =>$ex->getMessage()
+                'data' =>$e->getMessage()
             ];
-            return response()->json($arr, $ex->getCode());
+            return response()->json($arr, $e->getCode());
         }
     }
 
@@ -49,9 +50,10 @@ class ApiSeatController extends Controller
     // Xác thực dữ liệu đầu vào
     $validator = Validator::make($request->all(), [
         'room_id' => ['required', 'exists:rooms,room_id'],
+        'row_id' => ['required', 'exists:rows,row_id'],
+        'type_id' => ['required', 'exists:types,type_id'],
         'seat_number' => ['required'],
-        'seat_type' => ['required', 'in:standard,vip'],
-        'status' => ['required', 'in:available,booked'],
+        'status' => ['required'],
     ]);
 
     // Xử lý nếu xác thực thất bại
@@ -67,8 +69,9 @@ class ApiSeatController extends Controller
         // Tạo bản ghi mới trong cơ sở dữ liệu
         $seat = Seat::query()->create([
             'room_id' => $request->room_id,
+            'row_id' => $request->row_id,
+            'type_id' => $request->type_id,
             'seat_number' => $request->seat_number,
-            'seat_type' => $request->seat_type,
             'status' => $request->status,
         ]);
 
@@ -121,10 +124,9 @@ class ApiSeatController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $seat_id)
     {
-        $seat = Seat::query()->where('seat_id', $id)->first();
-    
+        $seat = Seat::query()->where('seat_id', $seat_id)->first();
         if (!$seat) {
             return response()->json([
                 'status' => false,
@@ -134,10 +136,11 @@ class ApiSeatController extends Controller
     
         // Xác thực dữ liệu đầu vào
         $validator = Validator::make($request->all(), [
-            'room_id' => ['required', 'exists:rooms,room_id'],
+           'room_id' => ['required', 'exists:rooms,room_id'],
+            'row_id' => ['required', 'exists:rows,row_id'],
+            'type_id' => ['required', 'exists:types,type_id'],
             'seat_number' => ['required'],
-            'seat_type' => ['required', 'in:standard,vip'],
-            'status' => ['required', 'in:available,booked'],
+            'status' => ['required'],
         ]);
     
         if ($validator->fails()) {
@@ -145,15 +148,16 @@ class ApiSeatController extends Controller
                 'status' => false,
                 'message' => "Data check error",
                 'description' => $validator->errors()
-            ], 422);
+            ], 200);
         }
     
         try {
             // Cập nhật seat
             $seat->update([
                 'room_id' => $request->room_id,
+                'row_id' => $request->row_id,
+                'type_id' => $request->type_id,
                 'seat_number' => $request->seat_number,
-                'seat_type' => $request->seat_type,
                 'status' => $request->status,
             ]);
     
@@ -175,9 +179,9 @@ class ApiSeatController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $seat_id)
     {
-        $seat = Seat::query()->where('seat_id', $id)->first();
+        $seat = Seat::query()->where('seat_id', $seat_id)->first();
         if(!$seat){
             $res = [
                 'status'=>false,
