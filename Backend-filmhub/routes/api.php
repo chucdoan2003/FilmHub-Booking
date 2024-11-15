@@ -7,6 +7,7 @@ use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\api\ApiRowController;
 use App\Http\Controllers\api\ApiSeatController;
 use App\Http\Controllers\api\ApiTypeController;
+use App\Http\Controllers\api\ApiCheckBookedSeat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -63,3 +64,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::resource('seat', ApiSeatController::class);
 Route::resource('row', ApiRowController::class);
 Route::resource('type', ApiTypeController::class);
+
+
+// Check ghe da dat
+Route::get('/showtimes', [ApiCheckBookedSeat::class, 'index']);
+Route::get('/showtimes/{showtimeId}', [ApiCheckBookedSeat::class, 'show']);
