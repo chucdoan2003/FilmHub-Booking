@@ -28,25 +28,45 @@ class ComboController extends Controller
     // Xử lý lưu combo mới
     public function store(Request $request)
     {
+        // Xác thực dữ liệu đầu vào
         $request->validate([
             'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-            'foods' => 'required|array',
-            'drinks' => 'nullable|array', // Không bắt buộc
+            'foods' => 'required|array', // Món ăn là bắt buộc
+            'drinks' => 'nullable|array', // Đồ uống không bắt buộc
         ]);
 
-        // Tạo combo mới
-        $combo = Combo::create($request->only(['name', 'price']));
+        // Tính tổng giá cho combo ngay tại đây
+        $totalPrice = 0;
+
+        // Tính tổng giá cho các món ăn
+        foreach ($request->foods as $foodId) {
+            $food = Food::find($foodId);
+            $totalPrice += $food->price; // Giả sử $food->price chứa giá trị
+        }
+
+        // Tính tổng giá cho các đồ uống nếu có
+        if (!empty($request->drinks)) {
+            foreach ($request->drinks as $drinkId) {
+                $drink = Drink::find($drinkId);
+                $totalPrice += $drink->price; // Giả sử $drink->price chứa giá trị
+            }
+        }
+
+        // Tạo combo mới và lưu giá trị price
+        $combo = Combo::create([
+            'name' => $request->name,
+            'price' => $totalPrice, // Lưu giá trị price
+        ]);
 
         // Gắn món ăn
         $combo->foods()->attach($request->foods);
 
         // Gắn đồ uống nếu có
-        if (isset($request->drinks) && !empty($request->drinks)) {
+        if (!empty($request->drinks)) {
             foreach ($request->drinks as $drinkId) {
                 ComboFoodDrink::create([
                     'combo_id' => $combo->id,
-                    'food_id' => null, // Hoặc bạn có thể xử lý theo cách khác nếu cần
+                    'food_id' => null, // Không có food_id, chỉ gán drink_id
                     'drink_id' => $drinkId,
                 ]);
             }
@@ -67,28 +87,53 @@ class ComboController extends Controller
     // Xử lý cập nhật combo
     public function update(Request $request, $id)
     {
+        // Xác thực dữ liệu đầu vào
         $request->validate([
             'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-            'foods' => 'required|array',
-            'drinks' => 'nullable|array', // Có thể không chọn đồ uống
+            'foods' => 'required|array', // Món ăn là bắt buộc
+            'drinks' => 'nullable|array', // Đồ uống không bắt buộc
         ]);
 
         // Tìm combo theo ID
         $combo = Combo::findOrFail($id);
 
-        // Cập nhật thông tin combo
-        $combo->update($request->only(['name', 'price']));
+        // Cập nhật tên combo
+        $combo->name = $request->name;
+
+        // Tính tổng giá cho combo
+        $totalPrice = 0;
+
+        // Tính tổng giá cho các món ăn
+        foreach ($request->foods as $foodId) {
+            $food = Food::find($foodId);
+            $totalPrice += $food->price; // Giả sử $food->price chứa giá trị
+        }
+
+        // Tính tổng giá cho các đồ uống nếu có
+        if (!empty($request->drinks)) {
+            foreach ($request->drinks as $drinkId) {
+                $drink = Drink::find($drinkId);
+                $totalPrice += $drink->price; // Giả sử $drink->price chứa giá trị
+            }
+        }
+
+        // Cập nhật giá combo
+        $combo->price = $totalPrice;
 
         // Cập nhật món ăn
-        $combo->foods()->sync($request->foods); // Cập nhật hoặc gán lại món ăn
+        $combo->foods()->sync($request->foods); // Đồng bộ món ăn mới
 
-        // Cập nhật đồ uống
-        if (isset($request->drinks) && !empty($request->drinks)) {
-            $combo->drinks()->sync($request->drinks); // Cập nhật hoặc gán lại đồ uống
+        // Cập nhật đồ uống nếu có
+        if (!empty($request->drinks)) {
+            // Đồng bộ đồ uống mới
+            $combo->drinks()->sync($request->drinks); // Đồng bộ đồ uống
         } else {
-            $combo->drinks()->detach(); // Nếu không có đồ uống, xóa tất cả đồ uống liên quan
+            // Nếu không có đồ uống, xóa tất cả đồ uống liên quan
+            $combo->drinks()->detach();
         }
+
+        // Lưu thay đổi
+        $combo->save();
 
         return redirect()->route('admin.combos.index')->with('success', 'Combo updated successfully.');
     }

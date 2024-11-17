@@ -19,6 +19,34 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function calculateTotalPrice() {
+                let totalPrice = 0;
+
+                // Tính tổng giá cho các món ăn đã chọn
+                $('#foods option:selected').each(function() {
+                    totalPrice += parseFloat($(this).data('price')) ||
+                        0; // Lấy giá từ thuộc tính data-price
+                });
+
+                // Tính tổng giá cho các đồ uống đã chọn
+                $('#drinks option:selected').each(function() {
+                    totalPrice += parseFloat($(this).data('price')) ||
+                        0; // Lấy giá từ thuộc tính data-price
+                });
+
+                // Cập nhật giá vào trường tổng giá
+                $('#total-price').val(totalPrice.toFixed(2)); // Định dạng 2 chữ số thập phân
+            }
+
+            // Gọi hàm tính giá khi có sự thay đổi trong select
+            $('#foods, #drinks').on('change', calculateTotalPrice);
+        });
+    </script>
 @endsection
 <style>
     .bootstrap-select .dropdown-toggle {
@@ -49,15 +77,20 @@
 
     <form action="{{ route('admin.combos.store') }}" method="POST">
         @csrf
+
         <label for="name">Name:</label>
-        <input type="text" name="name" class="form-control" required>
-        <label for="price">Price:</label>
-        <input type="text" name="price" class="form-control" required>
+        <input type="text" name="name" value="{{ old('name') }}" class="form-control" required>
+
+        <label for="total-price">Total Price:</label>
+        <input type="text" name="total-price" id="total-price" class="form-control" value="0" readonly>
+
         <div class="mt-4">
             <label for="foods" class="form-label">Foods:</label>
             <select name="foods[]" id="foods" class="selectpicker form-control" multiple data-live-search="true">
                 @foreach ($foods as $food)
-                    <option value="{{ $food->id }}">{{ $food->name }}</option>
+                    <option value="{{ $food->id }}" data-price="{{ $food->price }}">
+                        {{ $food->name }} ({{ $food->price }})
+                    </option>
                 @endforeach
             </select>
         </div>
@@ -66,12 +99,13 @@
             <label for="drinks" class="form-label">Drinks:</label>
             <select name="drinks[]" id="drinks" class="selectpicker form-control" multiple data-live-search="true">
                 @foreach ($drinks as $drink)
-                    <option value="{{ $drink->id }}">{{ $drink->name }}</option>
+                    <option value="{{ $drink->id }}" data-price="{{ $drink->price }}">
+                        {{ $drink->name }} ({{ $drink->price }})
+                    </option>
                 @endforeach
             </select>
         </div>
 
-
-        <button type="submit" class="mt-3 btn btn-success">Create</button>
+        <button type="submit" class="btn btn-success mt-3">Create</button>
     </form>
 @endsection

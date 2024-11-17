@@ -19,6 +19,36 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Hàm tính tổng giá
+            function calculateTotalPrice() {
+                let totalPrice = 0;
+
+                // Tính tổng giá cho các món ăn đã chọn
+                $('#foods option:selected').each(function() {
+                    totalPrice += parseFloat($(this).data('price')) ||
+                    0; // Lấy giá từ thuộc tính data-price
+                });
+
+                // Tính tổng giá cho các đồ uống đã chọn
+                $('#drinks option:selected').each(function() {
+                    totalPrice += parseFloat($(this).data('price')) ||
+                    0; // Lấy giá từ thuộc tính data-price
+                });
+
+                // Cập nhật giá vào trường tổng giá
+                $('#total-price').val(totalPrice.toFixed(2)); // Định dạng 2 chữ số thập phân
+            }
+
+            // Lắng nghe sự thay đổi trên các select
+            $('#foods, #drinks').on('change', calculateTotalPrice);
+
+            // Gọi hàm tính giá ngay khi tải trang để hiển thị giá hiện tại
+            calculateTotalPrice();
+        });
+    </script>
 @endsection
 <style>
     .bootstrap-select .dropdown-toggle {
@@ -45,22 +75,26 @@
     }
 </style>
 @section('content')
-    <h1>Create Combo</h1>
+    <h1>Edit Combo</h1>
 
     <form action="{{ route('admin.combos.update', $combo) }}" method="POST">
         @csrf
         @method('PUT')
+
         <label for="name">Name:</label>
-        <input type="text" name="name" value="{{ $combo->name }}" class="form-control" required>
-        <label for="price">Price:</label>
-        <input type="text" name="price" value="{{ $combo->price }}" class="form-control" required>
-        <label>Foods:</label>
+        <input type="text" name="name" value="{{ old('name', $combo->name) }}" class="form-control" required>
+
+        <label for="total-price">Total Price:</label>
+        <input type="text" name="total-price" id="total-price" class="form-control" value="{{ $combo->price }}" readonly>
+
         <div class="mt-4">
             <label for="foods" class="form-label">Foods:</label>
             <select name="foods[]" id="foods" class="selectpicker form-control" multiple data-live-search="true">
                 @foreach ($foods as $food)
-                    <option value="{{ $food->id }}" {{ $combo->foods->contains($food->id) ? 'selected' : '' }}>
-                        {{ $food->name }}</option>
+                    <option value="{{ $food->id }}" data-price="{{ $food->price }}"
+                        {{ $combo->foods->contains($food->id) ? 'selected' : '' }}>
+                        {{ $food->name }} ({{ $food->price }})
+                    </option>
                 @endforeach
             </select>
         </div>
@@ -69,11 +103,14 @@
             <label for="drinks" class="form-label">Drinks:</label>
             <select name="drinks[]" id="drinks" class="selectpicker form-control" multiple data-live-search="true">
                 @foreach ($drinks as $drink)
-                    <option value="{{ $drink->id }}" {{ $combo->drinks->contains($drink->id) ? 'selected' : '' }}>
-                        {{ $drink->name }}</option>
+                    <option value="{{ $drink->id }}" data-price="{{ $drink->price }}"
+                        {{ $combo->drinks->contains($drink->id) ? 'selected' : '' }}>
+                        {{ $drink->name }} ({{ $drink->price }})
+                    </option>
                 @endforeach
             </select>
         </div>
-        <button type="submit" class="btn btn-success">Update</button>
+
+        <button type="submit" class="btn btn-success mt-3">Update</button>
     </form>
 @endsection

@@ -20,4 +20,10 @@ class Combo extends Model
     {
         return $this->belongsToMany(Drink::class, 'combo_food_drink');
     }
+    public function calculateTotalPrice()
+    {
+        $foodPrice = $this->foods()->sum('price');
+        $drinkPrice = $this->drinks()->sum('price');
+        return $foodPrice + $drinkPrice;
+    }
 }

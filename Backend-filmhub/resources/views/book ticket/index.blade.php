@@ -46,20 +46,7 @@
                         @endforeach
                         <td>{{ $showtime->movie->title }}</td>
                         <td>{{ $showtime->movie->description }}</td> <!-- Mô tả phim -->
-                        @php
-
-                            $startTime = \Carbon\Carbon::parse($showtime->start_time);
-                            $endTime = \Carbon\Carbon::parse($showtime->end_time);
-                        @endphp
-                        <td>
-                            @if ($startTime->format('Y-m-d') === $endTime->format('Y-m-d'))
-                                {{ $startTime->format('d/m/Y') }}: {{ $startTime->format('H:i') }} -
-                                {{ $endTime->format('H:i') }}
-                            @else
-                                {{ $startTime->format('d/m/Y') }} - {{ $endTime->format('d/m/Y') }}:
-                                {{ $startTime->format('H:i') }} - {{ $endTime->format('H:i') }}
-                            @endif
-                        </td>
+                        <td>{{ $showtime->datetime }}</td>
                         <td>{{ $showtime->room->room_name }}</td>
                         <td>{{ $showtime->movie->duration }} phút</td> <!-- Thời lượng -->
                         <td>{{ number_format($showtime->value) }} VND</td> <!-- Giá vé -->

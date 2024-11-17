@@ -59,9 +59,7 @@
                                 <td>{{ $item->showtime_id }}</td>
                                 <td>{{ $item->movie_name }}</td>
                                 <td>{{ $item->room_name }}</td>
-                                <td>{{ $item->shift_name }}</td>
-                                <td>{{ $item->start_time }}</td>
-                                <td>{{ $item->end_time }}</td>
+                                <td>{{ $item->datetime }}</td>
                                 <td>{{ number_format($item->value, 0, ',', '.') }} VND</td>
 
                                 <td>
