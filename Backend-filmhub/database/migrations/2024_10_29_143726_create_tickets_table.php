@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('showtime_id');
             $table->decimal('total_price', 10, 2);
             $table->timestamp('ticket_time')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->string('status')->default('pending');
+            $table->string('status');
             // Indexes
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
             $table->foreign('showtime_id')->references('showtime_id')->on('showtimes')->onDelete('cascade');

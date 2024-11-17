@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -22,7 +23,7 @@ class PaymentController extends Controller
         ]);
         // dd($data['showtime_id']);
 
-
+        session(['user_id' => $data['user_id']]);
 
         // Lưu vé vào cơ sở dữ liệu
         $ticket = Ticket::create([
@@ -150,50 +151,106 @@ class PaymentController extends Controller
 
 
 
+    // public function vnpay_payment_return(Request $request)
+    // {
+    //     $data = $request->all();
+
+    //     // Lấy ticket_id và user_id từ session
+    //     $ticketId = session('ticket_id');
+    //     $userId = session('user_id');  // Truy xuất user_id từ session
+
+    //     $paymentStatus = $data['vnp_ResponseCode']; // Mã phản hồi từ VNPAY
+
+    //     // Kiểm tra trạng thái thanh toán từ VNPAY
+
+
+    //     // Kiểm tra vé thanh toán trong cơ sở dữ liệu
+    //     $ticket = Ticket::where('ticket_id', $ticketId)->first();
+
+    //     if ($paymentStatus != '00') {
+    //         return redirect()->route('bookings.index')->with('status', 'Thanh toán thất bại');
+    //     }
+
+    //     if ($ticket) {
+    //         // Cập nhật trạng thái vé thành 'completed'
+    //         $ticket->status = 'completed';
+    //         $ticket->save();
+
+    //         // Kiểm tra và thêm điểm cho người dùng
+    //         $user = User::find($userId);
+
+    //         if ($user) {
+    //             // Cộng điểm vào member_point (ví dụ, 100.000 VND = 100 điểm)
+    //             $pointsToAdd = $ticket->total_price / 1000; // 1 điểm = 1.000 VND
+    //             $user->member_point += $pointsToAdd;
+
+    //             if ($user->status !== 'member') {
+    //                 $user->status = 'member';
+    //             }
+    //             // Lưu lại thay đổi
+    //             $user->save();
+
+    //             return redirect()->route('bookings.index')->with('status', 'Thanh toán thành công và đã cộng điểm!');
+    //         } else {
+    //             return redirect()->route('bookings.index')->with('error', 'Không tìm thấy người dùng.');
+    //         }
+    //     } else {
+    //         return redirect()->route('bookings.index')->with('error', 'Không tìm thấy vé thanh toán.');
+    //     }
+    // }
+
+
     public function vnpay_payment_return(Request $request)
-{
-    $data = $request->all();
+    {
+        $data = $request->all();
 
-    $ticketId = session('ticket_id');
-    $paymentStatus = $data['vnp_ResponseCode']; // Mã phản hồi từ VNPAY
+        // Lấy ticket_id và user_id từ session
+        $ticketId = session('ticket_id');
+        $userId = session('user_id');  // Truy xuất user_id từ session
 
-    // Kiểm tra trạng thái thanh toán từ VNPAY
+        $paymentStatus = $data['vnp_ResponseCode']; // Mã phản hồi từ VNPAY
 
-    $ticket = Ticket::where('ticket_id', $ticketId)->first();
+        // Kiểm tra trạng thái thanh toán từ VNPAY
+        $ticket = Ticket::where('ticket_id', $ticketId)->first();
 
-    if ($ticket) {
-        // Kiểm tra xem vé có thanh toán trong vòng 15 phút không
-        // $createdAt = $ticket->created_at;
-        // $currentTime = now();
-        // $timeDifference = $currentTime->diffInMinutes($createdAt);
-
-        // // Nếu thời gian thanh toán quá 15 phút
-        // if ($timeDifference > 15) {
-        //     $ticket->status = 'failed'; // Đánh dấu vé là failed nếu quá thời gian
-        //     $ticket->save(); // Cập nhật lại trạng thái
-        //     return redirect()->route('bookings.index')->with('error', 'Thời gian thanh toán đã hết hạn.');
-        // }
-
-        // Cập nhật trạng thái vé khi thanh toán thành công hoặc thất bại
-        if ($paymentStatus == '00') { // VNPAY trả về mã '00' khi thanh toán thành công
-            $ticket->status = 'completed'; // Cập nhật trạng thái thành 'completed'
-            // Lưu lại thông tin ticket với trạng thái mới
-            $ticket->save();
-            return redirect()->route('bookings.index')->with('status', 'Thanh toán thành công!');
-        } else {
-            $ticket->status = 'failed'; // Nếu mã khác '00', thanh toán thất bại
-            return redirect()->route('bookings.index')->with('status', 'Thanh toán thất bại');
+        if (!$ticket) {
+            return redirect()->route('bookings.index')->with('error', 'Không tìm thấy vé thanh toán.');
         }
 
+        if ($paymentStatus != '00') {
+            // Nếu thanh toán thất bại, cập nhật trạng thái vé thành 'failed'
+            $ticket->status = 'failed';
+            $ticket->save();
 
+            // Xóa các ghế đã lưu trong bảng tickets_seats
+            \DB::table('tickets_seats')->where('ticket_id', $ticketId)->delete();
 
+            return redirect()->route('bookings.index')->with('status', 'Thanh toán thất bại. Ghế đã được hủy.');
+        }
 
-    } else {
-        return redirect()->route('bookings.index')->with('error', 'Ticket không hợp lệ.');
+        // Nếu thanh toán thành công
+        $ticket->status = 'completed';
+        $ticket->save();
+
+        // Kiểm tra và thêm điểm cho người dùng
+        $user = User::find($userId);
+
+        if ($user) {
+            // Cộng điểm vào member_point (ví dụ, 100.000 VND = 100 điểm)
+            $pointsToAdd = $ticket->total_price / 1000; // 1 điểm = 1.000 VND
+            $user->member_point += $pointsToAdd;
+
+            if ($user->status !== 'member') {
+                $user->status = 'member';
+            }
+            // Lưu lại thay đổi
+            $user->save();
+
+            return redirect()->route('bookings.index')->with('status', 'Thanh toán thành công và đã cộng điểm!');
+        } else {
+            return redirect()->route('bookings.index')->with('error', 'Không tìm thấy người dùng.');
+        }
     }
-}
-
-
 
 
 
