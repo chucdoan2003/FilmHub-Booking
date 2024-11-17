@@ -16,108 +16,87 @@ class ShowtimesController extends Controller
             ->join('movies', 'showtimes.movie_id', '=', 'movies.movie_id')
             ->join('rooms', 'showtimes.room_id', '=', 'rooms.room_id')   // Join với bảng rooms
             ->join('shifts', 'showtimes.shift_id', '=', 'shifts.shift_id') // Join với bảng shifts
-            ->select('showtimes.*', 'movies.title as movie_name', 'rooms.room_name as room_name', 'shifts.shift_name as shift_name', 'showtimes.start_time', 'showtimes.end_time', 'showtimes.value')
+            ->select(
+                'showtimes.*',
+                'movies.title as movie_name',
+                'rooms.room_name as room_name',
+                'shifts.shift_name as shift_name',
+                'showtimes.value',
+                'shifts.start_time as shift_start_time',
+                'shifts.end_time as shift_end_time'
+            )
             ->paginate(10);
         return view('admin.showtimes.list', compact('showtimes'));
     }
     function create()
     {
-        return view('admin.showtimes.add');
+
+        $shifts = DB::table('shifts')->select('shift_id', 'shift_name', 'start_time', 'end_time')->get();
+        return view('admin.showtimes.add', compact('shifts'));
     }
-    public function create2(Request $request)
+    function create2(Request $request)
     {
-
-        $start_time = $request->start_time ?? null;
-        $end_time = $request->end_time ?? null;
-
+        $datetime = $request->datetime;
         $movies = DB::table('movies')->get();
         $rooms = DB::table('rooms')->get();
         $shifts = DB::table('shifts')->get();
-
-
         $showtimes = DB::table('showtimes')
             ->select('room_id', DB::raw('COUNT(*) as total_showtimes'))
-            ->where(function ($query) use ($start_time, $end_time) {
-                $query->whereBetween('start_time', [$start_time, $end_time])
-                    ->orWhereBetween('end_time', [$start_time, $end_time]);
-            })
+            ->whereDate('datetime', $datetime)
             ->groupBy('room_id')
             ->get();
-
         $room_over = [];
         foreach ($showtimes as $item) {
             if ($item->total_showtimes == count($shifts)) {
                 $room_over[] = $item->room_id;
             }
         }
-
-        return view('admin.showtimes.add2', compact('movies', 'rooms', 'start_time', 'end_time', 'room_over'));
+        return view('admin.showtimes.add2', compact('movies', 'rooms', 'datetime', 'room_over'));
     }
-
-
-
-    public function store(Request $request)
+    function store(Request $request)
     {
-
-
         $movie_id = $request->movie;
         $room_id = $request->room;
-        $start_time = $request->start_time;
-        $end_time = $request->end_time;
-
-        // Kiểm tra lịch chiếu
-        $showtimes = DB::table('showtimes')
+        $datetime = $request->datetime;
+        $showtimes =  DB::table('showtimes')
+            ->where('datetime', $datetime)
             ->where('room_id', $room_id)
-            ->where(function ($query) use ($start_time, $end_time) {
-                $query->whereBetween('start_time', [$start_time, $end_time])
-                    ->orWhereBetween('end_time', [$start_time, $end_time]);
-            })
             ->get();
-
         $shiftInroomBook = [];
         foreach ($showtimes as $item) {
             $shiftInroomBook[] = $item->shift_id;
         }
-
         $movies = DB::table('movies')->get();
         $rooms = DB::table('rooms')->get();
         $shifts = DB::table('shifts')->get();
 
-        return view('admin.showtimes.addshift', compact('movies', 'rooms', 'shifts', 'movie_id', 'room_id', 'start_time', 'end_time', 'shiftInroomBook'));
+        return view('admin.showtimes.addshift', compact('movies', 'rooms', 'shifts', 'movie_id', 'room_id', 'datetime', 'shiftInroomBook'));
     }
-
-
-
     function addshowtime(Request $request)
     {
         $shift_id = $request->shift;
         $movie_id = $request->movie;
         $room_id = $request->room;
-        $start_time = $request->start_time;
-        $end_time = $request->end_time;
+        $datetime = $request->datetime;
         $value = $request->value;
-
-
         DB::table('showtimes')->insert([
             "movie_id" => $movie_id,
             "room_id" => $room_id,
             "shift_id" => $shift_id,
-            "start_time" => $start_time,
-            "end_time" => $end_time,
-            "value" => $value,
-            "created_at" => Carbon::now()
+            'datetime' => $datetime,
+            'value' => $value
         ]);
 
 
 
 
-        return redirect()->route('showtimes.create')->with('success', 'Lịch chiếu đã được tạo thành công!');
+        return redirect()->route('showtimes.create');
     }
 
 
     function destroy(string $id)
     {
-        DB::table('showtimes')->where('id', $id)->delete();
+        DB::table('showtimes')->where('showtime_id', $id)->delete();
         return redirect()->route('showtimes.index');
     }
     function edit(string $id)
@@ -130,7 +109,6 @@ class ShowtimesController extends Controller
         // Sử dụng start_time thay vì datetime
         $showtimes = DB::table('showtimes')
             ->select('room_id', DB::raw('COUNT(*) as total_showtimes'))
-            ->whereDate('start_time', $showtime->start_time) // Sửa ở đây
             ->groupBy('room_id')
             ->get();
 
@@ -144,7 +122,6 @@ class ShowtimesController extends Controller
 
         // Kiểm tra phòng chọn những ca nào
         $showtimes2 = DB::table('showtimes')
-            ->whereDate('start_time', $showtime->start_time) // Sửa ở đây
             ->where('room_id', $showtime->room_id)
             ->get();
 
@@ -163,8 +140,8 @@ class ShowtimesController extends Controller
                 "movie_id" => $request->movie,
                 "room_id" => $request->room,
                 "shift_id" => $request->shift,
-                "start_time" => $request->start_time,
-                "end_time" => $request->end_time
+                "datetime" => $request->start_time,
+
             ]);
 
             return redirect()->route('showtimes.index')->with('success', 'Lịch chiếu đã được cập nhật thành công!');

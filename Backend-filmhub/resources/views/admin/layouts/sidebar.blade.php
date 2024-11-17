@@ -27,31 +27,21 @@
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-            aria-expanded="true" aria-controls="collapseTwo">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRoom"
+            aria-expanded="true" aria-controls="collapseRoom">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Quản lý rạp chiếu</span>
+        </a>
 
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseShift"
-                aria-expanded="true" aria-controls="collapseShift">
-                <i class="fas fa-fw fa-cog"></i>
-                <span>Quản lý rạp chiếu</span>
-            </a>
+        <div id="collapseRoom" class="collapse" aria-labelledby="headingRoom" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Custom Components:</h6>
+                <a class="collapse-item" href="{{ route('admin.theaters.index') }}">Danh sách</a>
 
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Custom Components:</h6>
-                    <a class="collapse-item" href="{{ route('admin.theaters.index') }}">Danh sách</a>
+                <a class="collapse-item" href="{{ route('theaters.indexRoom') }}">Danh sách phòng</a>
 
-                    <a class="collapse-item" href="{{ route('theaters.indexRoom') }}">Danh sách phòng</a>
-
-
-                    <div id="collapseShift" class="collapse" aria-labelledby="headingOne"
-                        data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            {{--                <h6 class="collapse-header">Custom Components:</h6> --}}
-                            <a class="collapse-item" href="{{ route('admin.shifts.index') }}">List</a>
-                            <a class="collapse-item" href="{{ route('admin.shifts.create') }}">Create New</a>
-                        </div>
-                    </div>
+            </div>
+        </div>
     </li>
 
 
@@ -104,6 +94,35 @@
         </div>
     </li>
 
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCombos"
+            aria-expanded="true" aria-controls="collapseCombos">
+            <i class="fas fa-fw fa-concierge-bell"></i>
+            <span>Quản lý Combo</span>
+        </a>
+        <div id="collapseCombos" class="collapse" aria-labelledby="headingCombos" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Danh sách chức năng</h6>
+                <a class="collapse-item" href="{{ route('admin.combos.index') }}">Danh sách</a>
+                <a class="collapse-item" href="{{ route('admin.combos.create') }}">Tạo mới</a>
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFoods"
+            aria-expanded="true" aria-controls="collapseFoods">
+            <i class="fas fa-fw fa-concierge-bell"></i>
+            <span>Quản lý Đồ Ăn</span>
+        </a>
+        <div id="collapseFoods" class="collapse" aria-labelledby="headingFoods" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Danh sách chức năng</h6>
+                <a class="collapse-item" href="{{ route('admin.foods.index') }}">Danh sách Thức Ăn</a>
+                <a class="collapse-item" href="{{ route('admin.drinks.index') }}">Danh Sách Đồ Uống</a>
+            </div>
+        </div>
+    </li>
+
     <!-- Nav Item - Utilities Collapse Menu -->
     {{-- <li class="nav-item">
     <!-- Nav Item - Utilities Collapse Menu -->
@@ -139,7 +158,7 @@
         </div>
     </li> --}}
 
-{{-- 
+    {{-- 
     </div>
     </div>
     </li> --}}
