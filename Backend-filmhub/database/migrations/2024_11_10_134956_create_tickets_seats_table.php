@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('booking_seats', function (Blueprint $table) {
-            $table->unsignedBigInteger('booking_id');
+        Schema::create('tickets_seats', function (Blueprint $table) {
+            $table->unsignedBigInteger('ticket_id');
             $table->unsignedBigInteger('seat_id');
-
+            $table->unsignedBigInteger('showtime_id');
             // Indexes
-            $table->primary(['booking_id', 'seat_id']);
-            $table->foreign('booking_id')->references('booking_id')->on('bookings')->onDelete('cascade');
+            $table->primary(['ticket_id', 'seat_id']);
+            $table->foreign('ticket_id')->references('ticket_id')->on('tickets')->onDelete('cascade');
             $table->foreign('seat_id')->references('seat_id')->on('seats')->onDelete('cascade');
+            $table->foreign('showtime_id')->references('showtime_id')->on('showtimes')->onDelete('cascade');
         });
-
     }
 
     /**
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('tickets_seats');
     }
 };

@@ -18,6 +18,9 @@ class Movie extends Model
         'release_date',
         'rating',
         'poster_url',
+        'director',
+        'performer',
+        'trailer',
     ];
     public function genres()
     {

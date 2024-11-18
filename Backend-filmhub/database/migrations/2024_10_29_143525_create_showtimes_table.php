@@ -11,16 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('seats', function (Blueprint $table) {
-            $table->id('seat_id');
+        Schema::create('showtimes', function (Blueprint $table) {
+            $table->id('showtime_id');
+            $table->unsignedBigInteger('movie_id');
             $table->unsignedBigInteger('room_id');
-            $table->string('seat_number', 10);
-            $table->enum('status', ['available', 'booked'])->default('available');
+            $table->unsignedBigInteger('shift_id');
+            $table->bigInteger('value');
+            $table->date('datetime')->nullable();
+
             $table->timestamps();
 
             // Indexes
+            $table->foreign('movie_id')->references('movie_id')->on('movies')->onDelete('cascade');
             $table->foreign('room_id')->references('room_id')->on('rooms')->onDelete('cascade');
+            $table->foreign('shift_id')->references('shift_id')->on('shifts')->onDelete('cascade');
         });
+
     }
 
     /**
@@ -28,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('seats');
+        //
     }
 };

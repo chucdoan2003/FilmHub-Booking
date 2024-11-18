@@ -12,18 +12,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bookings', function (Blueprint $table) {
-            $table->id('booking_id');
+        Schema::create('tickets', function (Blueprint $table) {
+            $table->id('ticket_id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('showtime_id');
             $table->decimal('total_price', 10, 2);
-            $table->timestamp('booking_time')->default(DB::raw('CURRENT_TIMESTAMP'));
-
+            $table->timestamp('ticket_time')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->string('status');
             // Indexes
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
             $table->foreign('showtime_id')->references('showtime_id')->on('showtimes')->onDelete('cascade');
         });
-
     }
 
     /**
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('tickets');
     }
 };

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\MovieController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -44,3 +45,4 @@ Route::prefix('theaters')->group(function () {
     });
 });
 
+    Route::resource('/movies', MovieController::class );

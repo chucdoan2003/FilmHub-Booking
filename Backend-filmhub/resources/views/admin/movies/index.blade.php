@@ -40,6 +40,9 @@
                             <th>Genre</th>
                             <th>Rating</th>
                             <th>Poster</th>
+                            <th>Director</th>
+                            <th>Performer</th>
+                            <th>Trailer</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -53,6 +56,9 @@
                             <th>Genre</th>
                             <th>Rating</th>
                             <th>Poster</th>
+                            <th>Director</th>
+                            <th>Performer</th>
+                            <th>Trailer</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -74,6 +80,9 @@
                                 <td>{{ $movie->rating }}</td>
                                 <td><img src="{{ Storage::url($movie->poster_url) }}" style="width: 100px; height: 100px;"
                                         alt=""></td>
+                                <td>{{ $movie->director }}</td>
+                                <td>{{ $movie->performer }}</td>
+                                <td>{{ $movie->trailer }}</td>
                                 <td class="">
                                     <a href="{{ route('admin.movies.show', $movie->movie_id) }}"
                                         class="btn btn-info mb-3">Xem</a>

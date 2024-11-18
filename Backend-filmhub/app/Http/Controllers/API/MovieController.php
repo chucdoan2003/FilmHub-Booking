@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\api;
 
+use App\Http\Controllers\Controller;
 use App\Models\Movie;
 use App\Http\Requests\StoreMovieRequest;
 use App\Http\Requests\UpdateMovieRequest;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class MovieController extends Controller
 {
@@ -16,8 +15,12 @@ class MovieController extends Controller
      */
     public function index()
     {
-        $movie = Movie::all();
-        return response()->json(['message' => 'Movie get All successfully', 'data' => $movie], 200);
+        try {
+            $movie = Movie::all();
+            return response()->json(['message' => 'Movie get All successfully', 'data' => $movie], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error fetching Movie', 'error' => $e->getMessage()], 500);
+        }
     }
 
     /**
