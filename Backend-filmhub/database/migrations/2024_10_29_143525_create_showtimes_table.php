@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('movie_id');
             $table->unsignedBigInteger('room_id');
             $table->unsignedBigInteger('shift_id');
-            $table->dateTime('start_time');
-            $table->dateTime('end_time');
+            $table->date('datetime')->nullable();
+            $table->integer('value')->nullable();
             $table->timestamps();
 
             // Indexes

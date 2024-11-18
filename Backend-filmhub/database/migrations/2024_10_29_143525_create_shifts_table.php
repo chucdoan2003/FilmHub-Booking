@@ -16,13 +16,11 @@ return new class extends Migration
             $table->string('shift_name');
             $table->time('start_time');
             $table->time('end_time');
-            $table->unsignedBigInteger('theater_id')->nullable();
-            $table->unsignedBigInteger('room_id')->nullable();
+
             $table->timestamps();
 
             // Indexes
-            $table->foreign('theater_id')->references('theater_id')->on('theaters')->onDelete('cascade');
-            $table->foreign('room_id')->references('room_id')->on('rooms')->onDelete('cascade');
+
         });
 
     }

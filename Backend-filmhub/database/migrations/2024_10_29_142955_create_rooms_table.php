@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('room_id');
             $table->unsignedBigInteger('theater_id');
             $table->string('room_name');
-            $table->integer('capacity');
+            $table->integer('capacity')->nullable();
             $table->timestamps();
 
             // Indexes

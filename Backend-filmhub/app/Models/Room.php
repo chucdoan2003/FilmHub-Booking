@@ -15,6 +15,9 @@ class Room extends Model
         'capacity'
     ];
     public function seats() {
-        return $this->hasMany(Seat::class);
+        return $this->hasMany(Seat::class, 'room_id');
+    }
+    public function theaters() {
+        return $this->belongsTo(Theater::class, 'theater_id');
     }
 }

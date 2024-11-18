@@ -12,7 +12,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" href="">
+        <a class="nav-link" href="/admin">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
@@ -27,6 +27,19 @@
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRoom"
+           aria-expanded="true" aria-controls="collapseRoom">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Quản lý phòng</span>
+        </a>
+        <div id="collapseRoom" class="collapse" aria-labelledby="headingRoom" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" href="{{route('admin.rooms.index')}}">Danh sách phòng</a>
+                <a class="collapse-item" href="{{route('admin.rooms.create')}}">Tạo mới</a>
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
            aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-cog"></i>
@@ -34,8 +47,7 @@
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-{{--                <h6 class="collapse-header">Custom Components:</h6>--}}
-                <a class="collapse-item" href="{{route('admin.seats.index')}}">Danh sách</a>
+                <a class="collapse-item" href="{{route('admin.seats.index')}}">Danh sách ghế</a>
                 <a class="collapse-item" href="{{route('admin.seats.create')}}">Tạo mới</a>
             </div>
         </div>
@@ -52,7 +64,7 @@
              data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Danh sách chức năng</h6>
-                <a class="collapse-item" href="{{route('admin.rows.index')}}">Danh sách</a>
+                <a class="collapse-item" href="{{route('admin.rows.index')}}">Danh sách hàng ghế</a>
                 <a class="collapse-item" href="{{route('admin.rows.create')}}">Tạo mới</a>
             </div>
         </div>
@@ -68,9 +80,86 @@
              data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Danh sách chức năng</h6>
-                <a class="collapse-item" href="{{route('admin.types.index')}}">Danh sách</a>
+                <a class="collapse-item" href="{{route('admin.types.index')}}">Danh sách loại ghế</a>
                 <a class="collapse-item" href="{{route('admin.types.create')}}">Tạo mới</a>
 
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTheaters"
+            aria-expanded="true" aria-controls="collapseTheaters">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Quản lý rạp chiếu</span>
+        </a>
+        <div id="collapseTheaters" class="collapse" aria-labelledby="headingTheaters" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                {{--                <h6 class="collapse-header">Custom Components:</h6> --}}
+                <a class="collapse-item" href="{{ route('admin.theaters.index') }}">Danh sách rạp chiếu</a>
+                <a class="collapse-item" href="{{ route('admin.theaters.create') }}">Tạo mới</a>
+
+            </div>
+        </div>
+    </li>
+
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMovies"
+            aria-expanded="true" aria-controls="collapseMovies">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Quản lý phim</span>
+        </a>
+        <div id="collapseMovies" class="collapse" aria-labelledby="headingMovies" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Danh sách chức năng</h6>
+                <a class="collapse-item" href="{{ route('admin.movies.index') }}">Danh sách phim</a>
+                <a class="collapse-item" href="{{ route('admin.movies.create') }}">Tạo mới</a>
+            </div>
+        </div>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseShifts"
+            aria-expanded="true" aria-controls="collapseShifts">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Quản lý ca chiếu</span>
+        </a>
+        <div id="collapseShifts" class="collapse" aria-labelledby="headingShifts" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                {{--                <h6 class="collapse-header">Custom Components:</h6> --}}
+                <a class="collapse-item" href="{{ route('admin.shifts.index') }}">Danh sách ca chiếu</a>
+
+                <a class="collapse-item" href="{{ route('admin.shifts.create') }}">Tạo mới</a>
+
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseShowtimes"
+           aria-expanded="true" aria-controls="collapseShowtimes">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Quản lý lịch chiếu</span>
+        </a>
+        <div id="collapseShowtimes" class="collapse" aria-labelledby="headingOrders"
+             data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">List function</h6>
+                <a class="collapse-item" href="{{ route('showtimes.index') }}">Danh sách lịch chiếu</a>
+                <a class="collapse-item" href="{{ route('bookings.index') }}">Test đặt vé</a>
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseStatistics"
+           aria-expanded="true" aria-controls="collapseStatistics">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Thống kê</span>
+        </a>
+        <div id="collapseStatistics" class="collapse" aria-labelledby="headingStatistics"
+             data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">List function</h6>
+                <a class="collapse-item" href="{{ route('admin.statistics.index') }}">Thống kê theo phim</a>
             </div>
         </div>
     </li>
