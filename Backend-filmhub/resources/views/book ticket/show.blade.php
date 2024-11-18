@@ -51,7 +51,7 @@
                         <label for="seat-{{ $seat->seat_id }}"
 
                             @if (in_array($seat->seat_id, $bookedSeats)) style="color: grey;" @endif>
-                            {{ $seat->number }} (Số: {{ $seat->seat_id }})
+                            {{ $seat->number }} (Số: {{ $seat->seat_number }})
 
 
                         </label>

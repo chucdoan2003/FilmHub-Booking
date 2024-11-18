@@ -55,7 +55,7 @@
                         <!-- Card Body -->
 
                         <div class="card-body">
-                            <input type="date" name="start_time" id="datetime" value="{{ $showtime->datetime }}" >
+                            <input type="date" name="date_time" id="datetime" value="{{ $showtime->datetime }}" >
                         </div>
 
 
@@ -136,6 +136,17 @@
                         </select>
                     </div>
 
+
+                </div>
+
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Giá tiền</h6>
+                    </div>
+                    <div class="card-body">
+                        <label for="value">Nhập giá tiền:</label>
+                        <input type="text" name="value" id="value" class="form-control" value="{{$showtime->value}}" required>
+                    </div>
                 </div>
 
             <button class="btn btn-primary btn-user btn-block">

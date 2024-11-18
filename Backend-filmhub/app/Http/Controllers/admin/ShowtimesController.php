@@ -145,7 +145,8 @@ class ShowtimesController extends Controller
                 "movie_id" => $request->movie,
                 "room_id" => $request->room,
                 "shift_id" => $request->shift,
-                "datetime" => $request->start_time,
+                "datetime" => $request->date_time,
+                "value" => $request->value,
 
             ]);
 

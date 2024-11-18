@@ -22,7 +22,7 @@ class AdminTheaterController extends Controller
     public function index()
     {
 
-        $data = Theater::query()->withCount(['rooms', 'shifts'])->get();
+        $data = Theater::query()->withCount(['rooms'])->get();
         return view(self::PATH_VIEW . __FUNCTION__, compact('data'));
     }
 

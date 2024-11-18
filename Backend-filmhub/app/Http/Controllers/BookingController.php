@@ -8,9 +8,16 @@ use App\Models\Movie;
 use App\Models\Ticket;
 use App\Models\Seat;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class BookingController extends Controller
 {
+
+    public function __construct()
+    {
+        // Mỗi khi controller được gọi sẽ thực hiện kiểm tra trạng thái vé pending
+        $this->checkPendingTickets();
+    }
     public function index()
     {
 
@@ -34,4 +41,25 @@ class BookingController extends Controller
 
 
 
+    private function checkPendingTickets()
+    {
+        // Lấy các vé có status là "pending"
+        $pendingTickets = Ticket::where('status', 'pending')->get();
+
+        foreach ($pendingTickets as $ticket) {
+            // Kiểm tra xem vé có ticket_time không và chuyển ticket_time thành đối tượng Carbon
+            if ($ticket->ticket_time) {
+                $ticketTime = Carbon::parse($ticket->ticket_time); // Chuyển ticket_time thành Carbon
+
+                // Kiểm tra xem vé có quá thời gian quy định không (sau 16 phút)
+                if ($ticketTime->addMinutes(16) < now()) {
+                    // Cập nhật trạng thái vé thành "failed"
+                    $ticket->update(['status' => 'failed']);
+
+                    // Xóa các ghế liên quan trong bảng ticket_seats
+                    DB::table('tickets_seats')->where('ticket_id', $ticket->id)->delete();
+                }
+            }
+        }
+    }
 }

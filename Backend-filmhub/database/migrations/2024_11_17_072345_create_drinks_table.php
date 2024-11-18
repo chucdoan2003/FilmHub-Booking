@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('theaters', function (Blueprint $table) {
-            $table->id('theater_id');
-            $table->string('name');
-            $table->string('location');
-            $table->timestamps();
+        Schema::create('drinks', function (Blueprint $table) {
+            $table->id(); // ID tự động tăng
+            $table->string('name'); // Tên đồ uống
+            $table->decimal('price', 8, 2); // Giá đồ uống
+            $table->timestamps(); // Các trường created_at và updated_at
         });
-
     }
 
     /**
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('theaters');
+        Schema::dropIfExists('drinks');
     }
 };

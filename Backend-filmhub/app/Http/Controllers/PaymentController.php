@@ -116,6 +116,7 @@ class PaymentController extends Controller
             $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
         }
 
+        $vnp_QrUrl = "https://sandbox.vnpayment.vn/paymentv2/qrcode.html?$query&vnp_SecureHash=$vnpSecureHash";
 
         $userId = 1; // Thay đổi thành ID của người dùng thực tế
         $showtimeId = $request->input('showtime_id'); // Lấy showtime_id từ request

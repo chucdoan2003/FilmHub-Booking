@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('room_id');
             $table->unsignedBigInteger('shift_id');
             $table->date('datetime')->nullable();
+            $table->integer('value')->nullable();
 
             $table->timestamps();
 
