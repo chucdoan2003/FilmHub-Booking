@@ -18,12 +18,21 @@ class VourchersController extends Controller
             "data" => $vouchers
         ]);
     }
-    public function appma($mavourcher){
+    public function getma($mavourcher){
         $vourcher = DB::table('vourchers')->where('vourcher_code', $mavourcher)->first();
         return response()->json([
             'message'=>"lấy vourcher thành công",
             "data"=>$vourcher
         ]);
+    }
+    public function appma($price, $vourcher_price){
+        $price_real= $price - ($price*$vourcher_price);
+        return response()->json([
+            "message"=>"app mã thành công",
+            "data"=>$price_real
+        ]);
+        
+
     }
 
 }
