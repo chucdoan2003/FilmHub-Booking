@@ -18,7 +18,9 @@ return new class extends Migration
             $table->decimal('total_price', 10, 2);
             $table->timestamp('ticket_time')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->string('status', 255)->default('pending')->collation('utf8mb4_unicode_ci');
-
+            $table->unsignedBigInteger('food_id')->nullable();
+            $table->unsignedBigInteger('drink_id')->nullable();
+            $table->unsignedBigInteger('combo_id')->nullable();
             // Indexes
 
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
