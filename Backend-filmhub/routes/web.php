@@ -1,11 +1,14 @@
 <?php
 
-use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\AdminTheaterController;
 use App\Http\Controllers\admin\MovieController;
+
 use App\Http\Controllers\admin\ShowtimesController;
+
+use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\admin\VourcherAdmminController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -53,27 +56,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
 // Showtime
-Route::prefix("admin")->group(function(){
-    // Route::resource("users", UserController::class);
-    Route::get('showtime/list', [ShowtimesController::class, "list"])->name('showtimes.index');
-    Route::get('showtime/create', [ShowtimesController::class, "create"])->name('showtimes.create');
-    Route::post('showtime/create2', [ShowtimesController::class, "create2"])->name('showtimes.store1'); // Route này xử lý việc tạo
-    Route::post('showtime/store', [ShowtimesController::class, "store"])->name('showtimes.store2'); // Route này để gửi cuối cùng // hiển thị ca chiếu theo phòng, valid ca chiếu chọn r thì không chọn được nx
-    Route::post('showtime/add', [ShowtimesController::class, "addshowtime"])->name('showtimes.addshowtime');// thêm xuất chiếu
-    Route::get('showtime/edit/{id}', [ShowtimesController::class, "edit"])->name('showtimes.edit');
-    Route::put('showtime/update/{id}', [ShowtimesController::class, "update"])->name('showtimes.update');
-    Route::delete('showtime/destroy/{id}', [ShowtimesController::class, "destroy"])->name('showtimes.destroy');
-    Route::post('showtime/getApi', [ShowtimesController::class, "getAPI"])->name('showtimes.getAPI');
-});
 
 
-Route::prefix("admin")->group(function(){
-    // Route::resource("users", UserController::class);
-    Route::get('booking/list', [BookingController::class, 'index'])->name('bookings.index');
-    Route::get('bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');
-    Route::post('/book-tickets', [BookingController::class, 'purchaseTicket'])->name('purchase.ticket');
 
 
-});
+
 
 

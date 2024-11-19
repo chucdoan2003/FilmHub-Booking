@@ -12,6 +12,8 @@ class PaymentController extends Controller
 
         $data = $request->all();
 
+        // dd($data);
+
 
         // Kiểm tra dữ liệu đầu vào
         $request->validate([
@@ -19,6 +21,9 @@ class PaymentController extends Controller
             'showtime_id' => 'required|exists:showtimes,showtime_id',
             'total' => 'required|numeric',
             'selected_seats' => 'required|string',
+           'food_id' => 'nullable|integer',
+            'drink_id' => 'nullable|integer',
+            'combo_id' => 'nullable|integer',
 
         ]);
         // dd($data['showtime_id']);
@@ -32,6 +37,10 @@ class PaymentController extends Controller
             'total_price' => $data['total'],
             'ticket_time' => now(),
             'status' => 'pending',
+            'food_id' => $data['food_id'],
+            'drink_id' => $data['drink_id'],
+            'combo_id' => $data['combo_id'],
+
         ]);
 
         // Lưu thông tin ghế đã chọn vào bảng ticket_seats
@@ -60,7 +69,7 @@ class PaymentController extends Controller
         $vnp_OrderType = "FilmHub Booking";
         $vnp_Amount = $data['total'] * 100;
         $vnp_Locale = "VN";
-        $vnp_BankCode = "NCB";
+        $vnp_BankCode = "";
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
         $showtime_id = $data['showtime_id'];
 
@@ -116,7 +125,7 @@ class PaymentController extends Controller
             $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
         }
 
-        $vnp_QrUrl = "https://sandbox.vnpayment.vn/paymentv2/qrcode.html?$query&vnp_SecureHash=$vnpSecureHash";
+
 
         $userId = 1; // Thay đổi thành ID của người dùng thực tế
         $showtimeId = $request->input('showtime_id'); // Lấy showtime_id từ request

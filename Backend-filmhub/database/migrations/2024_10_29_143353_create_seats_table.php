@@ -17,9 +17,13 @@ return new class extends Migration
             $table->string('seat_number', 10);
             $table->enum('status', ['available', 'booked'])->default('available');
             $table->timestamps();
+            $table->unsignedBigInteger('row_id');
+            $table->unsignedBigInteger('type_id');
 
             // Indexes
             $table->foreign('room_id')->references('room_id')->on('rooms')->onDelete('cascade');
+            $table->foreign('row_id')->references('row_id')->on('rows')->onDelete('cascade');
+            $table->foreign('type_id')->references('type_id')->on('types')->onDelete('cascade');
         });
     }
 

@@ -3,10 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use PHPUnit\Framework\Attributes\Ticket;
 
 class User extends Authenticatable
 {
@@ -17,13 +19,15 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    protected $table="users";
     protected $primaryKey = 'user_id';
+
     protected $fillable = [
         'name',
         'email',
         'password',
-        'status',
-        'member_point',
+        'phone_number',
+        'role',
     ];
 
     /**
@@ -46,8 +50,13 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+
+
+
+
+    // Mối quan hệ với model Ticket
     public function tickets()
     {
-        return $this->hasMany(Ticket::class);
+        return $this->hasMany(Ticket::class, 'user_id');
     }
 }

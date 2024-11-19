@@ -27,10 +27,10 @@
     <a href="{{route('admin.theaters.create')}}" class="mb-3">
         <button class="btn btn-success">Tạo mới</button>
     </a>
-    <form action="{{ route('vnpay_payment') }}" method="POST">
+    {{-- <form action="{{ route('vnpay_payment') }}" method="POST">
         @csrf
         <button type="submit" name="redirect" class="btn btn-success">Thanh toan VNPAY </button>
-    </form>
+    </form> --}}
     <!-- DataTales Example -->
     <div class="card shadow mb-4 mt-3">
         <div class="card-header py-3">

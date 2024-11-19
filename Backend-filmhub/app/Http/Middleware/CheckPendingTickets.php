@@ -19,7 +19,7 @@ class CheckPendingTickets
     {
         $timeout = 16;
 
-        // Lấy tất cả các vé ở trạng thái 'pending' đã hết hạn
+
         $expiredTickets = DB::table('tickets')
             ->where('status', 'pending')
             ->where('ticket_time', '<', Carbon::now()->subMinutes($timeout))

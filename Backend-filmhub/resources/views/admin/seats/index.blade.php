@@ -44,9 +44,9 @@
                         <tr>
                             <th>ID</th>
                             <th>Phòng</th>
-                            <th>Hàng ghế</th>
+                            {{-- <th>Hàng ghế</th> --}}
                             <th>Số ghế</th>
-                            <th>Loại ghế</th>
+                            {{-- <th>Loại ghế</th> --}}
                             <th>Trạng thái</th>
                             <th>Hành động</th>
                         </tr>
@@ -56,9 +56,9 @@
                                 <tr>
                                     <td>{{$item->seat_id}}</td>
                                     <td>{{$item->rooms->room_name}}</td>
-                                    <td>{{$item->rows->row_name}}</td>
+                                    {{-- <td>{{$item->rows->row_name}}</td> --}}
                                     <td>{{$item->seat_number}}</td>
-                                    <td>{{$item->types->type_name}}</td>
+                                    {{-- <td>{{$item->types->type_name}}</td> --}}
                                     <td>{{$item->status}}</td>
                                     <td >
                                         <a href="{{route('admin.seats.edit', $item)}}" class="btn btn-info">Sửa</a>

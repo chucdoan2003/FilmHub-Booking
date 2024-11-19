@@ -12,6 +12,7 @@ use App\Http\Controllers\api\ApiCheckBookedSeat;
 use App\Http\Controllers\api\ComboController;
 use Illuminate\Http\Request;
 
+use App\Http\Controllers\VourchersController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -77,3 +78,11 @@ Route::get('/showtimes/{showtimeId}', [ApiCheckBookedSeat::class, 'show']);
 
 
 Route::apiResource('combos', ComboController::class);
+
+Route::get('user/vourchers/{id}',[VourchersController::class, 'userVourchers'])->name('userVourchers');
+
+Route::get('vourchers',[VourchersController::class, 'index'])->name('vourchers');
+
+Route::get('vourcher/{mavoucher}',[VourchersController::class, 'getma'])->name('vourcher');
+Route::get('vourcher/appma/{price}/{vourcher_price}',[VourchersController::class, 'appma'])->name('appma');
+Route::get('user/vourcher/add/{vourcher}/{id_user}', [VourchersController::class, 'addVourcherUser'])->name('addVourcherUser');
