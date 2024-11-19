@@ -34,11 +34,12 @@ Route::prefix('admin/shifts')->group(function () {
     Route::delete('/{shift_id}', [AdminShiftController::class, 'destroy'])->name('admin.shifts.destroy'); // Xóa một shift
 });
 
-Route::prefix('admin')->as('admin.')->middleware('auth')->group(function() {
+Route::prefix('admin')->as('admin.')->group(function() {
     Route::get('/', function () {
         return view('admin.dashboard');
     })->name('dashboard');
     Route::resource('categories', CategoryController::class);
     Route::resource('products', ProductController::class);
     Route::resource('orders', AdminOrderController::class);
+    
 });

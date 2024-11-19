@@ -90,6 +90,22 @@
             </div>
         </div>
     </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVourchers"
+           aria-expanded="true" aria-controls="collapseVourchers">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Manage Vourchers</span>
+        </a>
+        <div id="collapseVourchers" class="collapse" aria-labelledby="headingOrders"
+             data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">List function</h6>
+                <a class="collapse-item" href="{{ route('vourchers.index') }}">List Vourchers</a>
+                
+
+            </div>
+        </div>
+    </li>
 
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseShowtimes"

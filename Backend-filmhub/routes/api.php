@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\TheaterController;
 use App\Http\Controllers\RoomController;
-
+use App\Http\Controllers\VourchersController;
 
 Route::prefix('theaters')->group(function () {
     Route::get('/', [TheaterController::class, 'index']);
@@ -50,5 +50,7 @@ Route::post('auth/login', [AuthController::class, 'login' ]);
 Route::get('auth/profile', [AuthController::class, 'profile' ]);
 Route::post('auth/logout', [AuthController::class, 'logout' ]);
 Route::post('auth/register', [AuthController::class, 'register' ]);
-Route::get('showtime/{id}', [ApiShowtimes::class, 'showtime' ])->name('showtime');
 
+Route::get('showtime/{id}', [ApiShowtimes::class, 'showtime' ])->name('showtime');
+Route::get('vourchers',[VourchersController::class, 'index'])->name('vourchers');
+Route::get('vourcher/{mavoucher}',[VourchersController::class, 'appma'])->name('vourcher');
