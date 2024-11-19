@@ -55,3 +55,5 @@ Route::get('showtime/{id}', [ApiShowtimes::class, 'showtime' ])->name('showtime'
 Route::get('vourchers',[VourchersController::class, 'index'])->name('vourchers');
 Route::get('vourcher/{mavoucher}',[VourchersController::class, 'getma'])->name('vourcher');
 Route::get('vourcher/appma/{price}/{vourcher_price}',[VourchersController::class, 'appma'])->name('appma');
+
+Route::get('user/vourchers/{id}',[VourchersController::class, 'userVourchers'])->name('userVourchers');

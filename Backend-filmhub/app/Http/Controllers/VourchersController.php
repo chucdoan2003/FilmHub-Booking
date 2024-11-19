@@ -26,13 +26,23 @@ class VourchersController extends Controller
         ]);
     }
     public function appma($price, $vourcher_price){
-        $price_real= $price - ($price*$vourcher_price);
+        $price_real= $price*(100 - $vourcher_price);
         return response()->json([
             "message"=>"app mã thành công",
             "data"=>$price_real
         ]);
-        
 
+
+    }
+    public function userVourchers($id){
+        $vouchers = DB::table('vourcher_user')
+        ->join('vourchers', 'vourcher_user.vourcher_id', '=', 'vourchers.id')
+        ->where('vourcher_user.user_id', 2)
+        ->get();
+        return response()->json([
+            "message"=>"lấy danh sách vourcher thành công",
+            "data"=>$vouchers
+        ]);
     }
 
 }
