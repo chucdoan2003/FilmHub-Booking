@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('vourchers', function (Blueprint $table) {
             $table->id();
+            $table->integer('vourcher_code');
+            $table->integer('vourcher_price');
             $table->timestamps();
         });
     }
