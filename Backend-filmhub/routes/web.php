@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\MovieController;
 use App\Http\Controllers\Admin\ShowtimesController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\VourcherAdmminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,8 @@ Route::prefix("admin")->group(function(){
     Route::put('showtime/update/{id}', [ShowtimesController::class, "update"])->name('showtimes.update');
     Route::delete('showtime/destroy/{id}', [ShowtimesController::class, "destroy"])->name('showtimes.destroy');
     Route::post('showtime/getApi', [ShowtimesController::class, "getAPI"])->name('showtimes.getAPI');
+
+    Route::resource('vourchers', VourcherAdmminController::class);
 });
 
 Route::get('demo', [ShowtimesController::class, "demo"]);
