@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('vourchers', function (Blueprint $table) {
             $table->id();
+            $table->string('voucher_code');
+            $table->float('voucher_price');
             $table->timestamps();
         });
     }

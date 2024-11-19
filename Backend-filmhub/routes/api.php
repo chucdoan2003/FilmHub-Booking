@@ -57,3 +57,4 @@ Route::get('vourcher/{mavoucher}',[VourchersController::class, 'getma'])->name('
 Route::get('vourcher/appma/{price}/{vourcher_price}',[VourchersController::class, 'appma'])->name('appma');
 
 Route::get('user/vourchers/{id}',[VourchersController::class, 'userVourchers'])->name('userVourchers');
+Route::get('user/vourcher/add/{vourcher}/{id_user}', [VourchersController::class, 'addVourcherUser'])->name('addVourcherUser');

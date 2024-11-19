@@ -44,5 +44,25 @@ class VourchersController extends Controller
             "data"=>$vouchers
         ]);
     }
-
+    public function addVourcherUser($vourcher_id, $user_id){
+        $checkUserVoucher = DB::table('vourcher_user')
+        ->where('vourcher_user.user_id',$user_id)
+        ->where('vourcher_user.vourcher_id',$vourcher_id)
+        ->get();
+        if(!$checkUserVoucher){
+            DB::table('vourcher_user')->insert([
+                'vourcher_id' => $vourcher_id,
+                'user_id' => $user_id
+            ]);
+            return response()->json([
+                "message"=>"thêm vourcher vào user thành công",
+            ]);
+        }else{
+            return response()->json([
+                "message"=>"user đã có vourcher này",
+            ]);
+        }
+        
+        
+    }
 }
