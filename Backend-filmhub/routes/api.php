@@ -9,6 +9,7 @@ use App\Http\Controllers\api\ApiSeatController;
 use App\Http\Controllers\api\ApiTypeController;
 use App\Http\Controllers\api\ApiCheckBookedSeat;
 
+use App\Http\Controllers\api\MovieController;
 use App\Http\Controllers\api\ComboController;
 use Illuminate\Http\Request;
 
@@ -86,3 +87,6 @@ Route::get('vourchers',[VourchersController::class, 'index'])->name('vourchers')
 Route::get('vourcher/{mavoucher}',[VourchersController::class, 'getma'])->name('vourcher');
 Route::get('vourcher/appma/{price}/{vourcher_price}',[VourchersController::class, 'appma'])->name('appma');
 Route::get('user/vourcher/add/{vourcher}/{id_user}', [VourchersController::class, 'addVourcherUser'])->name('addVourcherUser');
+
+
+Route::resource('/movies', MovieController::class );
