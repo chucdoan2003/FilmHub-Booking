@@ -1,0 +1,88 @@
+/* Main wrapper style */
+.movie-item {
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.movie-item h3 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.movie-item p {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+.movie-item p strong {
+  font-weight: bold;
+  color: #333;
+}
+
+/* Image styling */
+.video-wrap img {
+  width: 100%;
+  max-width: 250px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+
+/* Trailer link styling */
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Error and loading message */
+p.loading,
+p.error {
+  font-size: 18px;
+  color: #ff6b6b;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Container styling */
+h2 {
+  font-size: 30px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Responsive styling for small screens */
+@media (max-width: 768px) {
+  .movie-item {
+    padding: 15px;
+    margin: 10px 0;
+  }
+
+  .movie-item h3 {
+    font-size: 22px;
+  }
+
+  .movie-item p {
+    font-size: 14px;
+  }
+
+  .video-wrap img {
+    max-width: 200px;
+  }
+}

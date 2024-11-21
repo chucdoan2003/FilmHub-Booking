@@ -169,3 +169,107 @@ code {
       opacity: 0; /* Ẩn hoàn toàn */
   }
 }
+
+/* ThongTin.css */
+
+.contact-inner select {
+  border: 1px solid #ced4da; /* Viền sáng như các input khác */
+  border-radius: 5px; /* Bo góc cho select */
+  padding: 10px; /* Padding giống như các input */
+  width: 100%; /* Chiều rộng đầy đủ */
+  margin-bottom: 15px; /* Khoảng cách giữa các input */
+  transition: border-color 0.3s; /* Hiệu ứng chuyển đổi */
+}
+
+.contact-inner select:focus {
+  border-color: #007bff; /* Thay đổi màu viền khi focus */
+  outline: none; /* Loại bỏ viền mặc định */
+}
+/* ThongTin.css */
+
+body {
+  background-color: #f8f9fa; /* Màu nền nhẹ cho toàn bộ trang */
+  font-family: 'Arial', sans-serif; /* Phông chữ dễ đọc */
+}
+
+.breadcrumb-area {
+  background-color: #343a40; /* Màu nền cho phần breadcrumb */
+  color: white; /* Màu chữ trắng */
+  padding: 20px 0; /* Padding cho phần breadcrumb */
+}
+
+.breadcrumb-style-2 h2 {
+  margin: 0; /* Bỏ margin cho tiêu đề */
+  font-size: 24px; /* Kích thước chữ tiêu đề */
+}
+
+.breadcrumb-list-2 {
+  list-style: none; /* Bỏ dấu đầu dòng */
+  padding: 0; /* Bỏ padding */
+}
+
+.breadcrumb-list-2 li {
+  display: inline; /* Hiển thị inline cho các mục */
+  margin-right: 10px; /* Khoảng cách giữa các mục */
+}
+
+.breadcrumb-list-2 li a {
+  color: white; /* Màu chữ cho liên kết */
+  text-decoration: none; /* Bỏ gạch chân */
+}
+
+.contact-us-area {
+  background-color: #fff; /* Nền trắng cho phần contact */
+  padding: 50px; /* Padding cho phần contact */
+  border-radius: 8px; /* Bo góc */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+}
+
+.contact-inner {
+  margin-bottom: 20px; /* Khoảng cách giữa các trường */
+}
+
+.contact-inner input,
+.contact-inner select {
+  width: 100%; /* Chiều rộng 100% */
+  padding: 15px; /* Padding cho input */
+  border: 1px solid #ced4da; /* Viền sáng */
+  border-radius: 5px; /* Bo góc */
+  transition: border-color 0.3s; /* Hiệu ứng chuyển đổi */
+}
+
+.contact-inner input:focus,
+.contact-inner select:focus {
+  border-color: #007bff; /* Màu viền khi focus */
+  outline: none; /* Bỏ viền mặc định */
+}
+
+.contact-submit-btn {
+  margin-top: 20px; /* Khoảng cách trên nút submit */
+}
+
+.submit-btn {
+  background-color: #007bff; /* Màu nền cho nút submit */
+  color: white; /* Màu chữ nút */
+  padding: 10px 20px; /* Padding cho nút */
+  border: none; /* Bỏ viền */
+  border-radius: 5px; /* Bo góc */
+  cursor: pointer; /* Hiệu ứng con trỏ */
+  transition: background-color 0.3s; /* Hiệu ứng chuyển đổi */
+}
+
+.submit-btn:hover {
+  background-color: #0056b3; /* Màu nền khi hover */
+}
+
+.form-messege {
+  color: red; /* Màu chữ thông báo lỗi */
+  margin-top: 10px; /* Khoảng cách trên thông báo lỗi */
+}
+.navbar-user{
+  color: rgb(0, 154, 165);
+}
+.navbar-logout {
+  color:rgb(156, 156, 156);
+  padding:0.35rem;
+}
