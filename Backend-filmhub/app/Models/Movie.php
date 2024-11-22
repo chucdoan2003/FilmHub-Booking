@@ -18,6 +18,7 @@ class Movie extends Model
         'release_date',
         'rating',
         'poster_url',
+        'status',
         'director',
         'performer',
         'trailer',

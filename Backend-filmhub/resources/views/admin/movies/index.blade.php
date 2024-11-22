@@ -40,6 +40,7 @@
                             <th>Genre</th>
                             <th>Rating</th>
                             <th>Poster</th>
+                            <th>Status</th>
                             <th>Director</th>
                             <th>Performer</th>
                             <th>Trailer</th>
@@ -56,6 +57,7 @@
                             <th>Genre</th>
                             <th>Rating</th>
                             <th>Poster</th>
+                            <th>Status</th>
                             <th>Director</th>
                             <th>Performer</th>
                             <th>Trailer</th>
@@ -80,6 +82,7 @@
                                 <td>{{ $movie->rating }}</td>
                                 <td><img src="{{ Storage::url($movie->poster_url) }}" style="width: 100px; height: 100px;"
                                         alt=""></td>
+                                <td>{{ $movie->status }}</td>
                                 <td>{{ $movie->director }}</td>
                                 <td>{{ $movie->performer }}</td>
                                 <td>{{ $movie->trailer }}</td>
