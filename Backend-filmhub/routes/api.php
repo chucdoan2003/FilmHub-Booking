@@ -90,3 +90,9 @@ Route::get('user/vourcher/add/{vourcher}/{id_user}', [VourchersController::class
 
 
 Route::resource('/movies', MovieController::class );
+
+
+use App\Http\Controllers\Api\PaymentController;
+
+Route::post('/vnpay/payment', [PaymentController::class, 'vnpay_payment']);
+Route::get('/vnpay/payment-return', [PaymentController::class, 'vnpay_payment_return'])->name('api.vnpay.return');
