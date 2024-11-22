@@ -88,7 +88,10 @@ Route::get('vourcher/{mavoucher}',[VourchersController::class, 'getma'])->name('
 Route::get('vourcher/appma/{price}/{vourcher_price}',[VourchersController::class, 'appma'])->name('appma');
 Route::get('user/vourcher/add/{vourcher}/{id_user}', [VourchersController::class, 'addVourcherUser'])->name('addVourcherUser');
 
+use App\Http\Controllers\Api\PaymentController;
 
+Route::post('/vnpay/payment', [PaymentController::class, 'vnpay_payment']);
+Route::post('/vnpay/payment-return', [PaymentController::class, 'vnpay_payment_return'])->name('api.vnpay.return');
 Route::resource('/movies', MovieController::class );
 
 
