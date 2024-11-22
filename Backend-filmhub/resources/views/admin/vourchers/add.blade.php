@@ -31,6 +31,8 @@
                         @method("POST")
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
+                                <label for="">Vourcher code</label>
+
                                 <input type="text" class="form-control form-control-user form-radius" id="exampleFirstName"
                                     placeholder="Vourcher code" name="vourcher_code">
                                     @if ($errors->has('vourcher_code'))
@@ -38,14 +40,41 @@
                                     @endif
                             </div>
                             <div class="col-sm-6">
+                                <label for="">Vourcher price</label>
                                 <input type="number" class="form-control form-control-user form-radius" id="exampleLastName"
                                     placeholder="Vourcher price" name="vourcher_price" min="0" max="100">
                                     @if ($errors->has('vourcher_price'))
                                         <div class="text-danger mt-1">{{ $errors->first('vourcher_price') }}</div>
                                     @endif
                             </div>
+                            
                         </div>
-                       
+                        <div class="row my-2">
+                            <div class="col-sm-6">
+                                <label for="">Start time</label>
+
+                                <input type="datetime-local" class="form-control form-control-user form-radius" id="exampleLastName"
+                                    placeholder="Start time" name="start_time"  >
+                                    @if ($errors->has('start_time'))
+                                        <div class="text-danger mt-1">{{ $errors->first('start_time') }}</div>
+                                    @endif
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="">End time</label>
+                                <input type="datetime-local" class="form-control form-control-user form-radius" id="exampleLastName"
+                                    placeholder="End time" name="end_time" >
+                                    @if ($errors->has('end_time'))
+                                        <div class="text-danger mt-1">{{ $errors->first('end_time') }}</div>
+                                    @endif
+                            </div>
+                            <div class="col-sm-6 mt-3 ">
+                                <label class="mr-3" for="">Loại mã giảm giá</label>
+                                <select name="vourcher_type" id="">
+                                    <option value="1" > Giảm giá %</option>
+                                    <option value="0" >Giảm giá trực tiếp</option>
+                                </select>
+                            </div>
+                        </div>
                         
                         <button class="btn btn-primary btn-user btn-block">
                             Create Vourcher
