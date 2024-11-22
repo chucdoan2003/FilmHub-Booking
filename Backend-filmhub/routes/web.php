@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\GenreController;
 use App\Http\Controllers\admin\MovieController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,4 +21,5 @@ Route::get('admin', function () {
 });
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('/movies', MovieController::class);
+    Route::resource('/genres', GenreController::class);
 });

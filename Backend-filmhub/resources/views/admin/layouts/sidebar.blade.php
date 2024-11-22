@@ -86,6 +86,20 @@
             </div>
         </div>
     </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseGenre"
+            aria-expanded="true" aria-controls="collapseGenre">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Quản lý thể loại</span>
+        </a>
+        <div id="collapseGenre" class="collapse" aria-labelledby="headingMovies" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Danh sách chức năng</h6>
+                <a class="collapse-item" href="{{ route('admin.genres.index') }}">Danh sách</a>
+                <a class="collapse-item" href="{{ route('admin.genres.create') }}">Tạo mới</a>
+            </div>
+        </div>
+    </li>
 
     {{--    <!-- Divider --> --}}
     {{--    <hr class="sidebar-divider"> --}}
