@@ -37,7 +37,7 @@ class VourchersController extends Controller
     public function userVourchers($id){
         $vouchers = DB::table('vourcher_user')
         ->join('vourchers', 'vourcher_user.vourcher_id', '=', 'vourchers.id')
-        ->where('vourcher_user.user_id', 2)
+        ->where('vourcher_user.user_id', $id)
         ->get();
         return response()->json([
             "message"=>"lấy danh sách vourcher thành công",

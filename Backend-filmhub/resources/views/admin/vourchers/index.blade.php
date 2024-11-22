@@ -46,6 +46,9 @@
                                 <th>Id</th>
                                 <th>Vourcher_code</th>
                                 <th>Vourcher_price</th>
+                                <th>Start time</th>
+                                <th>End time</th>
+                                <th>Status</th>
                                 
                                 <th>Action</th>
                             </tr>
@@ -56,6 +59,14 @@
                                 <td>{{$item->id}}</td>
                                 <td>{{$item->vourcher_code}}</td>
                                 <td>{{$item->vourcher_price}}</td>
+                                <td>{{ $item->start_time}}</td>
+                                <td>{{ $item->end_time}}</td>
+                                <td>@if ($item->start_time  < $now && $item->end_time > $now) 
+                                    Còn hạn
+                                @else
+                                    Hết hạn
+                                 @endif
+                             </td>
                                 <td>
                                     <a href="{{ route('vourchers.edit', $item->id) }}"><button class="btn-warning my-2">Edit</button></a>
                                     <form id="deleteForm" action="{{ route('vourchers.destroy', $item->id) }}" method="POST" >

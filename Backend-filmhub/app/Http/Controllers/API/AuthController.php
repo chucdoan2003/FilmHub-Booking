@@ -4,12 +4,15 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\StoreUserRequest;
+use App\Mail\ForgotPasswordMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -78,4 +81,33 @@ class AuthController extends Controller
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }   
     }
+    public function fogotPassword(Request $request){
+        $email = $request->email;
+        $user = User::where('email', $email)->first();
+        if($user){
+            Mail::to($user->email)->send(new ForgotPasswordMail($email));
+        }
+        return response()->json([
+            "message"=>"Vui lòng kiểm tra email để thay đổi mật khẩu",
+            "RC"=>0,
+        ], Response::HTTP_OK);
+    }
+    public function getChangePassword($email){
+        return view('admin.users.changePassword', compact('email'));
+    }
+    public function changePassword(Request $request){
+        if($request->password == $request->password_confirmation){
+            $user= DB::table("users")
+            ->where('email',$request->email)
+            ->update(['password'=>Hash::make($request->password)]);
+            return response()->json([
+                'message' => 'Password changed successfully',
+            ]);
+        }
+        
+
+
+
+    
+}
 }

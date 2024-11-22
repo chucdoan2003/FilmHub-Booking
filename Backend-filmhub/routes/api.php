@@ -50,9 +50,16 @@ Route::post('auth/login', [AuthController::class, 'login' ]);
 Route::get('auth/profile', [AuthController::class, 'profile' ]);
 Route::post('auth/logout', [AuthController::class, 'logout' ]);
 Route::post('auth/register', [AuthController::class, 'register' ]);
+Route::post('auth/fogotPassword', [AuthController::class, 'fogotPassword' ]);
+Route::get('auth/changePassword/{email}', [AuthController::class, 'getchangePassword' ])
+->name('getChangePassword');
+Route::post('auth/changePassword', [AuthController::class, 'changePassword' ])
+->name('changePassword');
 
 Route::get('showtime/{id}', [ApiShowtimes::class, 'showtime' ])->name('showtime');
+
 Route::get('vourchers',[VourchersController::class, 'index'])->name('vourchers');
+
 Route::get('vourcher/{mavoucher}',[VourchersController::class, 'getma'])->name('vourcher');
 Route::get('vourcher/appma/{price}/{vourcher_price}',[VourchersController::class, 'appma'])->name('appma');
 

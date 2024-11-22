@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('voucher_code');
             $table->float('voucher_price');
+            $table->date('start_time');
+            $table->date('end_time');
+            $table->integer('type');
             $table->timestamps();
         });
     }
