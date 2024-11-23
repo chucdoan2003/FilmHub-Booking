@@ -15,7 +15,152 @@
   .text-gray-300 {
     color: #d1d5db;
   }
-  
+  /* General Layout */
+.container {
+  display: flex;
+  justify-content: space-between;
+  background-color: #f8f9fa; /* Light gray background */
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 1200px;
+  font-family: Arial, sans-serif;
+}
+
+/* Left Section */
+.left-section {
+  width: 60%;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.left-section h2 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #444;
+}
+
+.left-section p {
+  margin: 6px 0;
+  color: #555;
+  font-size: 14px;
+}
+
+.banner {
+  margin-top: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.banner img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+/* Right Section */
+.right-section {
+  width: 35%;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.right-section h3 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #444;
+}
+
+.summary {
+  border-top: 1px solid #ccc;
+  padding-top: 10px;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.summary-item span {
+  font-size: 14px;
+  color: #555;
+}
+
+.total {
+  font-size: 18px;
+  font-weight: bold;
+  color: #e74c3c; /* Highlight total in red */
+}
+
+/* Bottom Section */
+.bottom-section {
+  margin-top: 20px;
+}
+
+.ticket-type {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.ticket-type button {
+  width: 48%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f8f9fa;
+  color: #333;
+  cursor: pointer;
+}
+
+.ticket-type button:hover {
+  background-color: #e74c3c;
+  color: #fff;
+  border: 1px solid #e74c3c;
+}
+
+.disabled-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #dcdcdc; /* Disabled gray */
+  color: #888;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 8px;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .left-section,
+  .right-section {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .ticket-type {
+    flex-direction: column;
+  }
+
+  .ticket-type button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
   .bg-gray-50 {
     background-color: #f9fafb;
   }

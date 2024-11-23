@@ -18,26 +18,26 @@ import Bill from './Checkout/Bill';
 const App = () => {
   return (
     <Router>
-
-
       <Header />
-     
-      <Routes>
 
+      <Routes>
         <Route path="/" element={<Home2 />} />
         <Route path="/about" element={<About />} />
         <Route path="/check" element={<Checkout />} />
         <Route path="/Bill" element={<Bill />} />
+        <Route path="/detail/:id" element={<DemoDetail />} />
 
-        <Route path="/thongtin" element={<PrivateRoute><ThongTin /></PrivateRoute>} />
-      
+        <Route
+          path="/thongtin"
+          element={
+            <PrivateRoute>
+              <ThongTin />
+            </PrivateRoute>
+          }
+        />
 
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-
-
-
-
 
         {/* Các route khác */}
       </Routes>

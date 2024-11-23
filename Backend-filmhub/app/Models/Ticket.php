@@ -15,6 +15,7 @@ class Ticket extends Model
         'showtime_id',
         'total_price',
         'ticket_time',
+        'status',
         'food_id', 'drink_id', 'combo_id',
     ];
     public $timestamps = false;

@@ -77,7 +77,7 @@ class PaymentController extends Controller
             // $vnp_Url .= '?' . http_build_query($inputData) . '&vnp_SecureHash=' . $vnpSecureHash;
 
             $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-            $vnp_Returnurl = 'http://localhost:3000/vnpay-return';
+            $vnp_Returnurl = route('api.vnpay.return');
             $vnp_TmnCode = "HUV2CWXV";//Mã website tại VNPAY
             $vnp_HashSecret = "8HOY25NHQSM6K2134OEFF1Z69GOJOSBG"; //Chuỗi bí mật
 
@@ -87,11 +87,12 @@ class PaymentController extends Controller
             $vnp_OrderType = "FilmHub Booking";
             $vnp_Amount = $validated['total'] * 100;
             $vnp_Locale = "VN";
-            $vnp_BankCode = "";
+            $vnp_BankCode = "NCB";
             $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
             $showtime_id = $validated['showtime_id'];
 
-
+            $ticket_id = $ticket->ticket_id;
+            $user_id = $ticket->user_id;
             $inputData = array(
                 "vnp_Version" => "2.1.0",
                 "vnp_TmnCode" => $vnp_TmnCode,
@@ -103,7 +104,7 @@ class PaymentController extends Controller
                 "vnp_Locale" => $vnp_Locale,
                 "vnp_OrderInfo" => $showtime_id,
                 "vnp_OrderType" => $vnp_OrderType,
-                "vnp_ReturnUrl" => $vnp_Returnurl,
+                "vnp_ReturnUrl" => $vnp_Returnurl . '?ticket_id=' . $ticket_id . '&user_id=' . $user_id,
                 "vnp_TxnRef" => $vnp_TxnRef,
 
 
@@ -158,15 +159,23 @@ class PaymentController extends Controller
     {
         $data = $request->all();
 
+        $ticketId = $request->query('ticket_id');
+        $userId = $request->query('user_id');
+
+
         // Retrieve ticket and user
-        $ticket = Ticket::find($data['ticket_id']);
-        $user = User::find($request->input('user_id'));
+        $ticket = Ticket::where('ticket_id', $ticketId)->first();
+        $user = User::where('user_id', $userId)->first();
+        // $user = User::find($request->input('user_id'));
+
+
 
         if (!$ticket) {
             return response()->json(['status' => 'error', 'message' => 'Ticket not found'], 404);
         }
 
         try {
+
             if ($data['vnp_ResponseCode'] !== '00') {
                 // Update ticket status
                 $ticket->update(['status' => 'failed']);
@@ -175,10 +184,15 @@ class PaymentController extends Controller
                 return response()->json(['status' => 'failed', 'message' => 'Payment failed, seats released.']);
             }
 
+
+
+            $userIdFromUser = $user->user_id;
+
+            $user = User::where('user_id', $userIdFromUser)->first();
             // Update ticket status and add points to user
             $ticket->update(['status' => 'completed']);
             $pointsToAdd = $ticket->total_price / 1000;
-
+            // dd($pointsToAdd);
             if ($user) {
                 $user->increment('member_point', $pointsToAdd);
                 if ($user->status !== 'member') {
