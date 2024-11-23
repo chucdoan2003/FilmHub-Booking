@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\api\ComboController;
+use App\Http\Controllers\api\DrinkController;
+use App\Http\Controllers\api\FoodController;
 use App\Http\Controllers\api\ShiftController;
 use App\Http\Controllers\api\ShowtimeController;
 use App\Http\Controllers\API\UserController;
@@ -46,3 +48,5 @@ use Illuminate\Support\Facades\Route;
 // });
 Route::apiResource('shifts', ShiftController::class);
 Route::apiResource('combos', ComboController::class);
+Route::apiResource('foods', FoodController::class);
+Route::apiResource('drinks', DrinkController::class);
