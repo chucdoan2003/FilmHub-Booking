@@ -7,7 +7,7 @@
   padding: 30px;
   background-color: #121212; /* Dark background */
   color: white;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
 }
 
 /* Grid layout for checkout page */
@@ -63,13 +63,14 @@
 .ghe {
   background-color: #444;
   border: 1px solid #555;
-  padding: 12px;
   margin: 6px;
   color: white;
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
   transition: background-color 0.3s ease;
+  width: 48px;
+  height: 48px;
 }
 /* Ghế đang được chọn */
 .gheDangDat {
@@ -80,6 +81,11 @@
 .gheDaDat {
   background-color: gray;
   cursor: not-allowed;
+  opacity: 1 !important;
+
+  &.gheVip {
+    border: 1px solid #555;
+  }
 }
 
 /* Ghế VIP */

@@ -1,24 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import "./Detail.css"
+import apiClient from "../api/apiClient";
+import { useDispatch } from "react-redux";
+import { selectShowTime } from "../redux/login/ticketSlice";
+import { useNavigate, useParams } from "react-router-dom";
+import dayjs from "dayjs";
 
-import axios from "axios";
+import styles from "./index.module.css";
+import "./Detail.css";
 
 function Detail() {
-  const [showVideo, setShowVideo] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // const [showVideo, setShowVideo] = useState(false);
   const [movie, setMovie] = useState(null);
   const [showtimes, setShowtimes] = useState([]);
 
-  const toggleVideo = () => {
-    setShowVideo(!showVideo);
-  };
+  const { id } = useParams();
+
+  // const toggleVideo = () => {
+  //   setShowVideo(!showVideo);
+  // };
 
   useEffect(() => {
     const fetchData = async (movie_id) => {
       try {
-        const res = await axios.get(
-          `http://127.0.0.1:8000/api/showtimes?movie_id=${movie_id}`
-        );
+        const res = await apiClient.get(`/showtimes?movie_id=${movie_id}`);
 
         if (res.data.success) {
           setMovie(res.data.showtimes[0].movie);
@@ -31,8 +38,25 @@ function Detail() {
       }
     };
 
-    fetchData();
-  }, []);
+    fetchData(id);
+  }, [id]);
+
+  const onSelectShowTime = (data) => {
+    const showTime = `${data.shift.start_time} - ${
+      data.shift.end_time
+    } Ngày ${dayjs(data.datetime).format("DD/MM/YYYY")}`;
+
+    dispatch(
+      selectShowTime({
+        showTimeId: data.showtime_id,
+        roomId: data.room_id,
+        movieName: movie.title,
+        showTime,
+        showTimePrice: data.value,
+      })
+    );
+    navigate("/check");
+  };
 
   return (
     <div className="main-wrapper">
@@ -123,11 +147,10 @@ function Detail() {
                     showtimes.map((showtime) => (
                       <li
                         key={showtime.showtime_id}
-                        className="border border-red-500 w-44 h-6 text-red-500 text-center rounded"
+                        className={`border border-red-500 w-44 h-6 text-red-500 text-center rounded ${styles.showTimeItem}`}
+                        onClick={() => onSelectShowTime(showtime)}
                       >
-                        <Link to={`/check`}>
-                          {showtime.shift.start_time}:{showtime.shift.end_time}
-                        </Link>
+                        {showtime.shift.start_time} - {showtime.shift.end_time}
                       </li>
                     ))
                   ) : (

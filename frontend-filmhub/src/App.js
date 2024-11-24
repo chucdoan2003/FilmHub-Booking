@@ -14,6 +14,7 @@ import DescriptionsItem from 'antd/es/descriptions/Item';
 import DemoDetail from './Detail/DemoDetail';
 import Checkout from './Checkout/Checkout';
 import Bill from './Checkout/Bill';
+import VNPayReturn from './VNPayReturn/VNPayReturn';
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
         <Route path="/check" element={<Checkout />} />
         <Route path="/Bill" element={<Bill />} />
         <Route path="/detail/:id" element={<DemoDetail />} />
+        <Route path="/vnpay-return" element={<VNPayReturn />} />
 
         <Route
           path="/thongtin"
