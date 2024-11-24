@@ -79,13 +79,15 @@ class ShowtimesController extends Controller
         $movie_id= $request->movie;
         $room_id = $request->room;
         $datetime =$request->datetime;
-        $value =$request->value;
+        $normal_price =$request->normal_price;
+        $vip_price =$request->vip_price;
         DB::table('showtimes')->insert([
             "movie_id"=>$movie_id,
             "room_id"=>$room_id,
             "shift_id"=>$shift_id,
             'datetime'=> $datetime,
-            'value'=>$value
+            'normal_price'=>$normal_price,
+            'vip_price'=>$vip_price,
         ]);
 
 

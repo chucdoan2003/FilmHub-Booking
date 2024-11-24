@@ -33,6 +33,7 @@
                     <th>Ca chiếu</th>
                     <th>Thời lượng</th>
                     <th>Giá vé</th>
+                    <th>Giá ghế vip</th>
                     <th>Hành động</th>
                 </tr>
             </thead>
@@ -60,7 +61,8 @@
                         </td>
 
                         <td>{{ $showtime->movie->duration }} phút</td> <!-- Thời lượng -->
-                        <td>{{ number_format($showtime->value) }} VND</td> <!-- Giá vé -->
+                        <td>{{ number_format($showtime->normal_price) }} VND</td>
+                        <td>{{ number_format($showtime->vip_price) }} VND</td>
                         <td>
                             <a href="{{ route('bookings.show', $showtime->showtime_id) }}" class="btn btn-primary">Đặt vé</a>
                         </td>

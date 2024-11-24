@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('seat_id');
             $table->unsignedBigInteger('room_id');
             $table->string('seat_number', 10);
-            $table->enum('status', ['available', 'booked'])->default('available');
+            $table->enum('status', ['normal', 'vip'])->default('normal');
             $table->timestamps();
             $table->unsignedBigInteger('row_id');
             $table->unsignedBigInteger('type_id');

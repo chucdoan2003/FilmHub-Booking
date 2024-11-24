@@ -28,10 +28,6 @@
     </div>
 
 
-    <div class="mb-3">
-        <label for="capacity" class="form-label">Sức chứa</label>
-        <input type="number" class="form-control" id="capacity" name="capacity" required min="1">
-    </div>
 
     <div class="mb-3">
         <label for="theater-select" class="form-label">Chọn Rạp</label>
@@ -41,6 +37,32 @@
                 <option value="{{ $theater->theater_id}}">{{ $theater->name }}</option>
             @endforeach
         </select>
+    </div>
+
+    <div class="card shadow mb-4">
+        <a href="#collapseSeats" class="d-block card-header py-3" data-toggle="collapse"
+           role="button" aria-expanded="true" aria-controls="collapseSeats">
+            <h6 class="m-0 font-weight-bold text-primary">
+                Thêm ghế
+            </h6>
+        </a>
+        <div class="collapse show" id="collapseSeats">
+            <div class="card-body">
+                <!-- Nhập số lượng ghế thường -->
+                <label for="normal_seats" class="form-label">Số lượng ghế thường</label>
+                <input type="number" class="form-control" id="normal_seats" name="normal_seats" min="0" placeholder="Nhập số lượng ghế thường">
+                @error('normal_seats')
+                    <span style="padding: 10px 0; color: red;">{{$message}}</span>
+                @enderror
+
+                <!-- Nhập số lượng ghế VIP -->
+                <label for="vip_seats" class="form-label mt-3">Số lượng ghế VIP</label>
+                <input type="number" class="form-control" id="vip_seats" name="vip_seats" min="0" placeholder="Nhập số lượng ghế VIP">
+                @error('vip_seats')
+                    <span style="padding: 10px 0; color: red;">{{$message}}</span>
+                @enderror
+            </div>
+        </div>
     </div>
 
 

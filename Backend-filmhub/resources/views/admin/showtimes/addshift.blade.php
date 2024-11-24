@@ -136,8 +136,17 @@
                         <h6 class="m-0 font-weight-bold text-primary">Giá tiền</h6>
                     </div>
                     <div class="card-body">
-                        <label for="value">Nhập giá tiền:</label>
-                        <input type="text" name="value" id="value" class="form-control" required>
+
+                        <div class="mb-3">
+                            <label for="normal_price" class="form-label">Giá ghế thường:</label>
+                            <input type="text" name="normal_price" id="normal_price" class="form-control" placeholder="Nhập giá ghế thường" required>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label for="vip_price" class="form-label">Giá ghế VIP:</label>
+                            <input type="text" name="vip_price" id="vip_price" class="form-control" placeholder="Nhập giá ghế VIP" required>
+                        </div>
                     </div>
                 </div>
 
