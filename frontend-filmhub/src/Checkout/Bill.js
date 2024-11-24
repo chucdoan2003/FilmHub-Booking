@@ -1,74 +1,51 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from 'axios';  // You can also use fetch if you prefer
+import { useSelector } from "react-redux";
+import axios from "axios";
 import "./Checkout.css";
+import apiClient from "../api/apiClient";
 
 const Bill = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Lấy dữ liệu từ location.state (dữ liệu từ Checkout)
-  const { seats, totalPrice, movie, showtime, user, theater } = location.state || {};
+  const { seats, totalPrice, movie, showtime, theater } = location.state || {};
 
-  // Declare useState hooks at the top level of the component
-  const [paymentMethod, setPaymentMethod] = useState(""); // To store selected payment method
-  const [loading, setLoading] = useState(false); // To show loading state during payment process
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // Early return for missing data
-  if (!seats || !totalPrice || !movie) {
-    return (
-      <div className="text-center">
-        <h1>Không có thông tin vé</h1>
-        <button
-          onClick={() => navigate("/checkout")}
-          className="bg-red-500 px-4 py-2 rounded mt-4"
-        >
-          Quay lại trang đặt vé
-        </button>
-      </div>
-    );
-  }
+  const user = useSelector((state) => state.auth.login?.currentUser?.user);
+  const ticket = useSelector((state) => state.ticket);
+  console.log("352 ~ Bill ~ ticket:", ticket);
 
   const handlePayment = async () => {
     if (!paymentMethod) {
       alert("Vui lòng chọn phương thức thanh toán!");
       return;
     }
-  
-    setLoading(true); // Show loading state
-  
+
+    setLoading(true);
+
     try {
-      console.log("Dữ liệu gửi đi:", {
-        movie,
-        showtime,
-        seats,
-        totalPrice,
-        theater,
-        paymentMethod,
-      });
-  
-      const response = await axios.post("http://127.0.0.1:8000/api/vnpay/payment", {
-        movie,
-        showtime,
-        seats,
-        totalPrice,
-        theater,
-        paymentMethod,
-      });
-  
-      console.log("Phản hồi từ server:", response.data);
-  
-      if (response.data.success) {
-        alert("Thanh toán thành công!");
-        navigate("/confirmation"); // Redirect to a confirmation page or success page
-      } else {
-        alert("Thanh toán thất bại, vui lòng thử lại!");
-      }
+      const payload = {
+        user_id: user.user_id,
+        showtime_id: ticket.showTimeId,
+        total: ticket.totalPrice,
+        selected_seats: ticket.selectedSeats.join(","),
+        food_id: null,
+        drink_id: null,
+        combo_id: null,
+      };
+
+      const response = await apiClient.post("/vnpay/payment", payload);
+      const paymentUrl = response.data.payment_url;
+
+      window.location.href = paymentUrl;
     } catch (error) {
       console.error("Lỗi thanh toán:", error);
       alert("Có lỗi xảy ra, vui lòng thử lại!");
     } finally {
-      setLoading(false); // Hide loading state
+      setLoading(false);
     }
   };
 
@@ -79,16 +56,16 @@ const Bill = () => {
           {/* Thông tin phim */}
           <div className="col-span-8 m-4">
             <h2 className="text-3xl font-bold ">Thông Tin Phim</h2>
-            <h3 className="text-xl my-4 ">Tên Phim: {movie}</h3>
+            <h3 className="text-xl my-4 ">Tên Phim: {ticket.movieName}</h3>
             <p className="my-2 ">Địa điểm: {theater}</p>
-            <p className="my-2 ">Ngày chiếu: {showtime}</p>
+            <p className="my-2 ">Ngày chiếu: {ticket.showTime}</p>
 
             {/* Ghế */}
             <div className="flex flex-row">
               <div className="mr-28">
                 <p className="">Ghế: </p>
               </div>
-              <div className=""> {seats.join(", ")}</div>
+              <div className=""> {ticket.selectedSeatTxt}</div>
             </div>
 
             {/* Thông tin khách hàng */}
@@ -116,8 +93,8 @@ const Bill = () => {
                   <tbody className="bg-white divide-y divide-gray-200 text-center">
                     <tr>
                       <td>Ghế</td>
-                      <td>{seats.length}</td>
-                      <td>{totalPrice.toLocaleString()}đ</td>
+                      <td>{ticket.selectedSeats.length}</td>
+                      <td>{ticket.totalPrice.toLocaleString()}đ</td>
                     </tr>
                   </tbody>
                 </table>
@@ -139,7 +116,9 @@ const Bill = () => {
                     value="credit"
                     onChange={(e) => setPaymentMethod(e.target.value)}
                   />
-                  <label htmlFor="credit" className="ml-2">Thẻ tín dụng</label>
+                  <label htmlFor="credit" className="ml-2">
+                    Thẻ tín dụng
+                  </label>
                 </div>
                 <div className="mb-3">
                   <input
@@ -149,7 +128,9 @@ const Bill = () => {
                     value="bank"
                     onChange={(e) => setPaymentMethod(e.target.value)}
                   />
-                  <label htmlFor="bank" className="ml-2">Chuyển khoản</label>
+                  <label htmlFor="bank" className="ml-2">
+                    Chuyển khoản
+                  </label>
                 </div>
                 <div className="mb-3">
                   <input
@@ -159,7 +140,9 @@ const Bill = () => {
                     value="cash"
                     onChange={(e) => setPaymentMethod(e.target.value)}
                   />
-                  <label htmlFor="cash" className="ml-2">Tiền mặt</label>
+                  <label htmlFor="cash" className="ml-2">
+                    Tiền mặt
+                  </label>
                 </div>
               </form>
             </div>
@@ -168,16 +151,16 @@ const Bill = () => {
             <div className="my-3">
               <h3 className="text-xl ">Chi phí</h3>
               <div className="flex justify-between my-3">
-                <p>Thanh Toán</p>
-                <span>{totalPrice.toLocaleString()}đ</span>
+                <p className="me-2">Thanh Toán</p>
+                <p>{ticket.totalPrice.toLocaleString()}đ</p>
               </div>
               <div className="flex justify-between my-3">
-                <p>Phí</p>
+                <p className="me-2">Phí</p>
                 <span>0đ</span>
               </div>
               <div className="flex justify-between my-3">
-                <p>Tổng tiền</p>
-                <span>{totalPrice.toLocaleString()}đ</span>
+                <p className="me-2">Tổng tiền</p>
+                <span>{ticket.totalPrice.toLocaleString()}đ</span>
               </div>
             </div>
 

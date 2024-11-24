@@ -77,7 +77,7 @@ class PaymentController extends Controller
             // $vnp_Url .= '?' . http_build_query($inputData) . '&vnp_SecureHash=' . $vnpSecureHash;
 
             $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-            $vnp_Returnurl = route('api.vnpay.return');
+            $vnp_Returnurl = 'http://localhost:3000/vnpay-return';
             $vnp_TmnCode = "HUV2CWXV";//Mã website tại VNPAY
             $vnp_HashSecret = "8HOY25NHQSM6K2134OEFF1Z69GOJOSBG"; //Chuỗi bí mật
 

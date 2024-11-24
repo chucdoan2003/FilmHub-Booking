@@ -1,0 +1,18 @@
+.wrapper {
+  margin-top: 120px;
+  min-height: 50vh;
+  margin-bottom: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.title {
+  font-weight: 600;
+}
+
+.image {
+  height: 150px;
+  margin-bottom: 24px;
+}

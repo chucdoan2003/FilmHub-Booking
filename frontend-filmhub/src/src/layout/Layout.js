@@ -1,6 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 const Home2 = () => {
+  
+
+
+
+
     const divStyle1 = {
         backgroundImage: 'url(assets/images/slider/slider-hm4-1.jpg)',
         backgroundSize: 'cover',
@@ -18,111 +23,159 @@ const Home2 = () => {
 
     const [currentSlide, setCurrentSlide] = useState(0);
     const slides = [divStyle1, divStyle2];
-    const [movies, setMovies] = useState([]);
-    const [loading, setLoading] = useState(true);
 
+    
     const nextSlide = useCallback(() => {
+        // logic của nextSlide
         const nextSlideIndex = (currentSlide + 1) % slides.length;
         setCurrentSlide(nextSlideIndex);
-    }, [currentSlide, slides.length]);
-
+      }, [currentSlide, slides.length]);
     useEffect(() => {
         const interval = setInterval(nextSlide, 2000);
         return () => clearInterval(interval);
-    }, [nextSlide]);
-
-    useEffect(() => {
-        // Fetch movie data from API
-        const fetchMovies = async () => {
-            try {
-                const response = await fetch('http://127.0.0.1:8000/api/movies'); // Replace with actual API URL
-                const data = await response.json();
-
-                console.log('API response:', data); // Log the full response to verify the structure
-                
-                if (data?.data) {
-                    setMovies(data.data); // Update state with movie data (accessing data from the response)
-                } else {
-                    console.error('No movie data found');
-                }
-
-                setLoading(false); // Set loading to false after fetching
-            } catch (error) {
-                console.error('Error fetching movies:', error);
-                setLoading(false); // Ensure loading state is false even if error occurs
-            }
-        };
-
-        fetchMovies();
-    }, []);
+      }, [nextSlide]);
 
     return (
         <div className="main-wrapper">
-            {/* Slider Section */}
             <div className="slider-area bg-black">
                 <div className="container-fluid p-0">
                     <div className="hero-slider-four dot-style-1 nav-style-1">
                         {slides.map((style, index) => (
-                            <div
-                                key={index}
-                                className={`single-hero-slider-wrap single-animation-wrap slider-height-hm4 bg-image-hm4 slider-bg-color-black d-flex align-items-center slider-bg-position-1 bg-black ${currentSlide === index ? 'active' : ''}`}
-                                style={style}
-                            >
+                            <div key={index} className={`single-hero-slider-wrap single-animation-wrap slider-height-hm4 bg-image-hm4 slider-bg-color-black d-flex align-items-center slider-bg-position-1 bg-black ${currentSlide === index ? 'active' : ''}`}
+                                style={style}>
                                 <div className="slider-content-hm4 slider-animated">
-                                    <h1 className="title animated">
-                                        {index === 0 ? 'Out Of Network' : 'The Love of Mind'}
-                                    </h1>
+                                    <h1 className="title animated">{index === 0 ? 'Out Of Network' : 'The Love of Mind'}</h1>
                                 </div>
                             </div>
                         ))}
                     </div>
+           
                 </div>
             </div>
+        
 
-            {/* Movies Section */}
+
+
+        
             <div className="movie-list section-padding-lr section-pt-50 bg-black">
                 <div className="container-fluid">
                     <div className="section-title-4 st-border-bottom">
-                        <h2>Latest Movies</h2>
+                        <h2>Latest Movies</h2>  
                     </div>
-
+                    
                     <div className="movie-slider-active nav-style-2">
-                        {loading ? (
-                            <p>Loading movies...</p>
-                        ) : movies.length > 0 ? (
-                            movies.map((movie, index) => (
-                                <div key={index} className="movie-wrap-plr">
-                                    <div className="movie-wrap text-center">
-                                        <div className="movie-img">
-                                            <a href={`detail/${movie.movie_id}`}>
-                                                {/* Use default image if poster_url is not available */}
-                                                <img 
-                                                    src={movie?.poster_url || 'default-image.jpg'} 
-                                                    alt={movie?.title || 'Movie'} 
-                                                />
-                                            </a>
-                                            <button title="Watchlist" className="Watch-list-btn" type="button">
-                                                <i className="zmdi zmdi-plus"></i>
-                                            </button>
-                                        </div>
-                                        <div className="movie-content">
-                                            <h3 className="title">
-                                                <a href={`detail/${movie.movie_id}`}>
-                                                    {movie?.title || 'No title available'}
-                                                </a>
-                                            </h3>
-                                            <div className="movie-btn">
-                                                <a href={`detail/${movie.movie_id}`} className="btn-style-hm4-2 animated">
-                                                    Watch Now
-                                                </a>
-                                            </div>
-                                        </div>
+                        <div className="movie-wrap-plr">
+                            <div className="movie-wrap text-center">
+                                <div className="movie-img">
+                                    <a href="movie-details.html"><img src="assets/images/product/movie-17.jpg" alt="" /></a>
+
+                                </div>
+                                <div className="movie-content">
+                                    <h3 className="title"><a href="movie-details.html">Top Of The World</a></h3>
+
+                                    <div className="movie-btn">
+                                        <a href="movie-details.html" className="btn-style-hm4-2 animated">Teaser</a>
+                                        <a href="movie-details.html" className="btn-style-hm4-2 animated">Đặt vé</a>
                                     </div>
                                 </div>
-                            ))
-                        ) : (
-                            <p>No movies found.</p>
-                        )}
+                            </div>
+                        </div>
+                        <div className="movie-wrap-plr">
+                            <div className="movie-wrap text-center">
+                                <div className="movie-img">
+                                    <a href="movie-details.html"><img src="assets/images/product/movie-02.jpg" alt="" /></a>
+                                    <button title="Watchlist" className="Watch-list-btn" type="button"><i
+                                        className="zmdi zmdi-plus"></i></button>
+                                </div>
+                                <div className="movie-content">
+                                    <h3 className="title"><a href="movie-details.html"> Land And Sea</a></h3>
+                                    <span>Quality : HD</span>
+                                    <div className="movie-btn">
+                                        <a href="movie-details.html" className="btn-style-hm4-2 animated">Watch Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="movie-wrap-plr">
+                            <div className="movie-wrap text-center">
+                                <div className="movie-img">
+                                    <a href="movie-details.html"><img src="assets/images/product/movie-03.jpg" alt="" /></a>
+                                    <button title="Watchlist" className="Watch-list-btn" type="button"><i
+                                        className="zmdi zmdi-plus"></i></button>
+                                </div>
+                                <div className="movie-content">
+                                    <h3 className="title"><a href="movie-details.html">The Walk</a></h3>
+                                    <span>Quality : HD</span>
+                                    <div className="movie-btn">
+                                        <a href="movie-details.html" className="btn-style-hm4-2 animated">Watch Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="movie-wrap-plr">
+                            <div className="movie-wrap text-center">
+                                <div className="movie-img">
+                                    <a href="movie-details.html"><img src="assets/images/product/movie-04.jpg" alt="" /></a>
+                                    <button title="Watchlist" className="Watch-list-btn" type="button"><i
+                                        className="zmdi zmdi-plus"></i></button>
+                                </div>
+                                <div className="movie-content">
+                                    <h3 className="title"><a href="movie-details.html">Never Stop Looking</a></h3>
+                                    <span>Quality : HD</span>
+                                    <div className="movie-btn">
+                                        <a href="movie-details.html" className="btn-style-hm4-2 animated">Watch Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="movie-wrap-plr">
+                            <div className="movie-wrap text-center">
+                                <div className="movie-img">
+                                    <a href="movie-details.html"><img src="assets/images/product/movie-01.jpg" alt="" /></a>
+                                    <button title="Watchlist" className="Watch-list-btn" type="button"><i
+                                        className="zmdi zmdi-plus"></i></button>
+                                </div>
+                                <div className="movie-content">
+                                    <h3 className="title"><a href="movie-details.html">The Lost Girl</a></h3>
+                                    <span>Quality : HD</span>
+                                    <div className="movie-btn">
+                                        <a href="movie-details.html" className="btn-style-hm4-2 animated">Watch Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="movie-wrap-plr">
+                            <div className="movie-wrap text-center">
+                                <div className="movie-img">
+                                    <a href="movie-details.html"><img src="assets/images/product/movie-06.jpg" alt="" /></a>
+                                    <button title="Watchlist" className="Watch-list-btn" type="button"><i
+                                        className="zmdi zmdi-plus"></i></button>
+                                </div>
+                                <div className="movie-content">
+                                    <h3 className="title"><a href="movie-details.html">The Lost Girl</a></h3>
+                                    <span>Quality : HD</span>
+                                    <div className="movie-btn">
+                                        <a href="movie-details.html" className="btn-style-hm4-2 animated">Watch Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="movie-wrap-plr">
+                            <div className="movie-wrap text-center">
+                                <div className="movie-img">
+                                    <a href="movie-details.html"><img src="assets/images/product/movie-05.jpg" alt="" /></a>
+                                    <button title="Watchlist" className="Watch-list-btn" type="button"><i
+                                        className="zmdi zmdi-plus"></i></button>
+                                </div>
+                                <div className="movie-content">
+                                    <h3 className="title"><a href="movie-details.html"> Silkovettes In The Attic</a></h3>
+                                    <span>Quality : HD</span>
+                                    <div className="movie-btn">
+                                        <a href="movie-details.html" className="btn-style-hm4-2 animated">Watch Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

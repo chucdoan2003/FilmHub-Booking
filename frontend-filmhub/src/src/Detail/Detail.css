@@ -1,0 +1,49 @@
+export const modalStyle = {
+  position: "fixed",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  zIndex: 1000, // Thêm dấu phẩy sau thuộc tính cuối cùng nếu có thêm thuộc tính sau
+};
+
+export const overlayStyle = {
+  position: "fixed",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  backgroundColor: "rgba(0, 0, 0, 0.7)", // Đảm bảo có dấu phẩy
+};
+
+export const videoContainerStyle = {
+  position: "relative",
+  width: "100%",
+  height: "100%",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  zIndex: 1001, // Thêm dấu phẩy nếu có thêm thuộc tính sau
+};
+
+export const videoStyle = {
+  width: "100%",
+  height: "100%",
+  objectFit: "cover", // Thêm dấu phẩy nếu có thuộc tính sau
+};
+
+export const closeButtonStyle = {
+  position: "absolute",
+  top: "20px",
+  right: "20px",
+  backgroundColor: "gray",
+  color: "white",
+  border: "none",
+  borderRadius: "10%",
+  cursor: "pointer",
+  padding: "8px",
+  fontSize: "16px", // Thêm dấu phẩy nếu có thuộc tính sau
+};
