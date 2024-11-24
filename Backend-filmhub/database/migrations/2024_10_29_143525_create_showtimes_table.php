@@ -18,6 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('shift_id');
             $table->date('datetime')->nullable();
             $table->integer('value')->nullable();
+            $table->integer('normal_price')->nullable();
+            $table->integer('vip_price')->nullable();
 
             $table->timestamps();
 

@@ -16,11 +16,23 @@ class ApiCheckBookedSeat extends Controller
             $showtimes = Showtime::with(['movie', 'room', 'shift'])->get();
             $selectedSeats = [];
 
+            $showtimesWithBookedSeats = $showtimes->map(function ($showtime) {
+                $bookedSeats = DB::table('tickets_seats')
+                    ->where('showtime_id', $showtime->showtime_id)
+                    ->pluck('seat_id')
+                    ->toArray();
+
+                // Gắn thêm danh sách ghế đã đặt vào từng suất chiếu
+                $showtime->booked_seats = $bookedSeats;
+                return $showtime;
+            });
+
+
+
             return response()->json([
                 'success' => true,
                 'message' => 'Lấy dữ liệu thành công',
-                'showtimes' => $showtimes,
-                'selectedSeats' => $selectedSeats
+                'showtimes' => $showtimesWithBookedSeats,
             ], 200);
         } catch (Exception $e) {
             return response()->json([
@@ -38,14 +50,20 @@ class ApiCheckBookedSeat extends Controller
 
             // Lấy danh sách ghế đã được đặt cho suất chiếu này từ bảng ticket_seat
             $bookedSeats = DB::table('tickets_seats')
-                            ->where('showtime_id', $showtimeId)
-                            ->pluck('seat_id')
-                            ->toArray();
+                ->where('showtime_id', $showtimeId)
+                ->pluck('seat_id')
+                ->toArray();
+
+            // Lấy toàn bộ ghế thuộc phòng của suất chiếu
+            $allSeats = DB::table('seats')
+                ->where('room_id', $showtime->room_id)
+                ->get();
 
             return response()->json([
                 'success' => true,
                 'message' => 'Lấy dữ liệu thành công',
                 'showtime' => $showtime,
+                'seats' => $allSeats,
                 'bookedSeats' => $bookedSeats
             ], 200);
         } catch (Exception $e) {
