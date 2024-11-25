@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\MovieController;
+use App\Http\Controllers\api\TicketController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -45,4 +46,5 @@ Route::prefix('theaters')->group(function () {
     });
 });
 
-    Route::resource('/movies', MovieController::class );
+Route::resource('/movies', MovieController::class);
+Route::middleware('auth:api')->get('/tickets/history', [TicketController::class, 'getUserTicketHistory']);
