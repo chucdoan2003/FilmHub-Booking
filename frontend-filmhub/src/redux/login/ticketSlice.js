@@ -16,6 +16,11 @@ const ticketSlice = createSlice({
     location: null,
     totalPrice: 0,
     selectedSeatTxt: null,
+    bookedSeats: [],
+    rate: {
+      normal: null,
+      vip: null,
+    },
   },
   reducers: {
     selectShowTime: (state, { payload }) => {
@@ -24,12 +29,14 @@ const ticketSlice = createSlice({
       state.movieName = payload.movieName;
       state.showTime = payload.showTime;
       state.showTimePrice = payload.showTimePrice;
+      state.bookedSeats = payload.bookedSeats;
+      state.rate = payload.rate;
     },
 
     booking: (state, { payload }) => {
       state.location = payload.location;
       state.selectedSeats = payload.selectedSeats;
-      state.totalPrice = state.selectedSeats.length * state.showTimePrice;
+      state.totalPrice = payload.totalPrice;
       state.selectedSeatTxt = payload.selectedSeatTxt;
     },
   },
