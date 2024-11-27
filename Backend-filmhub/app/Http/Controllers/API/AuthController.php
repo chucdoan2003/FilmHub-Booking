@@ -86,11 +86,16 @@ class AuthController extends Controller
         $user = User::where('email', $email)->first();
         if($user){
             Mail::to($user->email)->send(new ForgotPasswordMail($email));
+            return response()->json([
+                "message"=>"Vui lòng kiểm tra email để thay đổi mật khẩu",
+            ], Response::HTTP_OK);
+            
+        }else{
+            return response()->json([
+                "message"=>"Email không tồn tại",
+            ], Response::HTTP_NOT_FOUND);
         }
-        return response()->json([
-            "message"=>"Vui lòng kiểm tra email để thay đổi mật khẩu",
-            "RC"=>0,
-        ], Response::HTTP_OK);
+        
     }
     public function getChangePassword($email){
         return view('admin.users.changePassword', compact('email'));

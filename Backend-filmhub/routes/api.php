@@ -3,6 +3,7 @@
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\ShiftController;
 use App\Http\Controllers\api\ApiShowtimes;
+use App\Http\Controllers\api\SendMailController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -50,9 +51,14 @@ Route::post('auth/login', [AuthController::class, 'login' ]);
 Route::get('auth/profile', [AuthController::class, 'profile' ]);
 Route::post('auth/logout', [AuthController::class, 'logout' ]);
 Route::post('auth/register', [AuthController::class, 'register' ]);
+
+//Route check mail
 Route::post('auth/fogotPassword', [AuthController::class, 'fogotPassword' ]);
-Route::get('auth/changePassword/{email}', [AuthController::class, 'getchangePassword' ])
+
+//lấy view thay đổi mật khẩu
+Route::get('auth/changePassword1/{email}', [AuthController::class, 'getchangePassword' ])
 ->name('getChangePassword');
+//Thay mật khẩu mới
 Route::post('auth/changePassword', [AuthController::class, 'changePassword' ])
 ->name('changePassword');
 
@@ -65,3 +71,5 @@ Route::get('vourcher/appma/{price}/{vourcher_price}',[VourchersController::class
 
 Route::get('user/vourchers/{id}',[VourchersController::class, 'userVourchers'])->name('userVourchers');
 Route::get('user/vourcher/add/{vourcher}/{id_user}', [VourchersController::class, 'addVourcherUser'])->name('addVourcherUser');
+
+Route::post('payment/sendMail',[SendMailController::class, 'sendMailPayMent'])->name('sendMail');
