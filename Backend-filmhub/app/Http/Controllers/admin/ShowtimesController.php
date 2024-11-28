@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
-
 class ShowtimesController extends Controller
 {
-    function addshowtimes(Request $request) {}
+    function addshowtimes(Request $request)
+    {
+
+
+    }
     function list()
     {
         $showtimes = DB::table('showtimes')
@@ -21,7 +24,7 @@ class ShowtimesController extends Controller
                 'movies.title as movie_name',
                 'rooms.room_name as room_name',
                 'shifts.shift_name as shift_name',
-                'showtimes.value',
+
                 'shifts.start_time as shift_start_time',
                 'shifts.end_time as shift_end_time'
             )
@@ -34,63 +37,67 @@ class ShowtimesController extends Controller
         $shifts = DB::table('shifts')->select('shift_id', 'shift_name', 'start_time', 'end_time')->get();
         return view('admin.showtimes.add', compact('shifts'));
     }
-    function create2(Request $request)
-    {
-        $datetime = $request->datetime;
+    function create2(Request $request){
+        $datetime= $request->datetime;
         $movies = DB::table('movies')->get();
         $rooms = DB::table('rooms')->get();
         $shifts = DB::table('shifts')->get();
-        $showtimes = DB::table('showtimes')
-            ->select('room_id', DB::raw('COUNT(*) as total_showtimes'))
-            ->whereDate('datetime', $datetime)
-            ->groupBy('room_id')
-            ->get();
-        $room_over = [];
-        foreach ($showtimes as $item) {
-            if ($item->total_showtimes == count($shifts)) {
-                $room_over[] = $item->room_id;
+        $showtimes=DB::table('showtimes')
+        ->select('room_id', DB::raw('COUNT(*) as total_showtimes'))
+        ->whereDate('datetime', $datetime)
+        ->groupBy('room_id')
+        ->get();
+        $room_over=[];
+        foreach($showtimes as $item){
+            if($item->total_showtimes == count($shifts)){
+                $room_over[]= $item->room_id;
             }
         }
         return view('admin.showtimes.add2', compact('movies', 'rooms', 'datetime', 'room_over'));
+
     }
-    function store(Request $request)
-    {
-        $movie_id = $request->movie;
+    function store(Request $request){
+        $movie_id= $request->movie;
         $room_id = $request->room;
-        $datetime = $request->datetime;
-        $showtimes =  DB::table('showtimes')
-            ->where('datetime', $datetime)
-            ->where('room_id', $room_id)
-            ->get();
-        $shiftInroomBook = [];
-        foreach ($showtimes as $item) {
-            $shiftInroomBook[] = $item->shift_id;
-        }
+        $datetime= $request->datetime;
+        $showtimes=  DB::table('showtimes')
+        ->where('datetime', $datetime)
+        ->where('room_id', $room_id)
+        ->get();
+       $shiftInroomBook = [];
+       foreach($showtimes as $item){
+        $shiftInroomBook[]=$item->shift_id;
+       }
         $movies = DB::table('movies')->get();
         $rooms = DB::table('rooms')->get();
         $shifts = DB::table('shifts')->get();
 
-        return view('admin.showtimes.addshift', compact('movies', 'rooms', 'shifts', 'movie_id', 'room_id', 'datetime', 'shiftInroomBook'));
+        return view('admin.showtimes.addshift', compact('movies', 'rooms', 'shifts', 'movie_id', 'room_id', 'datetime', 'shiftInroomBook' ));
     }
-    function addshowtime(Request $request)
-    {
+    function addshowtime(Request $request){
         $shift_id = $request->shift;
-        $movie_id = $request->movie;
+        $movie_id= $request->movie;
         $room_id = $request->room;
-        $datetime = $request->datetime;
-        $value = $request->value;
+        $datetime =$request->datetime;
+        $normal_price =$request->normal_price;
+        $vip_price =$request->vip_price;
         DB::table('showtimes')->insert([
-            "movie_id" => $movie_id,
-            "room_id" => $room_id,
-            "shift_id" => $shift_id,
-            'datetime' => $datetime,
-            'value' => $value
+            "movie_id"=>$movie_id,
+            "room_id"=>$room_id,
+            "shift_id"=>$shift_id,
+            'datetime'=> $datetime,
+            'normal_price'=>$normal_price,
+            'vip_price'=>$vip_price,
         ]);
 
 
 
 
         return redirect()->route('showtimes.create');
+
+
+
+
     }
 
 
@@ -132,7 +139,7 @@ class ShowtimesController extends Controller
 
         return view('admin.showtimes.edit', compact('showtime', 'movies', 'shifts', 'rooms', 'room_over', 'shiftInroomBook'));
     }
-    function update(string $id, Request $request,)
+    function update(string $id, Request $request, )
     {
         try {
 
@@ -140,7 +147,8 @@ class ShowtimesController extends Controller
                 "movie_id" => $request->movie,
                 "room_id" => $request->room,
                 "shift_id" => $request->shift,
-                "datetime" => $request->start_time,
+                "datetime" => $request->date_time,
+                "value" => $request->value,
 
             ]);
 

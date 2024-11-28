@@ -36,8 +36,8 @@ class UserController extends Controller
                 "message"=>"Get list users fail"
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        
-        
+
+
     }
 
     /**
@@ -70,9 +70,9 @@ class UserController extends Controller
                     "RC"=>-1
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        
-        
-        
+
+
+
     }
 
     /**
@@ -90,7 +90,7 @@ class UserController extends Controller
                return response()->json([
                     "message"=>"Get user succed",
                     "RC"=>0,
-                    "data"=>UserResource::collection($user)
+                    "data"=>new UserResource($user)
                 ], Response::HTTP_OK);
             } else {
                 return response()->json([
@@ -98,9 +98,9 @@ class UserController extends Controller
                     "RC"=>-1,
                 ], Response::HTTP_NOT_FOUND);
             }
-                
-            
-            
+
+
+
         } catch (\Throwable $th) {
              Log::error(__CLASS__ ."@".__FUNCTION__,[
                 "line"=>$th->getLine(),
@@ -112,7 +112,7 @@ class UserController extends Controller
             //     ], Response::HTTP_NOT_FOUND);
             // }
             return $th;
-           
+
         }
     }
 
@@ -122,10 +122,10 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $user = User::query()->update([
+            $user = User::query()->where('id', $id)->update([
                 "name"=>$request->name,
                 "email"=>$request->email,
-                
+
             ]);
             if(!$user){
                 return response()->json([
@@ -171,7 +171,7 @@ class UserController extends Controller
 
                 ]);
             }
-            
+
         } catch (\Throwable $th) {
             Log::error(__CLASS__ . "@". __FUNCTION__, [
                 "line"=> $th->getLine(),
@@ -181,7 +181,7 @@ class UserController extends Controller
                 "message"=>"User not found",
                 "RC"=>-1
             ], Response::HTTP_OK);
-            
+
         }
     }
 }

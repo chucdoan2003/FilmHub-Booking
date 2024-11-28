@@ -1,10 +1,8 @@
 <?php
 
-use App\Http\Controllers\admin\AdminShiftController;
 use App\Http\Controllers\Admin\AdminTheaterController;
 use App\Http\Controllers\Admin\MovieController;
-use App\Http\Controllers\Admin\ShowtimesController;
-use App\Http\Controllers\BookingController;
+use App\Http\Controllers\frontend\MovieController as FrontendMovieController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+
 Route::get('admin', function () {
     return view('admin.dashboard');
 });
@@ -30,10 +30,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 Route::get('/theaters/rooms', [AdminTheaterController::class, 'indexRoom'])->name('theaters.indexRoom');
-
 Route::get('/theaters/rooms/create', [AdminTheaterController::class, 'createRoom'])->name('theaters.createRoom');
 Route::post('/theaters/rooms', [AdminTheaterController::class, 'storeRoom'])->name('theaters.storeRoom');
-
 Route::get('/theaters/rooms/{id}/edit', [AdminTheaterController::class, 'editRoom'])->name('theaters.editRoom');
 Route::put('/theaters/rooms/{id}', [AdminTheaterController::class, 'updateRoom'])->name('theaters.updateRoom');
 
@@ -43,7 +41,7 @@ Route::delete('/theaters/rooms/{room}', [AdminTheaterController::class, 'destroy
 
 // Payment
 Route::post('/vnpay_payment', [PaymentController::class, 'vnpay_payment'])->name('vnpay_payment');;
-Route::get('/vnpay-return', [PaymentController::class, 'vnpayReturn'])->name('vnpay.return');
+Route::get('/vnpay-return', [PaymentController::class, 'vnpay_payment_return'])->name('vnpay.return');
 
 
 
@@ -54,24 +52,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
 
-// Showtime
-Route::prefix("admin")->group(function () {
-    // Route::resource("users", UserController::class);
-    Route::get('showtime/list', [ShowtimesController::class, "list"])->name('showtimes.index');
-    Route::get('showtime/create', [ShowtimesController::class, "create"])->name('showtimes.create');
-    Route::post('showtime/create2', [ShowtimesController::class, "create2"])->name('showtimes.store1'); // Route này xử lý việc tạo
-    Route::post('showtime/store', [ShowtimesController::class, "store"])->name('showtimes.store2'); // Route này để gửi cuối cùng // hiển thị ca chiếu theo phòng, valid ca chiếu chọn r thì không chọn được nx
-    Route::post('showtime/add', [ShowtimesController::class, "addshowtime"])->name('showtimes.addshowtime'); // thêm xuất chiếu
-    Route::get('showtime/edit/{id}', [ShowtimesController::class, "edit"])->name('showtimes.edit');
-    Route::put('showtime/update/{id}', [ShowtimesController::class, "update"])->name('showtimes.update');
-    Route::delete('showtime/destroy/{id}', [ShowtimesController::class, "destroy"])->name('showtimes.destroy');
-    Route::post('showtime/getApi', [ShowtimesController::class, "getAPI"])->name('showtimes.getAPI');
+//========================================FrontEnd========================
+Route::get('/', function () {
+    return view('frontend.layouts.master');
 });
-
-
-Route::prefix("admin")->group(function () {
-    // Route::resource("users", UserController::class);
-    Route::get('booking/list', [BookingController::class, 'index'])->name('bookings.index');
-    Route::get('bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');
-    Route::post('/book-tickets', [BookingController::class, 'purchaseTicket'])->name('purchase.ticket');
+Route::get('/showtime', function () {
+    return view('frontend.showtime.index');
+});
+Route::prefix('frontend')->name('frontend.')->group(function () {
+    Route::get('/', [FrontendMovieController::class, 'index'])->name('frontend.movies.index');
 });

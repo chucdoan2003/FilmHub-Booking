@@ -98,6 +98,27 @@
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
+        <div class="mb-3">
+            <label for="director" class="form-label">Director:</label>
+            <input type="text" class="form-control" id="director" name="director">
+            @error('director')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="mb-3">
+            <label for="performer" class="form-label">Performer:</label>
+            <input type="text" class="form-control" id="performer" name="performer">
+            @error('performer')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="mb-3">
+            <label for="trailer" class="form-label">Trailer:</label>
+            <input type="text" class="form-control" id="trailer" name="trailer">
+            @error('trailer')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
         <button type="submit" class="btn btn-primary">Lưu</button>
     </form>
 @endsection
