@@ -69,7 +69,7 @@
   cursor: pointer;
   font-size: 14px;
   transition: background-color 0.3s ease;
-  width: 48px;
+  min-width: 48px;
   height: 48px;
 }
 /* Ghế đang được chọn */

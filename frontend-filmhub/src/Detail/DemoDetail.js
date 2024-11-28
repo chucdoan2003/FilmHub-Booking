@@ -52,7 +52,9 @@ function Detail() {
   const onSelectShowTime = (data) => {
     console.log("Selected showtime:", data);
 
-    const showTime = `${data.shift.start_time} - ${data.shift.end_time} Ngày ${dayjs(data.datetime).format("DD/MM/YYYY")}`;
+    const showTime = `${data.shift.start_time} - ${
+      data.shift.end_time
+    } Ngày ${dayjs(data.datetime).format("DD/MM/YYYY")}`;
     dispatch(
       selectShowTime({
         showTimeId: data.showtime_id,
@@ -60,6 +62,11 @@ function Detail() {
         movieName: movie?.title || "Unknown",
         showTime,
         showTimePrice: data.value || 0,
+        bookedSeats: data.booked_seats,
+        rate: {
+          normal: data.normal_price,
+          vip: data.vip_price,
+        },
       })
     );
     navigate("/check");

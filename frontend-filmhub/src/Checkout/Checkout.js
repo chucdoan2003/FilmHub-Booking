@@ -51,17 +51,25 @@ const Checkout = () => {
     return findTheater.theater.location;
   }, [ticket.roomId, theaterList]);
 
-  const selectedSeatsTxt = useMemo(() => {
+  const { selectedSeatsTxt, totalPrice } = useMemo(() => {
     const findSeats = seats.filter((it) => selectedSeats.includes(it.seat_id));
+    const totalPrice = findSeats.reduce((total, curr) => {
+      if (curr.status === "normal") {
+        total += ticket.rate.normal;
+      } else {
+        total += ticket.rate.vip;
+      }
+      return total;
+    }, 0);
 
     const txt = findSeats.map((it) => it.seat_number).join(", ");
 
-    return txt;
-  }, [selectedSeats, seats]);
+    return { selectedSeatsTxt: txt, totalPrice };
+  }, [seats, selectedSeats, ticket.rate.normal, ticket.rate.vip]);
 
   // Handle seat selection
-  const handleSeatClick = (seatId, status) => {
-    if (status !== "available") return;
+  const handleSeatClick = (seatId, disabled) => {
+    if (disabled) return;
     setSelectedSeats((prev) =>
       prev.includes(seatId)
         ? prev.filter((seat) => seat !== seatId)
@@ -81,6 +89,7 @@ const Checkout = () => {
         location,
         selectedSeats,
         selectedSeatTxt: selectedSeatsTxt,
+        totalPrice,
       })
     );
 
@@ -141,14 +150,21 @@ const Checkout = () => {
                     <button
                       key={seat.seat_id}
                       className={classNames(styles.ghe, {
-                        [styles.gheDaDat]: seat.status === "booked",
+                        [styles.gheDaDat]: ticket.bookedSeats.includes(
+                          seat.seat_id
+                        ),
                         [styles.gheDangDat]: selectedSeats.includes(
                           seat.seat_id
                         ),
                         [styles.gheVip]: seat.type_id === 1,
                       })}
-                      onClick={() => handleSeatClick(seat.seat_id, seat.status)}
-                      disabled={seat.status !== "available"}
+                      onClick={() =>
+                        handleSeatClick(
+                          seat.seat_id,
+                          ticket.bookedSeats.includes(seat.seat_id)
+                        )
+                      }
+                      disabled={ticket.bookedSeats.includes(seat.seat_id)}
                     >
                       {seat.seat_number}
                     </button>
@@ -164,8 +180,7 @@ const Checkout = () => {
         {/* Booking Details Section */}
         <div className={`${styles.rightSection} col-span-3`}>
           <h3 className={styles.totalPrice}>
-            Total Price:{" "}
-            {(ticket.showTimePrice * selectedSeats.length).toLocaleString()}đ
+            Total Price: {totalPrice.toLocaleString()}đ
           </h3>
           <h3 className="text-xl text-white">
             Movie: {ticket.movieName || "Loading..."}
