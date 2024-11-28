@@ -16,11 +16,21 @@ class ApiCheckBookedSeat extends Controller
             $showtimes = Showtime::with(['movie', 'room', 'shift'])->get();
             $selectedSeats = [];
 
+            $showtimesWithBookedSeats = $showtimes->map(function ($showtime) {
+                $bookedSeats = DB::table('tickets_seats')
+                                ->where('showtime_id', $showtime->showtime_id)
+                                ->pluck('seat_id')
+                                ->toArray();
+
+                // Gắn thêm danh sách ghế đã đặt vào từng suất chiếu
+                $showtime->booked_seats = $bookedSeats;
+                return $showtime;
+            });
+
             return response()->json([
                 'success' => true,
                 'message' => 'Lấy dữ liệu thành công',
-                'showtimes' => $showtimes,
-                'selectedSeats' => $selectedSeats
+                'showtimes' => $showtimesWithBookedSeats,
             ], 200);
         } catch (Exception $e) {
             return response()->json([

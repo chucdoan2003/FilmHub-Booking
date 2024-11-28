@@ -127,7 +127,7 @@ const Header = () => {
                                                 <Link to="#">Điểm Beta</Link>
                                                 <Link to="#">Voucher của tôi</Link>
                                                 <Link to="#" onClick={handleLogout}>Đăng xuất</Link> {/* Thêm onClick để gọi handleLogout */}
-                                                {user.user_id === 1 && <Link to="/admin">Admin</Link>}
+                                                {user.user_id === 1 && <Link to="http://127.0.0.1:8000/admin">Admin</Link>}
                                             </div>
                                         </div>
                                     </div>

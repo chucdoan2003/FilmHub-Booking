@@ -188,33 +188,48 @@ class AdminTheaterController extends Controller
         return view('admin.theaters.createRoom', compact('theaters'));
     }
     public function storeRoom(Request $request)
-    {
-        $request->validate([
-            'room_name' => 'required|string|max:255',
-            'theater_id' => 'required|exists:theaters,theater_id',
-            'capacity' => 'required|integer|min:1',
+{
+    $request->validate([
+        'room_name' => 'required|string|max:255',
+        'theater_id' => 'required|exists:theaters,theater_id',
+
+        'normal_seats' => 'required|integer|min:0',
+        'vip_seats' => 'required|integer|min:0',
+    ]);
+
+    // Tạo phòng
+    $room = Room::create([
+        'room_name' => $request->room_name,
+        'theater_id' => $request->theater_id,
+
+    ]);
+
+    $seatNumber = 1;
+
+    // Thêm ghế thường
+    for ($i = 1; $i <= $request->normal_seats; $i++) {
+        Seat::create([
+            'room_id' => $room->room_id,
+            'seat_number' => 'N-' . $seatNumber,
+            'status' => 'normal',
+
         ]);
-
-
-
-        $room = Room::create([
-            'room_name' => $request->room_name,
-            'theater_id' => $request->theater_id,
-            'capacity' => $request->capacity,
-        ]);
-
-
-        for ($i = 1; $i <= $request->capacity; $i++) {
-            Seat::create([
-                'room_id' => $room->room_id,
-                'seat_number' => $i,
-
-            ]);
-        }
-
-
-        return redirect()->route('theaters.createRoom')->with('success', 'Thêm phòng thành công');
+        $seatNumber++;
     }
+
+    // Thêm ghế VIP
+    for ($i = 1; $i <= $request->vip_seats; $i++) {
+        Seat::create([
+            'room_id' => $room->room_id,
+            'seat_number' => 'V-' . $seatNumber,
+            'status' => 'vip',
+
+        ]);
+        $seatNumber++;
+    }
+
+    return redirect()->route('theaters.createRoom')->with('success', 'Thêm phòng và ghế thành công');
+}
 
     public function destroyRoom(Room $room)
     {

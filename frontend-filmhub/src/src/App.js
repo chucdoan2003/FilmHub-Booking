@@ -16,6 +16,7 @@ import Checkout from './Checkout/Checkout';
 import Bill from './Checkout/Bill';
 
 const App = () => {
+  
   return (
     <Router>
       <Header />

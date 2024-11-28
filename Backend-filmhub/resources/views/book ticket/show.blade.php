@@ -39,12 +39,15 @@
             <h2>Chọn ghế</h2>
             <div class="seat-selection">
                 @foreach ($showtime->room->seats as $seat)
+                    @php
+                        $seatPrice = $seat->status === 'vip' ? $showtime->vip_price : $showtime->normal_price;
+                    @endphp
                     <div class="seat">
                         <input type="checkbox" id="seat-{{ $seat->seat_id }}" value="{{ $seat->seat_id }}"
-                            data-price="{{ $showtime->value }}" @if (in_array($seat->seat_id, $bookedSeats)) disabled @endif>
+                            data-price="{{ $seatPrice }}" @if (in_array($seat->seat_id, $bookedSeats)) disabled @endif>
                         <label for="seat-{{ $seat->seat_id }}"
                             @if (in_array($seat->seat_id, $bookedSeats)) style="color: grey;" @endif>
-                            {{ $seat->number }} (Số: {{ $seat->seat_number }})
+                            {{ $seat->number }} (Số: {{ $seat->seat_number }}) - Giá: {{ number_format($seatPrice) }} VND
                         </label>
                     </div>
                 @endforeach
@@ -100,6 +103,7 @@
                 total += parseInt(checkbox.getAttribute('data-price'));
                 selectedSeatIds.push(checkbox.value);
             });
+
 
             // Tính tổng giá tiền cho thực phẩm (food)
             const selectedFood = document.getElementById('food-select').value;

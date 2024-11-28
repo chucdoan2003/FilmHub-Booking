@@ -36,6 +36,7 @@ const Checkout = () => {
         dispatch(fetchMovieError(error.message));
       }
     };
+    
 
     ticket.roomId && fetchData();
   }, [dispatch, ticket.roomId]);
