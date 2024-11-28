@@ -50,7 +50,8 @@
                                 <th>Date</th>
                                 <th>Start time</th>
                                 <th>End time</th>
-                                <th>Giá tiền</th>
+                                <th>Giá thường</th>
+                                <th>Giá vip</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -64,7 +65,8 @@
                                     <td>{{ $item->datetime}}</td>
                                     <td>{{ $item->shift_start_time}}</td>
                                     <td>{{ $item->shift_end_time}}</td>
-                                    <td>{{ number_format($item->value, 0, ',', '.') }} VND</td>
+                                    <td>{{ number_format($item->normal_price, 0, ',', '.') }} VND</td>
+                                    <td>{{ number_format($item->vip_price, 0, ',', '.') }} VND</td>
 
                                     <td>
                                         <a href="{{ route('showtimes.edit', $item->showtime_id) }}"><button class="btn-warning">Edit</button></a>

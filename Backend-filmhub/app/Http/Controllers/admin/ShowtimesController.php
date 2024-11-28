@@ -24,7 +24,7 @@ class ShowtimesController extends Controller
                 'movies.title as movie_name',
                 'rooms.room_name as room_name',
                 'shifts.shift_name as shift_name',
-                'showtimes.value',
+
                 'shifts.start_time as shift_start_time',
                 'shifts.end_time as shift_end_time'
             )

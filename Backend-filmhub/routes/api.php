@@ -91,8 +91,14 @@ Route::get('user/vourcher/add/{vourcher}/{id_user}', [VourchersController::class
 use App\Http\Controllers\Api\PaymentController;
 
 Route::post('/vnpay/payment', [PaymentController::class, 'vnpay_payment']);
-Route::post('/vnpay/payment-return', [PaymentController::class, 'vnpay_payment_return'])->name('api.vnpay.return');
+Route::get('/vnpay/payment-return', [PaymentController::class, 'vnpay_payment_return'])->name('api.vnpay.return');
+
 Route::resource('/movies', MovieController::class );
+
+use App\Http\Controllers\api\CommentController;
+
+Route::get('/comments', [CommentController::class, 'index']);
+Route::post('/comments', [CommentController::class, 'store']);
 
 
 

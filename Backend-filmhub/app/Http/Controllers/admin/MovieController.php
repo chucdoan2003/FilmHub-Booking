@@ -46,6 +46,9 @@ class MovieController extends Controller
             'genres' => 'required|array|min:1',
             'genres.*' => 'exists:genres,genre_id',
             'poster_url' => 'required',
+            'director' => 'required',
+            'performer' => 'required',
+            'trailer' => 'required'
         ]);
 
         if ($request->hasFile('poster_url')) {
@@ -62,6 +65,9 @@ class MovieController extends Controller
             'status' => '1',
             'release_date' => $request->release_date,
             'poster_url' => $data['poster_url'],
+            'director' => $data['director'],
+            'performer' => $data['performer'],
+            'trailer' => $data['trailer']
         ]);
         $movie->genres()->attach($request->genres);
         return redirect()->route('admin.movies.index');
