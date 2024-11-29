@@ -105,6 +105,7 @@ Route::prefix("admin")->group(function(){
     Route::put('showtime/update/{id}', [ShowtimesController::class, "update"])->name('showtimes.update');
     Route::delete('showtime/destroy/{id}', [ShowtimesController::class, "destroy"])->name('showtimes.destroy');
     Route::post('showtime/getApi', [ShowtimesController::class, "getAPI"])->name('showtimes.getAPI');
+    Route::get('/get-rooms-by-theater', [ShowtimesController::class, 'getRoomsByTheater'])->name('getRoomsByTheater');
 
     Route::resource('vourchers', VourcherAdmminController::class);
 });

@@ -88,6 +88,7 @@ class ShowtimesController extends Controller
             'datetime'=> $datetime,
             'normal_price'=>$normal_price,
             'vip_price'=>$vip_price,
+            // 'theater_id'=>2
         ]);
 
 

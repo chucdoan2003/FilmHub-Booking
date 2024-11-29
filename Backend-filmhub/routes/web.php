@@ -55,7 +55,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
 
-// Showtime
+use App\Http\Controllers\ClientBookingController;
+Route::get('/booking/{id}', [ClientBookingController::class, 'index'])->name('booking.index');
 
 
 
