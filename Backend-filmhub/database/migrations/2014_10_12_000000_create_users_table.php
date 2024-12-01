@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+            $table->string('status');
+            $table->integer('member_point')->default(0);
         });
     }
 

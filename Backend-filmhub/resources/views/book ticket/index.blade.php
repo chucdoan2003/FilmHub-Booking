@@ -41,26 +41,26 @@
                     <tr>
 
                         <td>
-                            @if ($showtime->movie)
-                                <img src="{{ Storage::url($showtime->movie->poster_url) }}" style="width: 100px; height: 100px;" alt="Poster">
+                            @if ($showtime->movies)
+                                <img src="{{ Storage::url($showtime->movies->poster_url) }}" style="width: 100px; height: 100px;" alt="Poster">
                             @endif
                         </td>
 
-                        <td>{{ $showtime->movie->title }}</td>
-                        <td>{{ $showtime->movie->description }}</td> <!-- Mô tả phim -->
+                        <td>{{ $showtime->movies->title }}</td>
+                        <td>{{ $showtime->movies->description }}</td> <!-- Mô tả phim -->
 
-                        <td>{{ $showtime->room->room_name }}</td>
+                        <td>{{ $showtime->rooms->room_name }}</td>
                         <td>{{ $showtime->datetime}}</td>
                         <!-- Thêm thông tin ca chiếu -->
                         <td>
 
-                                {{ $showtime->shift->shift_name }} - {{ $showtime->shift->start_time }} -
-                                {{ $showtime->shift->end_time }}
+                                {{ $showtime->shifts->shift_name }} - {{ $showtime->shifts->start_time }} -
+                                {{ $showtime->shifts->end_time }}
 
                         </td>
 
-                        <td>{{ $showtime->movie->duration }} phút</td> <!-- Thời lượng -->
-                        <td>{{ number_format($showtime->value) }} VND</td> <!-- Giá vé -->
+                        <td>{{ $showtime->movies->duration }} phút</td> <!-- Thời lượng -->
+                        <td>{{ number_format($showtime->normal_price) }} VND</td> <!-- Giá vé -->
                         <td>
                             <a href="{{ route('bookings.show', $showtime->showtime_id) }}" class="btn btn-primary">Đặt vé</a>
                         </td>

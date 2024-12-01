@@ -24,7 +24,6 @@ class ShowtimesController extends Controller
                 'movies.title as movie_name',
                 'rooms.room_name as room_name',
                 'shifts.shift_name as shift_name',
-                'showtimes.value',
                 'shifts.start_time as shift_start_time',
                 'shifts.end_time as shift_end_time'
             )
@@ -79,13 +78,16 @@ class ShowtimesController extends Controller
         $movie_id= $request->movie;
         $room_id = $request->room;
         $datetime =$request->datetime;
-        $value =$request->value;
+        $normal_price =$request->normal_price;
+        $vip_price =$request->vip_price;
         DB::table('showtimes')->insert([
             "movie_id"=>$movie_id,
             "room_id"=>$room_id,
             "shift_id"=>$shift_id,
             'datetime'=> $datetime,
-            'value'=>$value
+            'normal_price'=>$normal_price,
+            'vip_price'=>$vip_price,
+            // 'theater_id'=>2
         ]);
 
 
@@ -145,8 +147,8 @@ class ShowtimesController extends Controller
                 "movie_id" => $request->movie,
                 "room_id" => $request->room,
                 "shift_id" => $request->shift,
-                "datetime" => $request->start_time,
-
+                "datetime" => $request->date_time,
+                "value" => $request->value,
             ]);
 
             return redirect()->route('showtimes.index')->with('success', 'Lịch chiếu đã được cập nhật thành công!');

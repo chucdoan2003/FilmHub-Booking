@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Room;
 use App\Http\Requests\StoreRoomRequest;
 use App\Http\Requests\UpdateRoomRequest;
+use App\Models\Row;
 use App\Models\Theater;
+use App\Models\Type;
 
 class RoomController extends Controller
 {
@@ -37,12 +39,14 @@ class RoomController extends Controller
     public function store(StoreRoomRequest $request)
     {
         $request->validate([
-            'room_name'=>['required'],
-            'theater_id'=>['required'],
+            'room_name' => ['required'],
+            'theater_id' => ['required'],
+           
         ]);
+
         $data = $request->all();
-        Room::query()->create($data);
-        return redirect()->route('admin.rooms.index')->with('success', 'Thêm mới thành công');
+        $room = Room::query()->create($data); // Tạo phòng mới
+        return redirect()->route('admin.rooms.index')->with('success', 'Thêm mới thành công và tạo ghế cho phòng.');
     }
 
     /**

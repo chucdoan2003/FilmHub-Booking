@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rows', function (Blueprint $table) {
-            $table->id('row_id');
-            $table->string('row_name');
-            $table->timestamps();
+        Schema::create('foods', function (Blueprint $table) {
+            $table->id(); // ID tự động tăng
+            $table->string('name'); // Tên món ăn
+            $table->decimal('price', 8, 2); // Giá món ăn
+            $table->timestamps(); // Các trường created_at và updated_at
         });
     }
 
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rows');
+        Schema::dropIfExists('foods');
     }
 };

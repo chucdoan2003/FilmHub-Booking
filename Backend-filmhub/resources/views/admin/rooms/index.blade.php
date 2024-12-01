@@ -31,8 +31,8 @@
                         <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Tên rạp chiếu</th>
                             <th>Tên phòng</th>
+                            <th>Tên rạp chiếu</th>
                             <th>Hành động</th>
                         </tr>
                         </thead>
@@ -40,8 +40,8 @@
                             @foreach($data as $item)
                                 <tr>
                                     <td>{{$item->room_id}}</td>
-                                    <td>{{$item->theaters->name}}</td>
                                     <td>{{$item->room_name}}</td>
+                                    <td>{{$item->theaters->name}}</td>
                                     <td >
                                         <a href="{{route('admin.rooms.edit', $item)}}" class="btn btn-info">Sửa</a>
                                         <form action="{{route('admin.rooms.destroy', $item)}}" method="POST">

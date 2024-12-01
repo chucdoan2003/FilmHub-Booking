@@ -22,17 +22,17 @@ class Showtime extends Model
     ];
 
 
-    public function movie()
+    public function movies()
     {
         return $this->belongsTo(Movie::class, 'movie_id');
     }
 
-    public function room()
+    public function rooms()
     {
         return $this->belongsTo(Room::class, 'room_id');
     }
 
-    public function shift()
+    public function shifts()
 {
     return $this->belongsTo(Shift::class, 'shift_id');
 }

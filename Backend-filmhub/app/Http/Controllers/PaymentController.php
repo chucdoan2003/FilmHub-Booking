@@ -8,7 +8,7 @@ class PaymentController extends Controller
 {
     public function vnpay_payment(Request $request)
     {
-
+        dd($request->all());
         $data = $request->all();
 
 

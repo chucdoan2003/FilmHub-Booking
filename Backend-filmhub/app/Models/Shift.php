@@ -16,7 +16,7 @@ class Shift extends Model
         'start_time',
         'end_time',
     ];
-    public function theater()
+    public function theaters()
     {
         return $this->belongsTo(Theater::class, 'theater_id');
     }

@@ -15,36 +15,36 @@
 
             <h1>Thông tin phim</h1>
             <div>
-                <h2>{{ $showtime->movie->title }}</h2>
+                <h2>{{ $showtime->movies->title }}</h2>
 
-                <img src="{{ Storage::url($showtime->movie->poster_url) }}" style="width: 200px; height: auto;"
+                <img src="{{ Storage::url($showtime->movies->poster_url) }}" style="width: 200px; height: auto;"
                     alt="Poster">
 
-                <p><strong>Mô tả:</strong> {{ $showtime->movie->description }}</p>
+                <p><strong>Mô tả:</strong> {{ $showtime->movies->description }}</p>
 
                 @php
 
 
-                    $shiftStartTime = \Carbon\Carbon::parse($showtime->shift->start_time);
-                    $shiftEndTime = \Carbon\Carbon::parse($showtime->shift->end_time);
+                    $shiftStartTime = \Carbon\Carbon::parse($showtime->shifts->start_time);
+                    $shiftEndTime = \Carbon\Carbon::parse($showtime->shifts->end_time);
                 @endphp
 
                 <p><strong>Thời gian chiếu:</strong>
                     {{ \Carbon\Carbon::parse($showtime->datetime)->format('d/m/Y ') }}
                 </p>
-                <p><strong>Ca chiếu:</strong> {{ $showtime->shift->shift_name }} :
+                <p><strong>Ca chiếu:</strong> {{ $showtime->shifts->shift_name }} :
                     {{ $shiftStartTime->format('H:i') }} - {{ $shiftEndTime->format('H:i') }}
                 </p>
 
 
-                <p><strong>Phòng:</strong> {{ $showtime->room->room_name }}</p>
-                <p><strong>Thời gian:</strong> {{ $showtime->movie->duration }} phút</p>
-                <p><strong>Giá vé:</strong> {{ number_format($showtime->value) }} VND</p>
+                <p><strong>Phòng:</strong> {{ $showtime->rooms->room_name }}</p>
+                <p><strong>Thời gian:</strong> {{ $showtime->movies->duration }} phút</p>
+                <p><strong>Giá vé:</strong> {{ number_format($showtime->normal_price) }} VND</p>
             </div>
 
             <h2>Chọn ghế</h2>
             <div class="seat-selection">
-                @foreach ($showtime->room->seats as $seat)
+                @foreach ($showtime->rooms->seats as $seat)
                     <div class="seat">
                         <input type="checkbox" id="seat-{{ $seat->seat_id }}" value="{{ $seat->seat_id }}"
                             data-price="{{ $showtime->value }}" @if (in_array($seat->seat_id, $bookedSeats)) disabled @endif>

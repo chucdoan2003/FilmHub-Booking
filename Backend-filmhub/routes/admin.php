@@ -4,8 +4,10 @@ use App\Http\Controllers\admin\AdminShiftController;
 use App\Http\Controllers\admin\RoomController;
 use App\Http\Controllers\admin\RowController;
 use App\Http\Controllers\admin\SeatController;
+use App\Http\Controllers\Admin\ShowtimesController;
 use App\Http\Controllers\admin\StatisticController;
 use App\Http\Controllers\admin\TypeController;
+use App\Http\Controllers\BookingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,4 +44,28 @@ Route::prefix('admin/shifts')->group(function () {
 Route::prefix('admin/shifts')->group(function () {
     Route::get('/statistics', [StatisticController::class, 'index'])->name('admin.statistics.index');
     Route::post('/statistics', [StatisticController::class, 'show'])->name('admin.statistics.show');
+});
+
+Route::prefix("admin")->group(function(){
+    // Route::resource("users", UserController::class);
+    Route::get('showtime/list', [ShowtimesController::class, "list"])->name('showtimes.index');
+    Route::get('showtime/create', [ShowtimesController::class, "create"])->name('showtimes.create');// hiển thị giao diện thêm ngày
+    Route::post('showtime/create2', [ShowtimesController::class, "create2"])->name('showtimes.store1'); // hiển thị movie và room trong theo ngày valid room nếu full ca
+    Route::post('showtime/store', [ShowtimesController::class, "store"])->name('showtimes.store2');// hiển thị ca chiếu theo phòng, valid ca chiếu chọn r thì không chọn được nx
+    Route::post('showtime/add', [ShowtimesController::class, "addshowtime"])->name('showtimes.addshowtime');// thêm xuất chiếu
+    Route::get('showtime/edit/{id}', [ShowtimesController::class, "edit"])->name('showtimes.edit');
+    Route::put('showtime/update/{id}', [ShowtimesController::class, "update"])->name('showtimes.update');
+    Route::delete('showtime/destroy/{id}', [ShowtimesController::class, "destroy"])->name('showtimes.destroy');
+    Route::post('showtime/getApi', [ShowtimesController::class, "getAPI"])->name('showtimes.getAPI');
+    Route::get('/get-rooms-by-theater', [ShowtimesController::class, 'getRoomsByTheater'])->name('getRoomsByTheater');
+
+    // Route::resource('vourchers', VourcherAdmminController::class);
+});
+Route::prefix("admin")->group(function(){
+    // Route::resource("users", UserController::class);
+    Route::get('booking/list', [BookingController::class, 'index'])->name('bookings.index');
+    Route::get('bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');
+    Route::post('/book-tickets', [BookingController::class, 'purchaseTicket'])->name('purchase.ticket');
+
+
 });
