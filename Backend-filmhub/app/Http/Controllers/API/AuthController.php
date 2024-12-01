@@ -98,7 +98,7 @@ class AuthController extends Controller
         
     }
     public function getChangePassword($email){
-        return view('admin.users.changePassword', compact('email'));
+        return view('frontend.auth.changePassword', compact('email'));
     }
     public function changePassword(Request $request){
         if($request->password == $request->password_confirmation){

@@ -5,6 +5,7 @@ use App\Http\Controllers\admin\MovieController;
 use App\Http\Controllers\Admin\ShowtimesController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VourcherAdmminController;
+use App\Http\Controllers\Admin\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,3 +40,18 @@ Route::get('demo', [ShowtimesController::class, "demo"]);
 
 Route::post('/movies', [MovieController::class, 'store'])->name('movies.store');
 Route::get('/movies/detail', [MovieController::class, 'show'])->name('movies.show');
+
+Route::get("auth/login", [AuthController::class, 'getLogin'])->name('getLogin');
+Route::get("auth/register", [AuthController::class, 'getRegister'])->name('getRegister');
+Route::get("auth/forgotPassword", [AuthController::class, 'getForgotPassword'])->name('getForgotPassword');
+Route::get("auth/changePassword/{email}", [AuthController::class, 'getChangePassword'])->name('getChangePassword');
+
+Route::post("auth/login", [AuthController::class, "login"])->name('login');
+Route::post("auth/register", [AuthController::class, "register"])->name('register');
+Route::post("auth/forgotPassword", [AuthController::class, "forgotPassword"])->name('forgotPassword');
+Route::post("auth/logout", [AuthController::class, "logout"])->name('logout');
+Route::post('auth/changePassword', [AuthController::class, 'changePassword' ])
+->name('changePassword');
+
+
+

@@ -17,7 +17,7 @@ class AdminOrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::with(['orderItems.productVariant.productSize', 'orderItems.productVariant.productColor'])->get();
+        // $orders = Order::with(['orderItems.productVariant.productSize', 'orderItems.productVariant.productColor'])->get();
 
         return view(self::PATH_VIEW.__FUNCTION__, compact('orders'));
     }
