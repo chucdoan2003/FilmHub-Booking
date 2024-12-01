@@ -19,6 +19,18 @@
 @endsection
 
 @section('content')
+    <style>
+        .description {
+            white-space: nowrap;
+            /* Không cho xuống dòng */
+            overflow: hidden;
+            /* Ẩn phần nội dung vượt quá kích thước */
+            text-overflow: ellipsis;
+            /* Hiển thị dấu "..." */
+            max-width: 200px;
+            /* Đặt độ rộng tối đa (tuỳ chỉnh theo giao diện) */
+        }
+    </style>
     @if (session('message'))
         <h4>{{ session('message') }}</h4>
     @endif
@@ -69,7 +81,7 @@
                             <tr>
                                 <td>{{ $movie->movie_id }}</td>
                                 <td>{{ $movie->title }}</td>
-                                <td>{{ $movie->description }}</td>
+                                <td class="description">{{ $movie->description }}</td>
                                 <td>{{ $movie->duration }} Phút</td>
                                 <td>{{ $movie->release_date }}</td>
                                 <td>
@@ -84,7 +96,7 @@
                                         alt=""></td>
                                 <td>{{ $movie->status }}</td>
                                 <td>{{ $movie->director }}</td>
-                                <td>{{ $movie->performer }}</td>
+                                <td class="description">{{ $movie->performer }}</td>
                                 <td>{{ $movie->trailer }}</td>
                                 <td class="">
                                     <a href="{{ route('admin.movies.show', $movie->movie_id) }}"

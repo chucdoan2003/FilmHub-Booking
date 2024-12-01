@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\admin\AdminShiftController;
+use App\Http\Controllers\admin\GenreController;
+use App\Http\Controllers\admin\MovieController;
 use App\Http\Controllers\admin\ShowtimeController;
-use App\Http\Controllers\MovieController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,4 +21,9 @@ Route::prefix('admin')->as('admin.')->group(function () {
     Route::get('/', function () {
         return view('admin.dashboard');
     })->name('dashboard');
+});
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('/movies', MovieController::class);
+    Route::resource('/genres', GenreController::class);
 });
