@@ -69,6 +69,12 @@ Route::prefix('admin/drinks')->group(function () {
     Route::delete('/{id}', [DrinkController::class, 'destroy'])->name('admin.drinks.destroy'); // Xóa một đồ uống theo id
 });
 
+use App\Http\Controllers\admin\MovieController;
+use App\Http\Controllers\admin\GenreController;
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('/movies', MovieController::class);
+    Route::resource('/genres', GenreController::class);
+});
 
 Route::prefix('admin/shifts')->group(function () {
     Route::get('/', [AdminShiftController::class, 'index'])->name('admin.shifts.index'); // Lấy danh sách tất cả shifts
@@ -94,6 +100,8 @@ Route::prefix("admin")->group(function(){
 
 });
 
+
+
 Route::prefix("admin")->group(function(){
     Route::resource("users", UserController::class);
     Route::get('showtime/list', [ShowtimesController::class, "list"])->name('showtimes.index');
@@ -110,3 +118,12 @@ Route::prefix("admin")->group(function(){
     Route::resource('vourchers', VourcherAdmminController::class);
 });
 
+
+Route::prefix("admin")->group(function(){
+    // Route::resource("users", UserController::class);
+    Route::get('booking/list', [BookingController::class, 'index'])->name('bookings.index');
+    Route::get('bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');
+    Route::post('/book-tickets', [BookingController::class, 'purchaseTicket'])->name('purchase.ticket');
+
+
+});

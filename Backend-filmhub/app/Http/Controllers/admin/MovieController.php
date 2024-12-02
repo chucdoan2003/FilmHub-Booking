@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Genre;
 use App\Models\Movie;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class MovieController extends Controller
@@ -45,15 +44,14 @@ class MovieController extends Controller
             'release_date' => 'required|date',
             'genres' => 'required|array|min:1',
             'genres.*' => 'exists:genres,genre_id',
-            'poster_url' => 'required',
+            'status' => 'required',
             'director' => 'required',
             'performer' => 'required',
-            'trailer' => 'required'
+            'trailer' => 'required',
         ]);
 
         if ($request->hasFile('poster_url')) {
-            // $data['poster_url'] = $request->file('poster_url')->store('movie', 'public');
-            $data['poster_url'] = Storage::put('movie', $request->file('poster_url'));
+            $data['poster_url'] = $request->file('poster_url')->store('storage/movie', 'public');
         } else {
             $data['poster_url'] = "";
         }
@@ -62,12 +60,12 @@ class MovieController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'duration' => $request->duration,
-            'status' => '1',
             'release_date' => $request->release_date,
             'poster_url' => $data['poster_url'],
-            'director' => $data['director'],
-            'performer' => $data['performer'],
-            'trailer' => $data['trailer']
+            'status' => $request->status,
+            'director' => $request->director,
+            'performer' => $request->performer,
+            'trailer' => $request->trailer,
         ]);
         $movie->genres()->attach($request->genres);
         return redirect()->route('admin.movies.index');
@@ -106,6 +104,10 @@ class MovieController extends Controller
             'release_date' => 'required|date',
             'genres' => 'required|array|min:1',
             'genres.*' => 'exists:genres,genre_id',
+            'status' => 'required',
+            'director' => 'required',
+            'performer' => 'required',
+            'trailer' => 'required',
         ]);
         $movie = Movie::find($id);
 

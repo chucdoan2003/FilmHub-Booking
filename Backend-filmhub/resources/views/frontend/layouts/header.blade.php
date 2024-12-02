@@ -55,13 +55,8 @@
                         </div>
                         <div class="clearfix"></div>
                         <ul class="dl-menu">
-                            <li class="parent"><a href="#">Home</a>
-                                <ul class="lg-submenu">
-                                    <li><a href="index.html">Index-I</a></li>
-                                    <li><a href="index2.html">Index-II</a></li>
-                                    <li><a href="index3.html">Index-III</a></li>
-                                    <li><a href="index4.html">Index-IV</a></li>
-                                </ul>
+                            <li class="parent"><a href="{{route('movies.index')}}">Home</a>
+
                             </li>
                             <li class="parent megamenu"><a href="#">movie</a>
                                 <ul class="lg-submenu">
@@ -321,7 +316,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li class="parent"><a href="contact.html">contact</a>
+                            <li class="parent"><a href="{{route('contact.index')}}">contact</a>
                             </li>
                         </ul>
                     </div>
@@ -338,9 +333,23 @@
             <div class="prs_top_login_btn_wrapper">
                 <div class="prs_animate_btn1">
                     <ul>
-                        <li><a href="#" class="button button--tamaya" data-text="sign up" data-toggle="modal"
-                                data-target="#myModal"><span>sign up</span></a>
+                        @if (Auth::check())
+                        <form action="{{route("logout")}}" method="POST">
+                            @csrf
+                            @method("POST")
+                                <li><a href="{{route('getLogin')}}" class="button button--tamaya" type="submit" data-text="Logout" ><span>Log out</span></a>
+                                </li>
+                            {{-- <button type="submit" style="margin: 6px 0 0 0 ; padding: 8px 12px;background-color: beige; border:none; border-radius: 5px">Logout</button> --}}
+                        </form>
+
+
+
+                        @else
+                        <li><a href="{{route('getLogin')}}" class="button button--tamaya" data-text="Sign in" ><span>Sign in</span></a>
                         </li>
+
+                        @endif
+
                     </ul>
                 </div>
             </div>
@@ -441,15 +450,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="prs_top_login_btn_wrapper prs_slidebar_searchbar_btn_wrapper">
-                    <div class="prs_animate_btn1">
-                        <ul>
-                            <li><a href="#" class="button button--tamaya" data-text="sign up"
-                                    data-toggle="modal" data-target="#myModal"><span>sign up</span></a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+
             </div>
         </div>
     </div>

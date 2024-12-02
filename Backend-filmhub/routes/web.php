@@ -3,7 +3,7 @@
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\AdminTheaterController;
-use App\Http\Controllers\admin\MovieController;
+
 
 use App\Http\Controllers\admin\ShowtimesController;
 
@@ -49,18 +49,39 @@ Route::get('/vnpay-return', [PaymentController::class, 'vnpay_payment_return'])-
 
 
 // Movie
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('/movies', MovieController::class);
-});
 
 
 
-use App\Http\Controllers\ClientBookingController;
+// Showtimes (Huy)
+use App\Http\Controllers\client\ClientBookingController;
 Route::get('/booking/{id}', [ClientBookingController::class, 'index'])->name('booking.index');
 
+use App\Http\Controllers\client\ContactController;
+Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 
+// Đăng nhập, đăng ký ( Chúc)
+use App\Http\Controllers\admin\AuthController;
+Route::get("auth/login", [AuthController::class, 'getLogin'])->name('getLogin');
+Route::get("auth/register", [AuthController::class, 'getRegister'])->name('getRegister');
+Route::get("auth/forgotPassword", [AuthController::class, 'getForgotPassword'])->name('getForgotPassword');
+Route::get("auth/changePassword/{email}", [AuthController::class, 'getChangePassword'])->name('getChangePassword');
+
+Route::post("auth/login", [AuthController::class, "login"])->name('login');
+Route::post("auth/register", [AuthController::class, "register"])->name('register');
+Route::post("auth/forgotPassword", [AuthController::class, "forgotPassword"])->name('forgotPassword');
+Route::post("auth/logout", [AuthController::class, "logout"])->name('logout');
+Route::post('auth/changePassword', [AuthController::class, 'changePassword' ])
+->name('changePassword');
 
 
+// Đặt ghế ( Hướng)
+Route::get('/showtime/{id}', [ClientBookingController::class, 'getSeatBooking'])->name('getSeatBooking');
+Route::get('detailBooking/{id}', [ClientBookingController::class, 'detailBooking'])->name('detailBooking');
+Route::post('/detailBooking/{id}', [ClientBookingController::class, 'detailBooking'])->name('detailBooking');
 
-
+// Detail ( Khôi)
+use App\Http\Controllers\client\MovieController as FrontendMovieController;
+Route::get('/', [FrontendMovieController::class, 'index'])->name('movies.index');
+Route::get('/show/{id}', [FrontendMovieController::class, 'detail'])->name('movies.detail');

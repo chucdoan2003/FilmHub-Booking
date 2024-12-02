@@ -1,7 +1,18 @@
 <!DOCTYPE html>
+<!--
+Template Name: Movie Pro
+Version: 1.0.0
+Author: Webstrot
+
+-->
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
 <html lang="zxx">
+<!--[endif]-->
 
 
+<!-- Mirrored from www.webstrot.com/html/moviepro/html/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Nov 2024 10:17:39 GMT -->
 
 <head>
     <meta charset="utf-8" />
@@ -12,11 +23,6 @@
     <meta name="author" content="" />
     <meta name="MobileOptimized" content="320" />
     <!--Template style -->
-    <link rel="shortcut icon" type="image/png" href="{{ asset('website/images/header/favicon.ico') }}" />
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{{ asset('website/css/animate.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('website/css/bootstrap.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('website/css/font-awesome.css') }}" />
@@ -33,35 +39,17 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('website/js/plugin/rs_slider/settings.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('website/css/style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('website/css/responsive.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('website/css/seat.css') }}" />
+
     <link rel="stylesheet" id="theme-color" type="text/css" href="#" />
     <!-- favicon links -->
-
+    <link rel="shortcut icon" type="image/png" href="{{ asset('website/images/header/favicon.ico') }}" />
 </head>
 
 <body>
-
-    @include('frontend.layouts.header')
-    {{-- @include('frontend.layouts.slider.slider') --}}
-
-
     @yield('content')
-    {{-- @include('frontend.layouts.product.product1') --}}
-
-
-    @include('frontend.layouts.slider.slider2')
-    @include('frontend.layouts.product.product2')
-
-
-    @include('frontend.layouts.content.blog')
-    @include('frontend.layouts.content.feature')
-    @include('frontend.layouts.content.vidpho')
-    @include('frontend.layouts.content.patner')
-
+    
     @include('frontend.layouts.login.login')
-    @include('frontend.layouts.footer')
-
-
-
     <!-- st login wrapper End -->
     <!--main js file start-->
     <script src="{{ asset('website/js/jquery_min.js') }}"></script>

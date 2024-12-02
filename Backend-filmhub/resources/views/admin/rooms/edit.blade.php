@@ -21,10 +21,10 @@
     <div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="h3 mb-4 text-gray-800">Cập nhật hàng ghế</h1>
+        <h1 class="h3 mb-4 text-gray-800">Cập nhật phòng</h1>
         <!--  Page main content   -->
         <!--   Main product information             -->
-        <form action="{{route('admin.rows.update', $row)}}" method="POST" enctype="multipart/form-data">
+        <form action="{{route('admin.rooms.update', $room)}}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="row">
@@ -34,15 +34,15 @@
                         <!-- Main product information -->
                         <a href="#collapseProductInfo" class="d-block card-header py-3" data-toggle="collapse"
                            role="button" aria-expanded="true" aria-controls="collapseCardExample">
-                            <h6 class="m-0 font-weight-bold text-primary">Thông tin chính của hàng ghế</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Thông tin chính phòng</h6>
                         </a>
                         <!-- Card Content - Collapse -->
                         <div class="collapse show" id="collapseProductInfo">
                             <div class="card-body">
                                 <div class="mb-3">
-                                    <label class="form-label">Tên hàng ghế</label>
-                                    <input type="text" class="form-control"  name="row_name" value="{{$row->row_name}}">
-                                    @error('row_name')
+                                    <label class="form-label">Tên phòng</label>
+                                    <input type="text" class="form-control"  name="room_name" value="{{$room->room_name}}">
+                                    @error('room_name')
                                         <span style="padding: 10px 0; color: red;">{{$message}}</span>
                                     @enderror
                                 </div>
@@ -53,21 +53,19 @@
                         <button class="btn btn-success w-sm">Cập nhật</button>
                     </div>
                 </div>
-
                 <div class="col-xl-4 col-lg-5">
                     <div class="card shadow mb-4">
                         <div class="collapse show" id="collapseStatus">
-                            <!-- end card body -->
                             <div class="card-body">
-                                <!-- chọn phòng -->
-                                <label for="choices-category-input" class="form-label">Chọn phòng</label>
+                                <!-- chọn rạp -->
+                                <label for="choices-category-input" class="form-label">Chọn rạp</label>
                                 <select class="form-control" aria-label="Default select example"
-                                        id="choices-category-input" name="room_id">
-                                    @foreach($rooms as $room_id => $room_name)
-                                        <option value="{{$seat->room_id}}" {{ $seat->room_id == $room_id ? 'selected' : '' }}>{{$room_name}}</option>
+                                        id="choices-category-input" name="theater_id" >
+                                    @foreach($theaters as $theater_id => $name)
+                                        <option value="{{$room->theater_id}}" {{ $room->theater_id == $theater_id ? 'selected' : '' }}>{{$name}}</option>
                                     @endforeach
                                 </select>
-                                @error('room_id')
+                                @error('theater_id')
                                     <span style="padding: 10px 0; color: red;">{{$message}}</span>
                                 @enderror
                             </div>

@@ -14,6 +14,7 @@ class PaymentController extends Controller
 
         // dd($data);
 
+        $selectedSeats = explode(',', $data['selected_seats']);
 
         // Kiểm tra dữ liệu đầu vào
         $request->validate([
@@ -21,14 +22,29 @@ class PaymentController extends Controller
             'showtime_id' => 'required|exists:showtimes,showtime_id',
             'total' => 'required|numeric',
             'selected_seats' => 'required|string',
-           'food_id' => 'nullable|integer',
+            'food_id' => 'nullable|integer',
             'drink_id' => 'nullable|integer',
             'combo_id' => 'nullable|integer',
-
         ]);
         // dd($data['showtime_id']);
 
+
+        $showtimeId = $data['showtime_id'];
         session(['user_id' => $data['user_id']]);
+
+        $reservedSeats = \DB::table('tickets_seats')
+            ->where('showtime_id', $showtimeId)
+            ->whereIn('seat_id', $selectedSeats)
+            ->pluck('seat_id')
+            ->toArray();
+
+        // Kiểm tra nếu có ghế trùng
+        if (!empty($reservedSeats)) {
+            $reservedSeatsList = implode(', ', $reservedSeats);
+            return redirect()->back()->withErrors([
+                'msg' => "Ghế $reservedSeatsList đã được đặt. Vui lòng chọn ghế khác."
+            ]);
+        }
 
         // Lưu vé vào cơ sở dữ liệu
         $ticket = Ticket::create([
@@ -37,20 +53,29 @@ class PaymentController extends Controller
             'total_price' => $data['total'],
             'ticket_time' => now(),
             'status' => 'pending',
-            'food_id' => $data['food_id'],
-            'drink_id' => $data['drink_id'],
-            'combo_id' => $data['combo_id'],
+            // 'food_id' => $data['food_id'],
+            // 'drink_id' => $data['drink_id'],
+            // 'combo_id' => $data['combo_id'],
 
         ]);
 
         // Lưu thông tin ghế đã chọn vào bảng ticket_seats
-        $selectedSeats = explode(',', $data['selected_seats']);
-        foreach ($selectedSeats as $seatId) {
-            \DB::table('tickets_seats')->insert([
-                'ticket_id' => $ticket->ticket_id, // Sử dụng ticket_id thay vì id
-                'seat_id' => $seatId,
-                'showtime_id' => $data['showtime_id'],
-            ]);
+        foreach ($selectedSeats as $seatNumber) {
+            // Tìm seat_id dựa trên seat_number
+            $seat = \DB::table('seats')->where('seat_number', $seatNumber)->first();
+
+            if ($seat) {
+                // Nếu tìm thấy seat_id từ seat_number, lưu vào bảng tickets_seats
+                \DB::table('tickets_seats')->insert([
+                    'ticket_id' => $ticket->ticket_id,
+                    'seat_id' => $seat->seat_id,
+                    'showtime_id' => $data['showtime_id'],
+                ]);
+            } else {
+                return redirect()->back()->withErrors([
+                    'msg' => "Không tìm thấy ghế $seatNumber."
+                ]);
+            }
         }
 
         session(['ticket_id' => $ticket->ticket_id]);
@@ -69,7 +94,7 @@ class PaymentController extends Controller
         $vnp_OrderType = "FilmHub Booking";
         $vnp_Amount = $data['total'] * 100;
         $vnp_Locale = "VN";
-        $vnp_BankCode = "";
+        $vnp_BankCode = "NCB";
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
         $showtime_id = $data['showtime_id'];
 

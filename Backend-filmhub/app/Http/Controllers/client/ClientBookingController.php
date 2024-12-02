@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\client;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Models\Showtime;
 class ClientBookingController extends Controller
 {
     public function index($id, Request $request)
@@ -17,6 +19,7 @@ class ClientBookingController extends Controller
         ->select('showtimes.showtime_id',DB::raw('DATE(showtimes.datetime) AS show_date'),
             'shifts.start_time', 'showtimes.normal_price', 'showtimes.vip_price', 'rooms.room_name as room_name', 'theaters.name as theater_name')
         ->orderBy('show_date', 'asc')
+        ->orderBy('shifts.start_time', 'asc')
         ->get();
 
     // Group các showtime theo ngày
@@ -40,6 +43,39 @@ class ClientBookingController extends Controller
         'selectedDate' => $selectedDate,
         'movieId' => $id
     ]);
+}
+
+
+public function getSeatBooking($showtime_id){
+    $showtime = Showtime::with([
+        'movies',
+        'rooms.rows.seats', // Tải trước hàng và ghế
+        'rooms.theaters',
+        'shifts'
+    ])
+    ->where('showtime_id', $showtime_id)
+    ->firstOrFail();
+     // Lấy giá vé
+    $normalPrice = $showtime->normal_price;
+    $vipPrice = $showtime->vip_price;
+    return view('frontend.layouts.booking.getSeatBooking', compact('showtime', 'normalPrice', 'vipPrice'));
+}
+public function detailBooking(Request $request, $showtime_id)
+{
+    $showtime = Showtime::findOrFail($showtime_id); // Lấy thông tin showtime
+
+
+    // Nhận ghế đã chọn từ request
+    $selectedSeats = $request->input('selected_seats'); // Có thể là chuỗi
+    $totalPrice = $request->input('total_price'); // Tổng giá tiền
+    // dd(   $selectedSeats);
+
+    // Truyền dữ liệu đến view
+    return view('frontend.layouts.booking.detailBooking', compact(
+        'showtime',
+        'selectedSeats', // Truyền mảng ghế đã chọn
+        'totalPrice'
+    ));
 }
 
 

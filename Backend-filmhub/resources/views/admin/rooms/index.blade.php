@@ -19,8 +19,8 @@
     <div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Danh sách hàng ghế</h1>
-        <a href="{{route('admin.rows.create')}}" class="btn btn-success mb-3">Tạo mới</a>
+        <h1 class="h3 mb-2 text-gray-800">Danh sách phòng</h1>
+        <a href="{{route('admin.rooms.create')}}" class="btn btn-success mb-3">Tạo mới</a>
         @if(session('success'))
             <h4 style="padding: 10px 0;color: #17A673; font-weight: bold;">{{session('success')}}</h4>
         @endif
@@ -32,19 +32,19 @@
                         <tr>
                             <th>ID</th>
                             <th>Tên phòng</th>
-                            <th>Tên hàng ghế</th>
+                            <th>Tên rạp chiếu</th>
                             <th>Hành động</th>
                         </tr>
                         </thead>
                         <tbody>
                             @foreach($data as $item)
                                 <tr>
-                                    <td>{{$item->row_id}}</td>
-                                    <td>{{$item->rooms->room_name}}</td>
-                                    <td>{{$item->row_name}}</td>
+                                    <td>{{$item->room_id}}</td>
+                                    <td>{{$item->room_name}}</td>
+                                    <td>{{$item->theaters->name}}</td>
                                     <td >
-                                        <a href="{{route('admin.rows.edit', $item)}}" class="btn btn-info">Sửa</a>
-                                        <form action="{{route('admin.rows.destroy', $item)}}" method="POST">
+                                        <a href="{{route('admin.rooms.edit', $item)}}" class="btn btn-info">Sửa</a>
+                                        <form action="{{route('admin.rooms.destroy', $item)}}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có muốn xóa không?')">Xóa</button>
