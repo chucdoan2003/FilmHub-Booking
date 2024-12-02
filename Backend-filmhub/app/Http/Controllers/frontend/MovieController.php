@@ -7,15 +7,26 @@ use App\Models\Genre;
 use App\Models\Movie;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MovieController extends Controller
 {
     public function index()
     {
         // Lấy tất cả các phim từ cơ sở dữ liệu
-        $movies = Movie::all();
+        $movieUpcoming1 = Movie::where('status', 'Sắp ra mắt')
+            ->orderBy('movie_id', 'asc')
+            ->skip(0) // Bỏ qua 0 bản ghi
+            ->take(8) // Lấy 8 bản ghi
+            ->get();
+        $movieUpcoming2 = Movie::where('status', 'Sắp ra mắt')
+            ->orderBy('movie_id', 'asc')
+            ->skip(8) // Bỏ qua 8 bản ghi
+            ->take(8) // Lấy 8 bản ghi
+            ->get();
+
         // Trả về view với danh sách phim
-        return view('frontend.movies.movies1', compact('movies'));
+        return view('frontend.movies.movies1', compact('movieUpcoming1', 'movieUpcoming2'));
     }
     public function detail(string $id)
     {

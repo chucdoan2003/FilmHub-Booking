@@ -1,5 +1,19 @@
 @extends('frontend.layouts.master')
 @section('movies')
+    <style>
+        .performer {
+            white-space: nowrap;
+            /* Không cho phép xuống dòng */
+            overflow: hidden;
+            /* Ẩn phần dư ra */
+            text-overflow: ellipsis;
+            /* Thêm dấu 3 chấm */
+            display: block;
+            /* Đảm bảo là block để áp dụng hiệu ứng */
+            width: 100%;
+            /* Giới hạn chiều rộng */
+        }
+    </style>
     <!-- prs title wrapper Start -->
     <div class="prs_title_main_sec_wrapper">
         <div class="prs_title_img_overlay"></div>
@@ -20,7 +34,7 @@
     </div>
     <!-- prs title wrapper End -->
     <!-- prs ms trailer wrapper Start -->
-    <div class="prs_ms_trailer_vid_main_wrapper">
+    <div class="prs_ms_trailer_vid_main_wrapper ">
         <div class="container">
             <div class="row">
                 {{-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -34,7 +48,7 @@
                         <div class="prs_ms_trailer_vid_icon_wrapper">
                             <ul>
                                 <li><a class="test-popup-link button" rel='external'
-                                        href='{{$movie->trailer}}' title='title'><i
+                                        href='{{$movie->poster}}' title='title'><i
                                             class="flaticon-play-button"></i></a>
                                 </li>
                             </ul>
@@ -42,40 +56,33 @@
                         </div>
                     </div>
                 </div> --}}
-                <div class="col-lg-12 col-lg-12 col-lg-12 col-lg-12">
-                    <div class="prs_ms_trailer_slider_main_wrapper">
-                        <div class="prs_ms_trailer_slider_left_wrapper">
-                            <div class="owl-carousel owl-theme">
-                                <div class="item">
-                                    <div class="prs_ms_trailer_slider_left_img_wrapper">
-                                        <img src="{{ Storage::url($movie->poster_url) }}"
-                                            style="object-fit: contain;height: 468px;" alt="vp_img">
-                                    </div>
-                                </div>
-                            </div>
+                <div class="col-lg-12 col-lg-12 col-lg-12 col-lg-12 d-flex justify-content-center">
+                    <div class="item">
+                        <div class="prs_ms_trailer_slider_left_img_wrapper">
+                            <img src="{{ Storage::url($movie->poster_url) }}" style="object-fit: contain;height: 468px;"
+                                alt="vp_img">
                         </div>
-                        <div class="prs_ms_trailer_slider_right_wrapper">
-                            <h2>{{ $movie->release_date }}</h2>
-                            <p>{{ $movie->title }}</p>
-                            <h5><span>Starring -</span> {{ $movie->performer }}
-                            </h5>
-                            <ul>
-                                <li>Duration - <span>{{ $movie->duration }} Phút</span>
-                                </li>
-                                <li>Directior - <span>{{ $movie->director }}</span>
-                                </li>
-                            </ul>
-                            <div>
-                                <a href="">Đặt vé ngay</a>
-                            </div>
+                    </div>
+                    <div class="prs_ms_trailer_slider_right_wrapper">
+                        <h2 class="mb-2">{{ $movie->title }}</h2>
+                        <h3>{{ $movie->release_date }}</h3>
+                        <h5 class="performer"><span>Starring -</span> {{ $movie->performer }}
+                        </h5>
+                        <ul>
+                            <li>Duration - <span>{{ $movie->duration }} Phút</span>
+                            </li>
+                            <li>Directior - <span>{{ $movie->director }}</span>
+                            </li>
+                        </ul>
+                        <div class="mt-4 text-center">
+                            <a class="text-white bg-danger py-2 px-5 rounded" href="/booking/{{ $movie->movie_id }}">Đặt
+                                vé ngay</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- prs ms trailer wrapper End -->
-    <!-- prs syn Slider Start -->
 
     <div class="prs_syn_main_section_wrapper">
         <div class="container">
@@ -102,8 +109,69 @@
             </div>
         </div>
     </div>
-    <!-- prs syn Slider End -->
-    <!-- prs related movie slider Start -->
+    {{-- comment --}}
+    <section style="background-color: #eee;">
+        <div class="container py-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-12 col-lg-10 col-xl-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-start align-items-center">
+                                <img class="rounded-circle shadow-1-strong me-3"
+                                    src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp" alt="avatar"
+                                    width="60" height="60" />
+                                <div>
+                                    <h6 class="fw-bold text-primary mb-1">Lily Coleman</h6>
+                                    <p class="text-muted small mb-0">
+                                        Shared publicly - Jan 2020
+                                    </p>
+                                </div>
+                            </div>
+
+                            <p class="mt-3 mb-4 pb-2">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                quis nostrud exercitation ullamco laboris nisi ut aliquip consequat.
+                            </p>
+
+                            <div class="small d-flex justify-content-start">
+                                <a href="#!" class="d-flex align-items-center me-3">
+                                    <i class="far fa-thumbs-up me-2"></i>
+                                    <p class="mb-0">Like</p>
+                                </a>
+                                <a href="#!" class="d-flex align-items-center me-3">
+                                    <i class="far fa-comment-dots me-2"></i>
+                                    <p class="mb-0">Comment</p>
+                                </a>
+                                <a href="#!" class="d-flex align-items-center me-3">
+                                    <i class="fas fa-share me-2"></i>
+                                    <p class="mb-0">Share</p>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
+                            <div class="d-flex flex-start w-100">
+                                <img class="rounded-circle shadow-1-strong me-3"
+                                    src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp" alt="avatar"
+                                    width="40" height="40" />
+                                <div data-mdb-input-init class="form-outline w-100">
+                                    <textarea class="form-control" id="textAreaExample" rows="4" style="background: #fff;"></textarea>
+                                    <label class="form-label" for="textAreaExample">Message</label>
+                                </div>
+                            </div>
+                            <div class="float-end mt-2 pt-1">
+                                <button type="button" data-mdb-button-init data-mdb-ripple-init
+                                    class="btn btn-primary btn-sm">Post comment</button>
+                                <button type="button" data-mdb-button-init data-mdb-ripple-init
+                                    class="btn btn-outline-primary btn-sm">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {{-- End comment --}}
     @if (!$directorRelatedMovies)
         <div class="prs_ms_rm_main_wrapper">
             <div class="container">

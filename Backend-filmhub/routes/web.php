@@ -28,3 +28,5 @@ Route::get('/showtime', function () {
 });
     Route::get('/', [FrontendMovieController::class, 'index'])->name('movies.index');
     Route::get('/show/{id}', [FrontendMovieController::class, 'detail'])->name('movies.detail');
+
+    
