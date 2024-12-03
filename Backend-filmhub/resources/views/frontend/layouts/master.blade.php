@@ -44,7 +44,7 @@
     @include('frontend.layouts.slider.slider')
 
 
-    @yield('movies')
+    @yield('content')
     {{-- @include('frontend.layouts.product.product1') --}}
 
 

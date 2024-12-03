@@ -26,7 +26,5 @@ Route::get('admin', function () {
 Route::get('/showtime', function () {
     return view('frontend.showtime.index');
 });
-    Route::get('/', [FrontendMovieController::class, 'index'])->name('movies.index');
-    Route::get('/show/{id}', [FrontendMovieController::class, 'detail'])->name('movies.detail');
-
-    
+Route::get('/', [FrontendMovieController::class, 'index'])->name('movies.index');
+Route::get('/show/{id}', [FrontendMovieController::class, 'detail'])->name('movies.detail');

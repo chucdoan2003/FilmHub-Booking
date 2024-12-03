@@ -24,18 +24,35 @@ class MovieController extends Controller
             ->skip(8) // Bỏ qua 8 bản ghi
             ->take(8) // Lấy 8 bản ghi
             ->get();
+        $movieReleased1 = Movie::where('status', 'Đang chiếu')
+            ->orderBy('movie_id', 'asc')
+            ->skip(0) // Bỏ qua 0 bản ghi
+            ->take(8) // Lấy 8 bản ghi
+            ->get();
+        $movieReleased2 = Movie::where('status', 'Đang chiếu')
+            ->orderBy('movie_id', 'asc')
+            ->skip(8) // Bỏ qua 8 bản ghi
+            ->take(8) // Lấy 8 bản ghi
+            ->get();
 
         // Trả về view với danh sách phim
-        return view('frontend.movies.movies1', compact('movieUpcoming1', 'movieUpcoming2'));
+        return view('frontend.movies.movies1', compact('movieUpcoming1', 'movieUpcoming2', 'movieReleased1', 'movieReleased2'));
     }
     public function detail(string $id)
     {
         $movie = Movie::with('genres')->find($id); // Lấy phim cùng với các thể loại đã gắn
         $movie->release_date = Carbon::parse($movie->release_date)->format('d-m-Y');
-        $directorRelatedMovies = Movie::where('director', $movie->director)
-            ->where('movie_id', '!=', $movie->movie_id) // Loại trừ bộ phim hiện tại
+        // Lấy danh sách các thể loại của phim
+        $genreIds = $movie->genres->pluck('genre_id')->toArray();
+
+        // Lấy các phim cùng loại nhưng không bao gồm phim hiện tại
+        $relatedMovies = Movie::whereHas('genres', function ($query) use ($genreIds) {
+            $query->whereIn('genre_movie.genre_id', $genreIds); // Chỉ rõ 'genre_movie' là bảng cần dùng
+        })
+            ->where('movie_id', '!=', $movie->movie_id) // Loại trừ phim hiện tại
+            ->limit(10) // Giới hạn số lượng phim trả về
             ->get();
-        // dd($movie);
-        return view('frontend.movies.detail', compact('movie', 'directorRelatedMovies'));
+        // dd($relatedMovies);
+        return view('frontend.movies.detail', compact('movie', 'relatedMovies'));
     }
 }
