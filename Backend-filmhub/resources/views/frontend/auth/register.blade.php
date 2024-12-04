@@ -38,7 +38,13 @@
                 
             @if (isset($user))
             <div>
-                <h2 style="font-size: 20px">Register successfully, please <button type="button" class="btn-login"><a href="{{route("getLogin")}}" style="color: #fff">Login</a></button> </h2>
+                <h2 style="font-size: 20px">Register successfully, please 
+                    <a href="{{route("getLogin")}}" style="color: #fff">
+                    <button type="button" class="btn-login">
+                        Login
+                    </button>
+                    </a>
+                </h2>
             </div>
                 
             @else
@@ -48,12 +54,21 @@
                 <div class="st_profile_input float_left">
                     <label>Email</label>
                     <input type="text" name="email">
+                    @if ($errors->has('email'))
+                        <div class="text-danger mt-1">{{ $errors->first('email') }}</div>
+                    @endif
                 </div>
                 <div class="st_profile__pass_input st_profile__pass_input_pop float_left">
                     <input type="password" placeholder="Password" name="password">
+                    @if ($errors->has('password'))
+                        <div class="text-danger mt-1">{{ $errors->first('password') }}</div>
+                    @endif
                 </div>
                 <div class="st_profile__pass_input st_profile__pass_input_pop float_left">
                     <input type="password" placeholder="Password confirmation" name="password_confirmation">
+                    @if ($errors->has('password_confirmation'))
+                        <div class="text-danger mt-1">{{ $errors->first('password_confirmation') }}</div>
+                    @endif
                 </div>
                 
                 <div class="st_form_pop_login_btn float_left">

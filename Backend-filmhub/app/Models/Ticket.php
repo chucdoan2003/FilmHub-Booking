@@ -40,4 +40,9 @@ class Ticket extends Model
     {
         return $this->belongsTo(Combo::class, 'combo_id');
     }
+
+    public function ticketsSeats()
+{
+    return $this->hasMany(TicketSeat::class, 'ticket_id');
+}
 }

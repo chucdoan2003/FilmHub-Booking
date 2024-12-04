@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\Showtime;
 
 class PaymentController extends Controller
 {
@@ -60,12 +61,12 @@ class PaymentController extends Controller
         ]);
 
         // Lưu thông tin ghế đã chọn vào bảng ticket_seats
-        foreach ($selectedSeats as $seatNumber) {
-            // Tìm seat_id dựa trên seat_number
-            $seat = \DB::table('seats')->where('seat_number', $seatNumber)->first();
+        foreach ($selectedSeats as $seatId) {
+            // Kiểm tra seat_id tồn tại trong bảng seats
+            $seat = \DB::table('seats')->where('seat_id', $seatId)->first();
 
             if ($seat) {
-                // Nếu tìm thấy seat_id từ seat_number, lưu vào bảng tickets_seats
+                // Nếu ghế hợp lệ, lưu vào bảng tickets_seats
                 \DB::table('tickets_seats')->insert([
                     'ticket_id' => $ticket->ticket_id,
                     'seat_id' => $seat->seat_id,
@@ -73,7 +74,7 @@ class PaymentController extends Controller
                 ]);
             } else {
                 return redirect()->back()->withErrors([
-                    'msg' => "Không tìm thấy ghế $seatNumber."
+                    'msg' => "Không tìm thấy ghế với seat_id $seatId."
                 ]);
             }
         }
@@ -281,13 +282,46 @@ class PaymentController extends Controller
             // Lưu lại thay đổi
             $user->save();
 
-            return redirect()->route('bookings.index')->with('status', 'Thanh toán thành công và đã cộng điểm!');
+            return redirect()->route('confirmBooking')->with('status', 'Thanh toán thành công và đã cộng điểm!')->with($data);
         } else {
             return redirect()->route('bookings.index')->with('error', 'Không tìm thấy người dùng.');
         }
     }
+    public function confirmBooking(Request $request)
+{
+    // Lấy thông tin từ session
+    $ticketId = $request->session()->get('ticket_id');
+    $userId = session('user_id');
 
+    // Kiểm tra dữ liệu
+    if (!$ticketId || !$userId) {
+        return redirect()->route('movies.index')->with('error', 'Không tìm thấy thông tin xác nhận.');
+    }
 
+    // Lấy thông tin vé
+    $ticket = Ticket::with('ticketsSeats.seat')->where('ticket_id', $ticketId)->first();
+
+    if (!$ticket) {
+        return redirect()->route('movies.index')->with('error', 'Không tìm thấy vé.');
+    }
+
+    // Lấy thông tin suất chiếu và người dùng
+    $showtime = Showtime::with('movie')->find($ticket->showtime_id);
+    $user = User::find($userId);
+
+    if (!$showtime || !$user) {
+        return redirect()->route('movies.index')->with('error', 'Dữ liệu không đầy đủ để xác nhận.');
+    }
+
+    // Trả về view xác nhận với dữ liệu cần thiết
+    return view('frontend.layouts.booking.confirmBooking', [
+        'ticket' => $ticket,
+        'showtime' => $showtime,
+        'user' => $user,
+        'movie' => $showtime->movie,
+        'theater' => $showtime->theater,
+    ]);
+}
 
 
 }

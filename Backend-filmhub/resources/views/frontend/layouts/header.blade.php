@@ -41,7 +41,7 @@
         </div>
         <div class="prs_navi_left_main_wrapper">
             <div class="prs_logo_main_wrapper">
-                <a href="index.html">
+                <a href="{{route('movies.index')}}">
                     <img src="{{ asset('website/images/header/logo.png') }}" alt="logo" />
                 </a>
             </div>
@@ -334,12 +334,13 @@
                 <div class="prs_animate_btn1">
                     <ul>
                         @if (Auth::check())
-                        <form action="{{route("logout")}}" method="POST">
+                        <form action="{{ route('logout') }}" method="POST">
                             @csrf
-                            @method("POST")
-                                <li><a href="{{route('getLogin')}}" class="button button--tamaya" type="submit" data-text="Logout" ><span>Log out</span></a>
-                                </li>
-                            {{-- <button type="submit" style="margin: 6px 0 0 0 ; padding: 8px 12px;background-color: beige; border:none; border-radius: 5px">Logout</button> --}}
+                            <li>
+                                <button class="button button--tamaya" type="submit" data-text="Logout">
+                                    <span>Log out</span>
+                                </button>
+                            </li>
                         </form>
 
 

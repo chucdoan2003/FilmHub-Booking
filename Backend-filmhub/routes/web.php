@@ -45,7 +45,7 @@ Route::delete('/theaters/rooms/{room}', [AdminTheaterController::class, 'destroy
 // Payment
 Route::post('/vnpay_payment' ,[PaymentController::class,'vnpay_payment'])->name('vnpay_payment');;
 Route::get('/vnpay-return', [PaymentController::class, 'vnpay_payment_return'])->name('vnpay.return');
-
+Route::get('/confirmBooking', [PaymentController::class, 'confirmBooking'])->name('confirmBooking');
 
 
 // Movie

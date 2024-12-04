@@ -91,14 +91,14 @@ Route::prefix('admin/shifts')->group(function () {
 });
 
 
-Route::prefix("admin")->group(function(){
-    // Route::resource("users", UserController::class);
-    Route::get('booking/list', [BookingController::class, 'index'])->name('bookings.index');
-    Route::get('bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');
-    Route::post('/book-tickets', [BookingController::class, 'purchaseTicket'])->name('purchase.ticket');
+// Route::prefix("admin")->group(function(){
+//     // Route::resource("users", UserController::class);
+//     Route::get('booking/list', [BookingController::class, 'index'])->name('bookings.index');
+//     Route::get('bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');
+//     Route::post('/book-tickets', [BookingController::class, 'purchaseTicket'])->name('purchase.ticket');
 
 
-});
+// });
 
 
 

@@ -1,6 +1,30 @@
-@extends('frontend.layouts.master3');
+@extends('frontend.layouts.master3')
 @section('content')
-    ;
+    <style>
+        body {
+            background-color: rgb(46, 44, 61);
+        }
+
+        input.seat-checkbox:checked {
+            background-color: red !important;
+            color: white !important;
+        }
+
+        label.seat-label[for^="c"]:has(input:checked) {
+            background-color: red !important;
+            color: white !important;
+        }
+
+        input.seat-checkbox:disabled {
+            background-color: grey !important;
+            color: white !important;
+        }
+
+        label.seat-label[for^="c"]:has(input:disabled) {
+            background-color: grey !important;
+            color: white !important;
+        }
+    </style>
     <!-- color picker start -->
     <!-- st top header Start -->
     <form action="{{ route('detailBooking', $showtime->showtime_id) }}" method="post" enctype="multipart/form-data">
@@ -14,7 +38,8 @@
             <div class="container container_seat">
                 <div class="row">
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                        <div class="st_bt_top_back_btn st_bt_top_back_btn_seatl float_left"> <a href="movie_booking.html"><i
+                        <div class="st_bt_top_back_btn st_bt_top_back_btn_seatl float_left"> <a
+                                href="{{ route('booking.index', $showtime->movies->movie_id) }}"><i
                                     class="fas fa-long-arrow-alt-left"></i> &nbsp;Back</a>
                         </div>
                         <div class="cc_ps_quantily_info cc_ps_quantily_info_tecket">
@@ -49,10 +74,13 @@
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                        <div class="st_bt_top_close_btn st_bt_top_close_btn2 float_left"> <a href="#"><i
+                        <div class="st_bt_top_close_btn st_bt_top_close_btn2 float_left"
+                            style="margin-left:20px !important"> <a
+                                href="{{ route('booking.index', $showtime->movies->movie_id) }}"><i
                                     class="fa fa-times"></i></a>
                         </div>
-                        <div class="st_seatlay_btn float_left"> <button type="submit" class="btn btn-success">Proceed to
+                        <div class="st_seatlay_btn float_left"> <button type="submit" class="btn btn-success"
+                                style="margin-top:15px !important">Proceed to
                                 Pay</button>
                         </div>
                     </div>
@@ -83,13 +111,23 @@
                                     <li class="st_seat_heading_row">{{ $row->row_name }}</li>
                                     @foreach ($row->seats as $seat)
                                         <li>
-                                            <span>{{ $seat->types->type_name == 'Ghế thường' ? $showtime->normal_price : $showtime->vip_price }}
-                                                VNĐ</span>
-                                            <input type="checkbox" id="c{{ $seat->seat_id }}" name="selected_seats[]"
-                                                value="{{ $seat->seat_number }}" class="seat-checkbox"
-                                                data-price="{{ $seat->types->type_name == 'Ghế thường' ? $showtime->normal_price : $showtime->vip_price }}">
-                                            <label for="c{{ $seat->seat_id }}" class="seat-label"
-                                                data-seat-number="{{ $seat->seat_number }}"></label>
+                                            @if (in_array($seat->seat_id, $bookedSeats))
+                                                <span>Ghế đã đặt</span>
+                                                <input type="checkbox" id="c{{ $seat->seat_id }}" name="selected_seats[]"
+                                                    value="{{ $seat->seat_id }}" class="seat-checkbox"
+                                                    data-price="{{ $seat->types->type_name == 'Ghế thường' ? $showtime->normal_price : $showtime->vip_price }}"
+                                                    disabled checked>
+                                                <label for="c{{ $seat->seat_id }}" class="seat-label"
+                                                    data-seat-number="{{ $seat->seat_number }}"></label>
+                                            @else
+                                                <span>{{ $seat->types->type_name == 'Ghế thường' ? $showtime->normal_price : $showtime->vip_price }}
+                                                    VNĐ</span>
+                                                <input type="checkbox" id="c{{ $seat->seat_id }}" name="selected_seats[]"
+                                                    value="{{ $seat->seat_id }}" class="seat-checkbox"
+                                                    data-price="{{ $seat->types->type_name == 'Ghế thường' ? $showtime->normal_price : $showtime->vip_price }}">
+                                                <label for="c{{ $seat->seat_id }}" class="seat-label"
+                                                    data-seat-number="{{ $seat->seat_number }}"></label>
+                                            @endif
                                         </li>
                                     @endforeach
                                 </ul>
@@ -105,27 +143,29 @@
     <!-- Số lượng ghế đã chọn và tổng tiền -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-    const seatCheckboxes = document.querySelectorAll(".seat-checkbox");
-    const selectedSeatsInput = document.getElementById("selected-seats");
-    const totalPriceInput = document.getElementById("total-price");
+            const seatCheckboxes = document.querySelectorAll(".seat-checkbox");
+            const selectedSeatsInput = document.getElementById("selected-seats");
+            const totalPriceInput = document.getElementById("total-price");
 
-    seatCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener("change", function() {
-            const selectedSeats = [];
-            let totalPrice = 0;
+            seatCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener("change", function() {
+                    const selectedSeats = [];
+                    let totalPrice = 0;
 
-            seatCheckboxes.forEach(cb => {
-                if (cb.checked) {
-                    selectedSeats.push(cb.value);
-                    totalPrice += parseFloat(cb.getAttribute("data-price"));
-                }
+                    seatCheckboxes.forEach(cb => {
+                        if (cb.checked) {
+                            selectedSeats.push(cb.value);
+                            totalPrice += parseFloat(cb.getAttribute("data-price"));
+                        }
+                    });
+
+                    // Cập nhật giá trị của selected_seats trong form với mảng ghế đã chọn
+                    selectedSeatsInput.value = selectedSeats.join(
+                    ','); // Mảng ghế dưới dạng chuỗi, nếu muốn gửi mảng thì bỏ join
+                    totalPriceInput.value = totalPrice.toFixed(0);
+                });
             });
-
-            selectedSeatsInput.value = JSON.stringify(selectedSeats);
-            totalPriceInput.value = totalPrice.toFixed(0);
         });
-    });
-});
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {

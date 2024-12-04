@@ -44,14 +44,15 @@
                         <thead>
                             <tr>
                                 <th>Id</th>
+                                <th>Thearter</th>
                                 <th>Movie</th>
                                 <th>Room</th>
                                 <th>Shift</th>
-                                <th>Date</th>
+                                <th>Price</th>
+                                <th>Vip Price</th>
                                 <th>Start time</th>
                                 <th>End time</th>
-                                <th>Giá thường</th>
-                                <th>Giá vip</th>
+                                <th>Date</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -59,15 +60,16 @@
                             @foreach ($showtimes as $item)
                                 <tr>
                                     <td>{{ $item->showtime_id  }}</td>
+                                    <td>{{ $item->thearter_name }}</td>
                                     <td>{{ $item->movie_name }}</td>
                                     <td>{{ $item->room_name }}</td>
                                     <td>{{ $item->shift_name }}</td>
-                                    <td>{{ $item->datetime}}</td>
-                                    <td>{{ $item->shift_start_time}}</td>
-                                    <td>{{ $item->shift_end_time}}</td>
-                                    <td>{{ number_format($item->normal_price, 0, ',', '.') }} VND</td>
-                                    <td>{{ number_format($item->vip_price, 0, ',', '.') }} VND</td>
+                                    <td>{{ $item->normal_price }}</td>
+                                    <td>{{ $item->vip_price }}</td>
+                                    <td>{{ $item->start_time }}</td>
 
+                                    <td>{{ $item->end_time}}</td>
+                                    <td>{{ $item->datetime }}</td>
                                     <td>
                                         <a href="{{ route('showtimes.edit', $item->showtime_id) }}"><button class="btn-warning">Edit</button></a>
                                         <form action="{{ route('showtimes.destroy', $item->showtime_id) }}" method="POST">

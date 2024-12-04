@@ -21,7 +21,7 @@ class BookingController extends Controller
     public function index()
     {
 
-        $showtimes = Showtime::with(['movie', 'room', 'shift'])->get();
+        $showtimes = Showtime::with(['movies', 'rooms', 'shifts'])->get();
         $selectedSeats = [];
         return view('book ticket.index', compact('showtimes', 'selectedSeats'));
     }

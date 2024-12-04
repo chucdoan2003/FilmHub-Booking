@@ -43,5 +43,16 @@ class Showtime extends Model
     }
 
 
+    public function movie()
+    {
+        return $this->belongsTo(Movie::class, 'movie_id');
+    }
+
+    public function theater()
+    {
+        return $this->belongsTo(Theater::class, 'theater_id');
+    }
 
 }
+
+

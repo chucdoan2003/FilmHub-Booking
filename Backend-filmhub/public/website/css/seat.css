@@ -38,6 +38,7 @@
     content: var(--seat-content);
 }
 .st_seat_lay_row #c14[type="checkbox"] + label:before {
+    content: var(--seat-content);
 }
 
 .st_seat_lay_row #c15[type="checkbox"] + label:before {

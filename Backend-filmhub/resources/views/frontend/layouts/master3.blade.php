@@ -48,8 +48,11 @@ Author: Webstrot
 
 <body>
     @yield('content')
-    
+
     @include('frontend.layouts.login.login')
+
+
+
     <!-- st login wrapper End -->
     <!--main js file start-->
     <script src="{{ asset('website/js/jquery_min.js') }}"></script>

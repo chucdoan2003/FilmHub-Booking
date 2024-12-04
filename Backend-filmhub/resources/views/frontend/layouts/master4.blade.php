@@ -41,20 +41,20 @@
 <body>
 
     @include('frontend.layouts.header')
-    @include('frontend.layouts.slider.slider')
+    {{-- @include('frontend.layouts.slider.slider') --}}
 
 
     @yield('content')
     {{-- @include('frontend.layouts.product.product1') --}}
 
 
-    @include('frontend.layouts.slider.slider2')
+    {{-- @include('frontend.layouts.slider.slider2')
     @include('frontend.layouts.product.product2')
 
 
     @include('frontend.layouts.content.blog')
     @include('frontend.layouts.content.feature')
-    @include('frontend.layouts.content.vidpho')
+    @include('frontend.layouts.content.vidpho') --}}
     @include('frontend.layouts.content.patner')
 
     @include('frontend.layouts.login.login')

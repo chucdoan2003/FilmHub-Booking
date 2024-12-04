@@ -21,5 +21,9 @@ class Room extends Model
     public function theaters() {
         return $this->belongsTo(Theater::class, 'theater_id');
     }
+
+    public function theater() {
+        return $this->belongsTo(Theater::class, 'theater_id');
+    }
 }
 

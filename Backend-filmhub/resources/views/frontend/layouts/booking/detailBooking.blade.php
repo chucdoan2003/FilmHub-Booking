@@ -4,7 +4,9 @@
 	@csrf
 
 	<input type="hidden" name="showtime_id" value="{{ $showtime->showtime_id }}">
-    <input type="hidden" name="user_id" value="1">
+    <input type="hidden" name="user_id" value="{{$user_id}}">
+
+
     <input type="hidden" name="total" value="{{$totalPrice}}">
     <input type="hidden" name="selected_seats" value="{{ implode(',', $selectedSeats) }}">
     <!-- st top header Start -->
@@ -39,7 +41,7 @@
                                         <li><span class="dtts1">Ngày chiếu:</span> {{ \Carbon\Carbon::parse($showtime->datetime)->format('d/m/Y ') }}</li>
                                         <li><span class="dtts1">Ca chiếu:</span> <span class="dtts2">{{ $showtime->shifts->shift_name }}: {{ \Carbon\Carbon::parse($showtime->shifts->start_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($showtime->shifts->end_time)->format('H:i') }}</span></li>
                                         <li><span class="dtts1">Rạp chiếu:</span> <span class="dtts2">{{ $showtime->rooms->theaters->name }}</span></li>
-                                        <li><span class="dtts1">Ghế đã chọn:</span> <span class="dtts2">{{ implode(', ', $selectedSeats) }}</span></li>
+                                        <li><span class="dtts1">Ghế đã chọn:</span> <span class="dtts2">{{ implode(', ', $seatNumbers->toArray()) }}</span></li>
                                     </ul>
                                 </div>
                             </div>

@@ -47,7 +47,7 @@
                             @endif
                         </td>
 
-                        <td>{{ $showtime->movie->title }}</td>
+                        <td>{{ $showtime->movie->movie_id }}</td>
                         <td>{{ $showtime->movie->description }}</td> <!-- Mô tả phim -->
 
                         <td>{{ $showtime->room->room_name }}</td>

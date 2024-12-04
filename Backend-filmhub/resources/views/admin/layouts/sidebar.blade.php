@@ -149,7 +149,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">List function</h6>
                 <a class="collapse-item" href="{{ route('showtimes.index') }}">Danh sách lịch chiếu</a>
-                <a class="collapse-item" href="{{ route('bookings.index') }}">Test đặt vé</a>
+                {{-- <a class="collapse-item" href="{{ route('bookings.index') }}">Test đặt vé</a> --}}
 
 
             </div>
