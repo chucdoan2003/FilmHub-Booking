@@ -38,6 +38,7 @@ Route::prefix('admin')->as('admin.')->group(function() {
     Route::resource('rows', RowController::class);
     Route::resource('types', TypeController::class);
     Route::get('rooms/{room_id}/seats', [SeatController::class, 'filterSeatByRoom'])->name('filterSeatByRoom');
+    Route::post('createSeat/', [SeatController::class, 'createSeat'])->name('createSeat');
 });
 
 
@@ -71,9 +72,12 @@ Route::prefix('admin/drinks')->group(function () {
 
 use App\Http\Controllers\admin\MovieController;
 use App\Http\Controllers\admin\GenreController;
+use App\Http\Controllers\admin\TicketController;
+
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('/movies', MovieController::class);
     Route::resource('/genres', GenreController::class);
+    Route::resource('/tickets', TicketController::class);
 });
 
 Route::prefix('admin/shifts')->group(function () {

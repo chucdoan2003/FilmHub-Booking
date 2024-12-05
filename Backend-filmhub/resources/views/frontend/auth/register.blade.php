@@ -1,4 +1,4 @@
-@extends('frontend.layouts.master')
+@extends('frontend.layouts.master2')
 @section('content')
 <style>
     .btn-register{
@@ -33,12 +33,12 @@
 <div class=" st_pop_form_wrapper" >
     <div class="modal-dialog">
         <div class="modal-content">
-          
-           
-                
+
+
+
             @if (isset($user))
             <div>
-                <h2 style="font-size: 20px">Register successfully, please 
+                <h2 style="font-size: 20px">Register successfully, please
                     <a href="{{route("getLogin")}}" style="color: #fff">
                     <button type="button" class="btn-login">
                         Login
@@ -46,7 +46,7 @@
                     </a>
                 </h2>
             </div>
-                
+
             @else
                 <div class="st_pop_form_heading_wrapper float_left">
                     <h3>Sign Up</h3>
@@ -70,7 +70,7 @@
                         <div class="text-danger mt-1">{{ $errors->first('password_confirmation') }}</div>
                     @endif
                 </div>
-                
+
                 <div class="st_form_pop_login_btn float_left">
                     <button type="submit" class="btn-register">Sign Up</button>
                 </div>
@@ -81,14 +81,14 @@
                     <h4>You have an account? <a href="{{route('getLogin')}}">Log in</a></h4>
                     <h5>I agree to the <a href="#">Terms & Conditions</a> & <a href="#">Privacy Policy</a></h5>
                 </div>
-                
+
                 <div class="st_form_pop_signin_btn st_form_pop_signin_btn_signup float_left">
                     <h5>I agree to the <a href="#">Terms & Conditions</a> & <a href="#">Privacy Policy</a></h5>
                 </div>
-                
+
             @endif
-            
-            
+
+
         </div>
     </div>
 </div>

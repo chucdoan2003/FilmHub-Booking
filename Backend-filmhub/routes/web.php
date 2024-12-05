@@ -79,6 +79,13 @@ Route::post("auth/logout", [AuthController::class, "logout"])->name('logout');
 Route::post('auth/changePassword', [AuthController::class, 'changePassword' ])
 ->name('changePassword');
 
+use App\Http\Controllers\client\UserInforController;
+Route::get('user/history', [UserInforController::class, 'history'])->name('ticketHistory');
+Route::get('userOverview', [UserInforController::class, 'overview'])->name('userOverview');
+Route::get('user/edit', [UserInforController::class, 'edit'])->name('editUserInfor');
+
+Route::post('user/update', [UserInforController::class, 'update'])->name('updateUserInfor');
+
 
 // Đặt ghế ( Hướng)
 Route::get('/showtime/{id}', [ClientBookingController::class, 'getSeatBooking'])->name('getSeatBooking');
@@ -87,5 +94,8 @@ Route::post('/detailBooking/{id}', [ClientBookingController::class, 'detailBooki
 
 // Detail ( Khôi)
 use App\Http\Controllers\client\MovieController as FrontendMovieController;
+use App\Http\Controllers\client\CommentController;
 Route::get('/', [FrontendMovieController::class, 'index'])->name('movies.index');
 Route::get('/show/{id}', [FrontendMovieController::class, 'detail'])->name('movies.detail');
+Route::post('/comments', [CommentController::class, 'store'])->name('comments.store'); // Lưu bình luận
+Route::post('/movies/{movie_id}/comments', [CommentController::class, 'store'])->name('comments.store');

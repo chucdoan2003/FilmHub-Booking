@@ -37,6 +37,7 @@ class Showtime extends Model
         return $this->belongsTo(Shift::class, 'shift_id');
     }
 
+
     public function tickets()
     {
         return $this->hasMany(Ticket::class, 'showtime_id');

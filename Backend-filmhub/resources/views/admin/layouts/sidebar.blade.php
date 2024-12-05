@@ -235,6 +235,20 @@
         </div>
     </li>
 
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTicket"
+            aria-expanded="true" aria-controls="collapseTicket">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Manager Tickets</span>
+        </a>
+        <div id="collapseTicket" class="collapse" aria-labelledby="headingMovies" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">List Function</h6>
+                <a class="collapse-item" href="{{ route('admin.tickets.index') }}">List Tickets</a>
+            </div>
+        </div>
+    </li>
+
     <!-- Nav Item - Utilities Collapse Menu -->
     {{-- <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"

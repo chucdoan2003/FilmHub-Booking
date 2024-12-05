@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Tạo mới Phim
+    Create Movie
 @endsection
 
 @section('style-libs')
@@ -50,87 +50,89 @@
     }
 </style>
 @section('content')
-    <form action="{{ route('admin.movies.store') }}" enctype="multipart/form-data" method="POST">
+    <form action="{{ route('admin.movies.store') }}"  enctype="multipart/form-data" method="POST">
         @csrf
-        <div class="mb-3">
-            <label for="title" class="form-label">Title:</label>
-            <input type="text" class="form-control" id="title" name="title">
-            @error('title')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
+        <div class="row">
+            <div class="mb-3 col-6">
+                <label for="title" class="form-label">Title:</label>
+                <input type="text" class="form-control" id="title" name="title">
+                @error('title')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="mb-3 col-6">
+                <label for="description" class="form-label">Description:</label>
+                <textarea type="text" class="form-control" id="description" name="description"></textarea>
+                @error('description')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="mb-3 col-6">
+                <label for="duration" class="form-label">Duration:</label>
+                <input type="number" class="form-control" id="duration" name="duration">
+                @error('duration')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="mb-3 col-6">
+                <label for="release_date" class="form-label">Release date:</label>
+                <input type="date" class="form-control" id="release_date" name="release_date">
+                @error('release_date')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="mb-4 col-6">
+                <label for="genres" class="form-label">Genre:</label>
+                <select id="genres" name="genres[]" class="selectpicker form-control" multiple data-live-search="true">
+                    @foreach ($genres as $data)
+                        <option value="{{ $data->genre_id }}">{{ $data->name }}</option>
+                    @endforeach
+                </select>
+                @error('genre')
+                    <div class="text-danger mt-2">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="mb-3 col-6">
+                <label for="poster_url" class="form-label">Poster:</label>
+                <input type="file" id="imageInput" name="poster_url" id="poster_url">
+                @error('poster_url')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="mb-3 col-6">
+                <label for="status" class="form-label">Status:</label>
+                <select name="status" class="form-control" id="status">
+                    <option value="Sắp ra mắt" selected>Sắp ra mắt</option>
+                    <option value="Đang chiếu">Đang chiếu</option>
+                    <option value="Ngừng chiếu">Ngừng chiếu</option>
+                </select>
+                @error('director')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="mb-3 col-6">
+                <label for="director" class="form-label">Director:</label>
+                <input type="text" class="form-control" id="director" name="director">
+                @error('director')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="mb-3 col-6">
+                <label for="performer" class="form-label">Performer:</label>
+                <input type="text" class="form-control" id="performer" name="performer">
+                @error('performer')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="mb-3 col-6">
+                <label for="trailer" class="form-label">Trailer:</label>
+                <input type="text" class="form-control" id="trailer" name="trailer">
+                @error('trailer')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="description" class="form-label">Description:</label>
-            <input type="text" class="form-control" id="description" name="description">
-            @error('description')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="mb-3">
-            <label for="duration" class="form-label">Duration:</label>
-            <input type="number" class="form-control" id="duration" name="duration">
-            @error('duration')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="mb-3">
-            <label for="release_date" class="form-label">Release date:</label>
-            <input type="date" class="form-control" id="release_date" name="release_date">
-            @error('release_date')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="mb-4">
-            <label for="genres" class="form-label">Genre:</label>
-            <select id="genres" name="genres[]" class="selectpicker form-control" multiple data-live-search="true">
-                @foreach ($genres as $data)
-                    <option value="{{ $data->genre_id }}">{{ $data->name }}</option>
-                @endforeach
-            </select>
-            @error('genre')
-                <div class="text-danger mt-2">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="mb-3">
-            <label for="poster_url" class="form-label">Poster:</label>
-            <input type="file" id="imageInput" name="poster_url" id="poster_url">
-            @error('poster_url')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="mb-3">
-            <label for="status" class="form-label">Status:</label>
-            <select name="status" class="form-control" id="status">
-                <option value="Sắp ra mắt" selected>Sắp ra mắt</option>
-                <option value="Đang chiếu">Đang chiếu</option>
-                <option value="Ngừng chiếu">Ngừng chiếu</option>
-            </select>
-            @error('director')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="mb-3">
-            <label for="director" class="form-label">Director:</label>
-            <input type="text" class="form-control" id="director" name="director">
-            @error('director')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="mb-3">
-            <label for="performer" class="form-label">Performer:</label>
-            <input type="text" class="form-control" id="performer" name="performer">
-            @error('performer')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="mb-3">
-            <label for="trailer" class="form-label">Trailer:</label>
-            <input type="text" class="form-control" id="trailer" name="trailer">
-            @error('trailer')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <button type="submit" class="btn btn-primary">Lưu</button>
+        <button type="submit" class="btn btn-primary ">Save</button>
     </form>
 @endsection
 <script>

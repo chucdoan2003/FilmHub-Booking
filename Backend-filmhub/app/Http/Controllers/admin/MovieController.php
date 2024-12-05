@@ -57,7 +57,7 @@ class MovieController extends Controller
 
         // Xử lý poster_url
         if ($request->hasFile('poster_url')) {
-            $data['poster_url'] = $request->file('poster_url')->store('storage/movie', 'public');
+            $data['poster_url'] = $request->file('poster_url')->store('movie', 'public');
         } else {
             $data['poster_url'] = "";
         }
@@ -87,6 +87,7 @@ class MovieController extends Controller
     public function show(string $id)
     {
         $movie = Movie::with('genres')->find($id); // Lấy phim cùng với các thể loại đã gắn
+        // dd($movie->genres);
         $genres = Genre::all(); // Lấy tất cả thể loại để hiển thị trong select box
         return view('admin.movies.show', compact('movie', 'genres'));
     }
@@ -131,7 +132,7 @@ class MovieController extends Controller
             if ($movie->poster_url) {
                 Storage::delete($movie->poster_url);
             }
-            $data['poster_url'] = $request->file('poster_url')->store('storage/movie', 'public');
+            $data['poster_url'] = $request->file('poster_url')->store('movie', 'public');
         } else {
             $data['poster_url'] = $movie->poster_url;
         }

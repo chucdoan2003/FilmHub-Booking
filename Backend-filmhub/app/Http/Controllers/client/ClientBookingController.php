@@ -12,6 +12,7 @@ use App\Models\Seat;
 use App\Models\Genre;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
+use App\Models\Combo;
 class ClientBookingController extends Controller
 {
     public function index($id, Request $request)
@@ -97,22 +98,30 @@ class ClientBookingController extends Controller
 
         $user_id = session('user_id');
 
+        $foods = DB::table('foods')->get();
+        $drinks = DB::table('drinks')->get();
+        $combos = DB::table('combos')->get();
 
         // Nhận ghế đã chọn từ request
         $selectedSeats = $request->input('selected_seats');
-        session(['selectedSeats' => $selectedSeats]);
+        // session(['selectedSeats' => $selectedSeats]);
         $totalPrice = $request->input('total_price'); // Tổng giá tiền
         $seats = Seat::whereIn('seat_id', $selectedSeats)->get(); // Truy vấn các ghế từ cơ sở dữ liệu
         $seatNumbers = $seats->pluck('seat_number');
         // dd(   $selectedSeats);
         $genres = Genre::withCount('movies')->get();
 
-        $minutes = 10;
-        Cookie::queue('selected_seats', implode(',', $selectedSeats), $minutes);
-        Cache::put('selected_seats_' . session('user_id'), [
-            'seats' => $selectedSeats,
-            'total_price' => $totalPrice
-        ], now()->addMinutes(60));
+        // $minutes = 10;
+        // Cookie::queue('selected_seats', implode(',', $selectedSeats), $minutes);
+        // Cache::put('selected_seats_' . session('user_id'), [
+        //     'seats' => $selectedSeats,
+        //     'total_price' => $totalPrice
+        // ], now()->addMinutes(60));
+
+        $combos = Combo::all();
+        $foods = DB::table('foods')->get();
+        $drinks = DB::table('drinks')->get();
+
 
         // dd($totalPrice);
         // Truyền dữ liệu đến view
@@ -122,7 +131,10 @@ class ClientBookingController extends Controller
             'totalPrice',
             'user_id',
             'seatNumbers',
-            'genres'
+            'genres',
+            'foods',
+            'drinks',
+            'combos'
         ));
     }
 

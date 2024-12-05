@@ -23,11 +23,11 @@ class AuthController extends Controller
     }
     public function getRegister()
     {
-        return view("frontend.auth.register", compact('genres'));
+        return view("frontend.auth.register");
     }
     public function getForgotPassword()
     {
-        return view("frontend.auth.forgotPassword", compact('genres'));
+        return view("frontend.auth.forgotPassword");
     }
 
     public function login(Request $request)
@@ -56,7 +56,7 @@ class AuthController extends Controller
             return redirect()->route('movies.index')->with('success', 'Đăng nhập thành công!');
         } else {
             $isLogin = false;
-            return view("frontend.auth.login", compact('isLogin', 'genres'));
+            return view("frontend.auth.login", compact('isLogin'));
         }
     }
     public function register(Request $request)

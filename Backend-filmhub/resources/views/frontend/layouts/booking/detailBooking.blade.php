@@ -6,17 +6,17 @@
 	<input type="hidden" name="showtime_id" value="{{ $showtime->showtime_id }}">
     <input type="hidden" name="user_id" value="{{$user_id}}">
 
-    @php
+    {{-- @php
     // Lấy thông tin từ cache, nếu không có thì trả về mảng rỗng
     $selectedSeats = Cache::get('selected_seats_' . session('user_id'), ['seats' => []])['seats'] ?? [];
 
     $selectedSeats = is_array($selectedSeats) ? $selectedSeats : [];
-@endphp
+@endphp --}}
 {{-- @php
     dd($selectedSeats);
 @endphp --}}
     <input type="hidden" name="total" value="{{$totalPrice}}">
-    <input type="hidden" name="selected_seats" value="{{ Cookie::get('selected_seats', '') }}">
+    <input type="hidden" name="selected_seats" value="{{ implode(',', $selectedSeats) }}">
     <!-- st top header Start -->
     <div class="st_bt_top_header_wrapper float_left">
         <div class="container">
@@ -56,14 +56,26 @@
                             <div class="col-md-12">
                                 <div class="st_cherity_section float_left">
                                     <div class="st_cherity_img float_left">
-                                        <img src="images/content/cc1.jpg" alt="img">
+                                        {{-- <img src="images/content/cc1.jpg" alt="img"> --}}
                                     </div>
                                     <div class="st_cherity_img_cont float_left">
                                         <div class="box">
-                                            <p class="cc_pc_color1">
-                                                <input type="checkbox" id="c201" name="cb">
-                                                <label for="c201"><span>ADD Rs. 2</span> to your transaction as a donation. (Uncheck if you do not wish to donate)</label>
-                                            </p>
+                                            {{-- <label for="combo">Chọn Combo:</label> --}}
+                                            <select id="combo" name="combo_id" class="form-control"
+                                                onchange="updateTotalPrice()">
+                                                <option value="">Chọn combo</option>
+                                                @foreach ($combos as $combo)
+                                                    <option value="{{ $combo->id }}"
+                                                        data-price="{{ $combo->price }}"
+                                                        data-food-id="{{ $combo->comboFoodDrink->first()->food->id ?? '' }}"
+                                                        data-drink-id="{{ $combo->comboFoodDrink->first()->drink->id ?? '' }}">
+                                                        {{ $combo->name }} - {{ number_format($combo->price) }} VNĐ
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <!-- Input ẩn để lưu food_id và drink_id -->
+                                            <input type="hidden" name="food_id" id="food_id" value="">
+                                            <input type="hidden" name="drink_id" id="drink_id" value="">
                                         </div>
                                     </div>
                                 </div>
@@ -90,30 +102,77 @@
                                 </div>
                                 <div class="st_dtts_sb_ul float_left">
                                     <ul id="selected-seats-list">
-                                        @if(count($selectedSeats) > 0)
-
-                                                <li>{{ implode(', ', $seatNumbers->toArray()) }}<br>( Ticket) <span>Giá: {{ number_format($totalPrice)}} VNĐ</span></li>
-
+                                        @if (count($selectedSeats) > 0)
+                                            @foreach ($selectedSeats as $seat)
+                                                <li>{{ $seat }}<br>(1 Ticket) <span>Giá:
+                                                        {{ number_format($totalPrice) }} VNĐ</span></li>
+                                            @endforeach
                                         @else
                                             <li>Không có ghế nào được chọn.</li>
                                         @endif
                                     </ul>
-                                    {{-- <p>Booking Fees <span>Rs. 60.00</span></p>
-                                    <p>Integrated GST (IGST) @ 18% <span>Rs. 60.00</span></p> --}}
+                                    @if (isset($combo))
+                                        <p>Combo đã chọn: <span>{{ $combo->name }}</span></p>
+                                        <p>Giá combo: <span>{{ number_format($combo->price) }} VNĐ</span></p>
+                                    @else
+                                        <p>Không có combo nào được chọn.</p>
+                                    @endif
+                                    <p>Booking Fees <span>Rs. 60.00</span></p>
+                                    <p>Integrated GST (IGST) @ 18% <span>Rs. 60.00</span></p>
                                 </div>
 
                                 <div class="st_dtts_sb_h2 float_left">
-                                    <h3>Thành tiền: <span>{{ number_format($totalPrice)}} VNĐ</span></h3>
+                                    <h3>Thành tiền: <span id="totalPriceDisplay">{{ number_format($totalPrice) }}
+                                            VNĐ</span></h3>
                                     <h4>Current State is <span>Kerala</span></h4>
-                                    <h5>Số tiền phải trả <span>{{ number_format($totalPrice)}} VNĐ</span></h5>
+                                    <h5>Số tiền phải trả <span id="totalAmountDisplay">{{ number_format($totalPrice) }}
+                                            VNĐ</span></h5>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
             </div>
         </div>
     </div>
+    <script>
+        function updateTotalPrice() {
+            var totalPrice = {{ $totalPrice }}; // Giá hiện tại
+            var comboSelect = document.getElementById('combo');
+            var selectedOption = comboSelect.options[comboSelect.selectedIndex];
+            var comboPrice = selectedOption.dataset.price ? parseFloat(selectedOption.dataset.price) : 0; // Giá combo
+
+            totalPrice += comboPrice; // Cộng giá combo vào tổng
+
+            // Cập nhật giá thành hiển thị
+            document.getElementById('totalPriceDisplay').innerText = new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(totalPrice) + ' VNĐ';
+
+            // Cập nhật số tiền phải trả hiển thị
+            document.getElementById('totalAmountDisplay').innerText = new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(totalPrice) + ' VNĐ';
+
+
+            // Cập nhật giá tổng vào input
+            document.querySelector('input[name="total"]').value = totalPrice;
+            // Lưu food_id và drink_id vào các input ẩn
+            var foodId = selectedOption.dataset.foodId;
+            var drinkId = selectedOption.dataset.drinkId;
+
+            document.querySelector('input[name="food_id"]').value = foodId;
+            document.querySelector('input[name="drink_id"]').value = drinkId;
+
+            // Cập nhật thông tin combo đã chọn
+            var comboName = selectedOption.text;
+            document.getElementById('selectedComboDisplay').innerText = comboName;
+        }
+    </script>
     <!-- st dtts section End -->
 </form>
 @endsection

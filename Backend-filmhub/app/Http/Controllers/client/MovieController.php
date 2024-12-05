@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\client;
-
 use App\Http\Controllers\Controller;
+use App\Models\Comment;
 use App\Models\Genre;
 use App\Models\Movie;
 use Carbon\Carbon;
@@ -34,9 +34,10 @@ class MovieController extends Controller
             ->skip(8) // Bỏ qua 8 bản ghi
             ->take(8) // Lấy 8 bản ghi
             ->get();
-
-        // Trả về view với danh sách phim
         $genres = Genre::withCount('movies')->get();
+
+        // dd($topMovies);
+        // Trả về view với danh sách phim
         return view('frontend.movies.index', compact('movieUpcoming1', 'movieUpcoming2', 'movieReleased1', 'movieReleased2', 'genres'));
     }
     public function detail(string $id)
@@ -55,6 +56,7 @@ class MovieController extends Controller
             ->get();
         // dd($relatedMovies);
         $genres = Genre::withCount('movies')->get();
-        return view('frontend.movies.detail', compact('movie', 'relatedMovies', 'genres'));
+        $comments = Comment::where('movie_id', $id)->orderBy('created_at', 'desc')->get();
+        return view('frontend.movies.detail', compact('movie', 'relatedMovies', 'genres', 'comments'));
     }
 }

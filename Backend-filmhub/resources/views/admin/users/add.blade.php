@@ -48,7 +48,7 @@
                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">Add new users</h6>
                 </div>
-               
+
                 <!-- Card Body -->
                 <div class="card-body">
                     <form action="{{ route('users.store') }}" method="POST" class="user">
@@ -70,7 +70,7 @@
                                     @endif
                             </div>
                         </div>
-                       
+
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
                                 <input type="password" class="form-control form-control-user form-radius"
@@ -90,12 +90,12 @@
                         <button class="btn btn-primary btn-user btn-block">
                             Create Account
                         </button>
-                        
+
                     </form>
 
-            
 
-                    
+
+
                 </div>
             </div>
         </div>

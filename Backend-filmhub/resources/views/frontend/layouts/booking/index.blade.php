@@ -221,48 +221,28 @@
                 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                     <div class="prs_mcc_left_side_wrapper">
                         <div class="prs_mcc_left_searchbar_wrapper">
-                            <input type="text" placeholder="Search Movie">
-                            <button><i class="flaticon-tool"></i>
-                            </button>
+                            <form action="{{ route('movies.search') }}" method="GET">
+                                <input type="text" name="search" placeholder="Search Movie" />
+                                <button type="submit"><i class="flaticon-tool"></i></button>
+                            </form>
                         </div>
                         <div class="prs_mcc_bro_title_wrapper">
-                            <h2>browse title</h2>
+                            <h2>Danh mục</h2>
                             <ul>
-                                <li><i class="fa fa-caret-right"></i> &nbsp;&nbsp;&nbsp;<a href="#">All
-                                        <span>23,124</span></a>
-                                </li>
-                                <li><i class="fa fa-caret-right"></i> &nbsp;&nbsp;&nbsp;<a href="#">Action
-                                        <span>512</span></a>
-                                </li>
-                                <li><i class="fa fa-caret-right"></i> &nbsp;&nbsp;&nbsp;<a href="#">Romantic
-                                        <span>548</span></a>
-                                </li>
-                                <li><i class="fa fa-caret-right"></i> &nbsp;&nbsp;&nbsp;<a href="#">Love
-                                        <span>557</span></a>
-                                </li>
-                                <li><i class="fa fa-caret-right"></i> &nbsp;&nbsp;&nbsp;<a href="#">Musical
-                                        <span>554</span></a>
-                                </li>
-                                <li><i class="fa fa-caret-right"></i> &nbsp;&nbsp;&nbsp;<a href="#">Drama
-                                        <span>567</span></a>
-                                </li>
-                                <li><i class="fa fa-caret-right"></i> &nbsp;&nbsp;&nbsp;<a href="#">Thriller
-                                        <span>689</span></a>
-                                </li>
-                                <li><i class="fa fa-caret-right"></i> &nbsp;&nbsp;&nbsp;<a href="#">Horror
-                                        <span>478</span></a>
-                                </li>
+                                <ul>
+                                    @foreach ($genres as $genre)
+                                        <li>
+                                            <i class="fa fa-caret-right"></i> &nbsp;&nbsp;&nbsp;
+                                            <a href="{{ route('category.show', $genre->genre_id) }}">
+                                                {{ $genre->name }}
+                                                <span>{{ $genre->movies->count() }}</span>
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
                             </ul>
                         </div>
-                        <div class="prs_mcc_event_title_wrapper">
-                            <h2>Top Events</h2>
-                            <img src="images/content/movie_category/event_img.jpg" alt="event_img">
-                            <h3><a href="#">Music Event in india</a></h3>
-                            <p>Pune <span><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i><i
-                                        class="fa fa-star-o"></i><i class="fa fa-star-o"></i></span>
-                            </p>
-                            <h4>June 07 <span>08:00-12:00 pm</span></h4>
-                        </div>
+
                     </div>
                 </div>
             </div>

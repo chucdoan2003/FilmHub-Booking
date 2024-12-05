@@ -50,15 +50,13 @@
                                 <td>{{ $key + 1 }}</td>
                                 <td>{{ $genre->name }}</td>
                                 <td class="d-flex">
-                                    <a href="{{ route('admin.genres.show', $genre->genre_id) }}"
-                                        class="btn mr-3 btn-info mb-3">Xem</a>
                                     <a href="{{ route('admin.genres.edit', $genre->genre_id) }}"
-                                        class="btn mr-3 btn-success mb-3">Sửa</a>
+                                        class="btn mr-3 btn-success mb-3">Edit</a>
                                     <form action="{{ route('admin.genres.destroy', $genre->genre_id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger"
-                                            onclick="return confirm('Bạn có muốn xóa phim này không')">Xóa</button>
+                                            onclick="return confirm('Bạn có muốn xóa phim này không')">Delete</button>
                                     </form>
                                 </td>
                             </tr>
