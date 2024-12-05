@@ -22,11 +22,11 @@ class Showtime extends Model
     ];
 
 
-   // Quan hệ với Movie
-   public function movie()
-   {
-       return $this->belongsTo(Movie::class, 'movie_id');
-   }
+    // Quan hệ với Movie
+    public function movie()
+    {
+        return $this->belongsTo(Movie::class, 'movie_id');
+    }
 
     public function rooms()
     {
@@ -47,7 +47,4 @@ class Showtime extends Model
     {
         return $this->belongsTo(Theater::class, 'theater_id');
     }
-
 }
-
-

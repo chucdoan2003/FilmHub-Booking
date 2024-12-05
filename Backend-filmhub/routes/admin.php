@@ -16,6 +16,7 @@ use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\VourcherAdmminController;
 
 use App\Http\Controllers\admin\AdminShiftController;
+use App\Http\Controllers\admin\CommentController;
 use App\Http\Controllers\admin\StatisticController;
 use Illuminate\Support\Facades\Route;
 
@@ -77,6 +78,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('/movies', MovieController::class);
     Route::resource('/genres', GenreController::class);
     Route::resource('/tickets', TicketController::class);
+    Route::get('/comments', [CommentController::class, 'showComments'])->name('comments.index');
+    Route::delete('/comments/{id}', [CommentController::class, 'deleteComment'])->name('comments.delete');
 });
 
 Route::prefix('admin/shifts')->group(function () {

@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    List Movies
+    List Comment
 @endsection
 
 @section('style-libs')
@@ -37,7 +37,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4 mt-3">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Danh sách phim</h6>
+            <h6 class="m-0 font-weight-bold text-primary">List Comment</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -45,55 +45,38 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Title</th>
-                            <th>Duration</th>
-                            <th>Genre</th>
+                            <th>User Name</th>
+                            <th>Movie</th>
+                            <th>Comment</th>
                             <th>Rating</th>
-                            <th>Poster</th>
-                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th>ID</th>
-                            <th>Title</th>
-                            <th>Duration</th>
-                            <th>Genre</th>
+                            <th>User Name</th>
+                            <th>Movie</th>
+                            <th>Comment</th>
                             <th>Rating</th>
-                            <th>Poster</th>
-                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
                     <tbody>
-                        @foreach ($data as $movie)
+                        @foreach ($comments as $index => $comment)
                             <tr>
-                                <td>{{ $movie->movie_id }}</td>
-                                <td>{{ $movie->title }}</td>
-                                <td>{{ $movie->duration }} Phút</td>
-                                <td>
-                                    @foreach ($movie->genres as $genre)
-                                        {{ $genre->name }}@if (!$loop->last)
-                                            ,
-                                        @endif
-                                    @endforeach
-                                </td>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $comment->user->name ?? 'Không xác định' }}</td>
+                                <td> {{ $comment->movie->title }}</td>
+                                <td>{{ $comment->comment }} </td>
                                 <td>
                                     @for ($i = 1; $i <= 5; $i++)
                                         <i
-                                            class="fa fa-star {{ $movie->rating >= $i ? 'text-warning' : 'text-muted' }}"></i>
+                                            class="fa fa-star {{ $comment->rating >= $i ? 'text-warning' : 'text-muted' }}"></i>
                                     @endfor
                                 </td>
-                                <td><img src="{{ Storage::url($movie->poster_url) }}" style="width: 100px; height: 100px;"
-                                        alt=""></td>
-                                <td>{{ $movie->status }}</td>
                                 <td class="">
-                                    <a href="{{ route('admin.movies.show', $movie->movie_id) }}"
-                                        class="btn btn-primary mb-3">Detail</a>
-                                    <a href="{{ route('admin.movies.edit', $movie->movie_id) }}"
-                                        class="btn btn-success mb-3">Edit</a>
-                                    <form action="{{ route('admin.movies.destroy', $movie->movie_id) }}" method="POST">
+                                    <form action="{{ route('admin.comments.delete', $comment->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger"

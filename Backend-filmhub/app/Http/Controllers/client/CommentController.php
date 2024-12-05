@@ -36,11 +36,13 @@ class CommentController extends Controller
 
         // Kiểm tra xem người dùng đã mua vé cho phim này chưa
         $ticketExists = Ticket::where('user_id', $user_id)
-            ->where('showtime_id', $movie_id)
+            ->whereHas('showtime', function ($query) use ($movie_id) {
+                $query->where('movie_id', $movie_id); // Kiểm tra xem showtime có liên kết với movie_id
+            })
             ->exists();
 
         if (!$ticketExists) {
-            return redirect()->back()->with('error', 'Bạn cần mua vé để đánh giá và bình luận.');
+            return redirect()->back()->with('error', 'Bạn cần mua vé cho phim này để đánh giá và bình luận.');
         }
 
         // Validate dữ liệu từ form
