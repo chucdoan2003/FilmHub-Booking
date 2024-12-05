@@ -9,6 +9,8 @@ use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use function Laravel\Prompts\alert;
+
 class CommentController extends Controller
 {
     public function show($movie_id)
@@ -26,19 +28,20 @@ class CommentController extends Controller
     {
         // Kiểm tra người dùng đăng nhập
         if (!Auth::check()) {
-            return redirect()->back()->withErrors(['login' => 'Bạn cần đăng nhập để đánh giá và bình luận.']);
+            session()->flash('error', 'Bạn cần đăng nhập để đánh giá và bình luận.');
+            return redirect()->route('getLogin');
         }
 
         $user_id = Auth::id();
 
         // Kiểm tra xem người dùng đã mua vé cho phim này chưa
-        // $ticketExists = Ticket::where('user_id', $user_id)
-        //     ->where('showtime_id', $movie_id)
-        //     ->exists();
+        $ticketExists = Ticket::where('user_id', $user_id)
+            ->where('showtime_id', $movie_id)
+            ->exists();
 
-        // if (!$ticketExists) {
-        //     return redirect()->back()->withErrors(['ticket' => 'Bạn cần mua vé để đánh giá và bình luận.']);
-        // }
+        if (!$ticketExists) {
+            return redirect()->back()->with('error', 'Bạn cần mua vé để đánh giá và bình luận.');
+        }
 
         // Validate dữ liệu từ form
         $request->validate([

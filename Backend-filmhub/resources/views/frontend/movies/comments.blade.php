@@ -89,20 +89,19 @@
         /* Màu mặc định cho sao */
     }
 
-    .star-rating-comments .filled {
+    .star .filled {
         color: gold;
         /* Màu vàng cho sao đã được đánh giá */
     }
 </style>
 <div class="comment-form mt-4 w-75 mx-auto">
     <h1 class="text-center">Bình luận</h1>
-
     <form class="" action="{{ route('comments.store', ['movie_id' => $movie->movie_id]) }}" method="POST">
         @csrf
         <div class="comment-box">
             <div class="d-flex mb-1">
-                <img src="{{ Auth::user()->avatar ?? "" }}" alt="Avatar" style="margin-left: 50px" class="rounded-circle" width="50"
-                    height="50">
+                <img src="{{ Auth::user()->avatar ?? '' }}" alt="Avatar" style="margin-left: 50px" class="rounded-circle"
+                    width="50" height="50">
                 <!-- Star Rating -->
                 <div class="star-rating">
                     <input type="radio" name="rating" id="star5" value="5"><label for="star5"
@@ -126,13 +125,27 @@
     </form>
 </div>
 <div class="comments-section w-75 mx-auto mb-5">
-
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Thông báo',
+                text: "{{ session('error') }}",
+                confirmButtonText: 'OK'
+            });
+        </script>
     @endif
 
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công',
+                text: "{{ session('success') }}",
+                confirmButtonText: 'OK'
+            });
+        </script>
+    @endif
     <!-- Danh sách bình luận -->
     <div id="comments-list">
         @foreach ($comments as $comment)
@@ -149,10 +162,12 @@
                         <p class="text-muted small">{{ $comment->created_at->format('d/m/Y H:i') }}</p>
 
                         <!-- Hiển thị đánh giá sao -->
-                        <div class="star-rating">
+                        <div class="star-rating" style="direction: ltr;">
                             @for ($i = 1; $i <= 5; $i++)
-                                <span class="star {{ $i <= $comment->rating ? 'filled' : '' }}">★</span>
-                            @endfor
+                            <span
+                                class="fa {{ $i <= $comment->rating ? 'fa-star' : 'fa-star-o' }}"
+                                style="color: #f39c12;"></span>
+                        @endfor
                         </div>
 
                         <!-- Nội dung bình luận -->

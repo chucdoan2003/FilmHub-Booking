@@ -18,11 +18,9 @@ class Room extends Model
     public function rows() {
         return $this->hasMany(Row::class, 'room_id');
     }
-    public function theaters() {
-        return $this->belongsTo(Theater::class, 'theater_id');
-    }
-
-    public function theater() {
+    // Quan hệ với Theater
+    public function theater()
+    {
         return $this->belongsTo(Theater::class, 'theater_id');
     }
 }

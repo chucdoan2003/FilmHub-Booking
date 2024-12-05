@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Danh sách phim
+    List Tickets
 @endsection
 
 @section('style-libs')
@@ -45,57 +45,53 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Title</th>
-                            <th>Duration</th>
-                            <th>Release date</th>
-                            <th>Genre</th>
-                            <th>Rating</th>
-                            <th>Poster</th>
+                            <th>User</th>
+                            <th>Movie</th>
+                            <th>Room</th>
+                            <th>Shift</th>
+                            <th>Theater</th>
+                            <th>Seats</th>
+                            <th>Combo</th>
+                            <th>Total Price</th>
                             <th>Status</th>
-                            <th>Action</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th>ID</th>
-                            <th>Title</th>
-                            <th>Duration</th>
-                            <th>Release date</th>
-                            <th>Genre</th>
-                            <th>Rating</th>
-                            <th>Poster</th>
+                            <th>User</th>
+                            <th>Movie</th>
+                            <th>Room</th>
+                            <th>Shift</th>
+                            <th>Theater</th>
+                            <th>Seats</th>
+                            <th>Combo</th>
+                            <th>Total Price</th>
                             <th>Status</th>
-                            <th>Action</th>
+                            <th>Actions</th>
                         </tr>
                     </tfoot>
                     <tbody>
-                        @foreach ($data as $movie)
+                        @foreach ($tickets as $index => $ticket)
                             <tr>
-                                <td>{{ $movie->movie_id }}</td>
-                                <td>{{ $movie->title }}</td>
-                                <td>{{ $movie->duration }} Phút</td>
-                                <td>{{ $movie->release_date }}</td>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $ticket->user->name }}</td>
+                                <td>{{ $ticket->showtime->movie->title }}</td>
+                                <td>Phòng {{ $ticket->showtime->rooms->room_name }}</td>
+                                <td>Ca {{ $ticket->showtime->shifts->shift_name }}</td>
+                                <td>{{ $ticket->showtime->rooms->theater->name }}</td>
+                                <td>{{ $ticket->ticketsSeats->count() }} Ghế</td>
+                                <td>{{ $ticket->combo ? $ticket->combo->name : 'N/A' }}</td>
+                                <td>{{ $ticket->total_price }}</td>
+                                <td>{{ $ticket->status }}</td>
                                 <td>
-                                    @foreach ($movie->genres as $genre)
-                                        {{ $genre->name }}@if (!$loop->last)
-                                            ,
-                                        @endif
-                                    @endforeach
-                                </td>
-                                <td>{{ $movie->rating }}</td>
-                                <td><img src="{{ Storage::url($movie->poster_url) }}" style="width: 100px; height: 100px;"
-                                        alt=""></td>
-                                <td>{{ $movie->status }}</td>
-                                <td class="">
-                                    <a href="{{ route('admin.movies.show', $movie->movie_id) }}"
-                                        class="btn btn-primary mb-3">Detail</a>
-                                    <a href="{{ route('admin.movies.edit', $movie->movie_id) }}"
-                                        class="btn btn-success mb-3">Edit</a>
-                                    <form action="{{ route('admin.movies.destroy', $movie->movie_id) }}" method="POST">
+                                    <a href="{{ route('admin.tickets.show', $ticket) }}" class="btn btn-info">View</a>
+                                    <form action="{{ route('admin.tickets.destroy', $ticket) }}" method="POST"
+                                        style="display:inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger"
-                                            onclick="return confirm('Bạn có muốn xóa phim này không')">Delete</button>
+                                        <button type="submit" class="btn btn-danger">Delete</button>
                                     </form>
                                 </td>
                             </tr>

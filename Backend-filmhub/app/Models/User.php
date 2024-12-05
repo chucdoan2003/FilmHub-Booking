@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use PHPUnit\Framework\Attributes\Ticket;
+
 
 class User extends Authenticatable
 {
@@ -19,7 +19,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $table="users";
+    protected $table = "users";
     protected $primaryKey = 'user_id';
 
     public $incrementing = false;
@@ -53,10 +53,6 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-
-
-
-
     // Mối quan hệ với model Ticket
     public function tickets()
     {
@@ -64,7 +60,7 @@ class User extends Authenticatable
     }
 
     public function comments()
-{
-    return $this->hasMany(Comment::class, 'user_id');
-}
+    {
+        return $this->hasMany(Comment::class, 'user_id');
+    }
 }

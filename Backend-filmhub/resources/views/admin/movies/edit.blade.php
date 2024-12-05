@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Sửa Phim
+    Edit Movie
 @endsection
 
 @section('style-libs')
@@ -140,7 +140,7 @@
                 @enderror
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Lưu</button>
+        <button type="submit" class="btn btn-primary">Save</button>
     </form>
 @endsection
 <script>

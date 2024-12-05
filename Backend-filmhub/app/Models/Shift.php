@@ -17,5 +17,14 @@ class Shift extends Model
     {
         return $this->belongsTo(Theater::class, 'theater_id');
     }
-}
+    public function showtimes()
+    {
+        return $this->hasMany(Showtime::class, 'shift_id');
+    }
 
+    // Quan hệ gián tiếp với tickets qua showtimes
+    public function tickets()
+    {
+        return $this->hasManyThrough(Ticket::class, Showtime::class, 'shift_id', 'showtime_id');
+    }
+}

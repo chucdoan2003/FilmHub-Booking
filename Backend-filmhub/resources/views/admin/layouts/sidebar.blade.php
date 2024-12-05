@@ -27,17 +27,17 @@
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-            aria-expanded="true" aria-controls="collapseTwo">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTheater"
+            aria-expanded="true" aria-controls="collapseTheater">
             <i class="fas fa-fw fa-cog"></i>
-            <span>Quản lý rạp chiếu</span>
+            <span>Manager Theater</span>
         </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseTheater" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 {{--                <h6 class="collapse-header">Custom Components:</h6> --}}
-                <a class="collapse-item" href="{{ route('admin.theaters.index') }}">Danh sách</a>
+                <a class="collapse-item" href="{{ route('admin.theaters.index') }}">List Theaters</a>
 
-                <a class="collapse-item" href="{{ route('theaters.indexRoom') }}">Danh sách phòng</a>
+                <a class="collapse-item" href="{{ route('theaters.indexRoom') }}">List Rooms</a>
 
             </div>
         </div>
@@ -47,13 +47,13 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMovies"
             aria-expanded="true" aria-controls="collapseMovies">
             <i class="fas fa-fw fa-table"></i>
-            <span>Quản lý phim</span>
+            <span>Manager Movies</span>
         </a>
         <div id="collapseMovies" class="collapse" aria-labelledby="headingMovies" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Danh sách phim</h6>
-                <a class="collapse-item" href="{{ route('admin.movies.index') }}">Danh sách</a>
-                <a class="collapse-item" href="{{ route('admin.movies.create') }}">Tạo mới</a>
+                <h6 class="collapse-header">List Function</h6>
+                <a class="collapse-item" href="{{ route('admin.movies.index') }}">List Movies</a>
+                <a class="collapse-item" href="{{ route('admin.movies.create') }}">Create New</a>
             </div>
         </div>
     </li>
@@ -62,13 +62,26 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseGenre"
             aria-expanded="true" aria-controls="collapseGenre">
             <i class="fas fa-fw fa-table"></i>
-            <span>Quản lý thể loại</span>
+            <span>Manager Genres</span>
         </a>
         <div id="collapseGenre" class="collapse" aria-labelledby="headingMovies" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Danh sách chức năng</h6>
-                <a class="collapse-item" href="{{ route('admin.genres.index') }}">Danh sách</a>
-                <a class="collapse-item" href="{{ route('admin.genres.create') }}">Tạo mới</a>
+                <h6 class="collapse-header">List Function</h6>
+                <a class="collapse-item" href="{{ route('admin.genres.index') }}">List Genres</a>
+                <a class="collapse-item" href="{{ route('admin.genres.create') }}">Create New</a>
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTicket"
+            aria-expanded="true" aria-controls="collapseTicket">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Manager Tickets</span>
+        </a>
+        <div id="collapseTicket" class="collapse" aria-labelledby="headingMovies" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">List Function</h6>
+                <a class="collapse-item" href="{{ route('admin.tickets.index') }}">List Tickets</a>
             </div>
         </div>
     </li>

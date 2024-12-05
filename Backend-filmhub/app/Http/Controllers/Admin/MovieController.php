@@ -87,6 +87,7 @@ class MovieController extends Controller
     public function show(string $id)
     {
         $movie = Movie::with('genres')->find($id); // Lấy phim cùng với các thể loại đã gắn
+        // dd($movie->genres);
         $genres = Genre::all(); // Lấy tất cả thể loại để hiển thị trong select box
         return view('admin.movies.show', compact('movie', 'genres'));
     }

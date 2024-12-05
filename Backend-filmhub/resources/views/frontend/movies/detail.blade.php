@@ -158,7 +158,7 @@
     @include('frontend.movies.comments', ['movie_id' => $movie->id])
     {{-- End comment --}}
 
-    @if (!$relatedMovies)
+    @if ($relatedMovies)
         <div class="prs_ms_rm_main_wrapper">
             <div class="container">
                 <div class="row">

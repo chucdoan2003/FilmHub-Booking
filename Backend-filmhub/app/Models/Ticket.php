@@ -16,19 +16,22 @@ class Ticket extends Model
         'total_price',
         'ticket_time',
         'status',
-        'food_id', 'drink_id', 'combo_id',
+        'combo_id',
     ];
     public $timestamps = false;
     public function showtime()
     {
         return $this->belongsTo(Showtime::class, 'showtime_id');
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public function food()
     {
         return $this->belongsTo(Food::class, 'food_id');
     }
-
 
     public function drink()
     {
@@ -42,7 +45,7 @@ class Ticket extends Model
     }
 
     public function ticketsSeats()
-{
-    return $this->hasMany(TicketSeat::class, 'ticket_id');
-}
+    {
+        return $this->hasMany(TicketSeat::class, 'ticket_id');
+    }
 }
