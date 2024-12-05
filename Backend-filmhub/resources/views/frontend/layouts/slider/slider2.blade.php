@@ -1,3 +1,31 @@
+@php
+    $topMovies = DB::table('movies')
+        ->join('showtimes', 'movies.movie_id', '=', 'showtimes.movie_id')
+        ->join('tickets', 'showtimes.showtime_id', '=', 'tickets.showtime_id')
+        ->leftJoin('genre_movie', 'movies.movie_id', '=', 'genre_movie.movie_id')
+        ->leftJoin('genres', 'genre_movie.genre_id', '=', 'genres.genre_id')
+        ->select(
+            'movies.movie_id',
+            'movies.title',
+            'movies.description',
+            'movies.poster_url',
+            'movies.rating',
+            'movies.trailer',
+            DB::raw('COUNT(tickets.ticket_id) as total_bookings'),
+            DB::raw('GROUP_CONCAT(DISTINCT genres.name) as genres'), // Dùng DISTINCT để loại bỏ trùng lặp thể loại
+        )
+        ->groupBy(
+            'movies.movie_id',
+            'movies.title',
+            'movies.description',
+            'movies.poster_url',
+            'movies.rating',
+            'movies.trailer',
+        )
+        ->orderByDesc('total_bookings')
+        ->limit(10)
+        ->get();
+@endphp
 <!-- prs theater Slider Start -->
 <div class="prs_theater_main_slider_wrapper">
     <div class="prs_theater_img_overlay"></div>
@@ -6,34 +34,6 @@
     </div>
     <div class="wrap-album-slider">
         <ul class="album-slider">
-            @php
-                $topMovies = DB::table('movies')
-                    ->leftJoin('showtimes', 'movies.movie_id', '=', 'showtimes.movie_id')
-                    ->leftJoin('tickets', 'showtimes.showtime_id', '=', 'tickets.showtime_id')
-                    ->leftJoin('genre_movie', 'movies.movie_id', '=', 'genre_movie.movie_id')
-                    ->leftJoin('genres', 'genre_movie.genre_id', '=', 'genres.genre_id')
-                    ->select(
-                        'movies.movie_id',
-                        'movies.title',
-                        'movies.description',
-                        'movies.poster_url',
-                        'movies.rating',
-                        'movies.trailer',
-                        DB::raw('GROUP_CONCAT(genres.name SEPARATOR ", ") as genres'),
-                        DB::raw('COUNT(tickets.ticket_id) as total_tickets'),
-                    )
-                    ->groupBy(
-                        'movies.movie_id',
-                        'movies.title',
-                        'movies.description',
-                        'movies.poster_url',
-                        'movies.rating',
-                        'movies.trailer',
-                    )
-                    ->orderByDesc('total_tickets')
-                    ->limit(10)
-                    ->get();
-            @endphp
             @foreach ($topMovies as $mv)
                 <li class="album-slider__item">
                     <figure class="album">
@@ -61,11 +61,7 @@
                                     </h2>
 
                                     <p class="movie-genre">
-                                        @if (!empty($movie->genres))
-                                            <p><strong>Genres:</strong> {{ $movie->genres }}</p>
-                                        @else
-                                            <p><strong>Genres:</strong> Not available</p>
-                                        @endif
+                                        {{ $mv->genres ?? 'No genres available' }}
                                     </p>
                                     <div class="star-rating" style="direction: ltr;">
                                         @for ($i = 1; $i <= 5; $i++)
@@ -88,6 +84,7 @@
                     <!-- End album -->
                 </li>
             @endforeach
+            <!-- End album slider item -->
         </ul>
         <!-- End slider -->
     </div>

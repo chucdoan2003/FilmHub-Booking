@@ -100,8 +100,8 @@
     <form class="" action="{{ route('comments.store', ['movie_id' => $movie->movie_id]) }}" method="POST">
         @csrf
         <div class="comment-box">
-            <div class="d-flex">
-                <img src="{{ Auth::user()->avatar }}" alt="Avatar" class="rounded-circle me-3" width="50"
+            <div class="d-flex mb-1">
+                <img src="{{ Auth::user()->avatar ?? "" }}" alt="Avatar" style="margin-left: 50px" class="rounded-circle" width="50"
                     height="50">
                 <!-- Star Rating -->
                 <div class="star-rating">
