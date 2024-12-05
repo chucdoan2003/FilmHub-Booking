@@ -17,6 +17,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
     <link rel="stylesheet" type="text/css" href="{{ asset('website/css/animate.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('website/css/bootstrap.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('website/css/font-awesome.css') }}" />
@@ -64,6 +65,7 @@
 
     <!-- st login wrapper End -->
     <!--main js file start-->
+    <script src="{{ asset('website/js/font-fontawesome-ae333ffef2.js') }}"></script>
     <script src="{{ asset('website/js/jquery_min.js') }}"></script>
     <script src="{{ asset('website/js/modernizr.js') }}"></script>
     <script src="{{ asset('website/js/bootstrap.js') }}"></script>

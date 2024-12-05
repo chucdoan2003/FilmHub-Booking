@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Genre;
+
 class AuthController extends Controller
 {
     public function getLogin()
@@ -23,7 +24,7 @@ class AuthController extends Controller
     }
     public function getRegister()
     {
-        return view("frontend.auth.register", compact('genres'));
+        return view("frontend.auth.register");
     }
     public function getForgotPassword()
     {
@@ -107,7 +108,6 @@ class AuthController extends Controller
         if ($user) {
             Mail::to($user->email)->send(new ForgotPasswordMail($email));
             return view("frontend.auth.forgotPassword", compact("user"));
-
         } else {
             $user = false;
             return view("frontend.auth.forgotPassword", compact("user"));

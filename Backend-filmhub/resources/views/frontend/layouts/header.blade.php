@@ -3,34 +3,6 @@
         <img src="{{ asset('website/images/header/horoscope.gif') }}" id="preloader_image" alt="loader">
     </div>
 </div>
-<!-- color picker start -->
-<div id="style-switcher">
-    <div>
-        <h3>Choose Color</h3>
-        <ul class="colors">
-            <li>
-                <p class='colorchange' id='color'></p>
-            </li>
-            <li>
-                <p class='colorchange' id='color2'></p>
-            </li>
-            <li>
-                <p class='colorchange' id='color3'></p>
-            </li>
-            <li>
-                <p class='colorchange' id='color4'></p>
-            </li>
-            <li>
-                <p class='colorchange' id='color5'></p>
-            </li>
-            <li>
-                <p class='colorchange' id='style'></p>
-            </li>
-        </ul>
-    </div>
-    <div class="bottom"> <a href="#" class="settings"><i class="fa fa-gear"></i></a> </div>
-</div>
-<!-- color picker end -->
 <!-- prs navigation Start -->
 <div class="prs_navigation_main_wrapper">
     <div class="container-fluid">

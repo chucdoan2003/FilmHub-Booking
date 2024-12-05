@@ -57,7 +57,7 @@ class MovieController extends Controller
 
         // Xử lý poster_url
         if ($request->hasFile('poster_url')) {
-            $data['poster_url'] = $request->file('poster_url')->store('storage/movie', 'public');
+            $data['poster_url'] = $request->file('poster_url')->store('movie', 'public');
         } else {
             $data['poster_url'] = "";
         }
@@ -131,7 +131,7 @@ class MovieController extends Controller
             if ($movie->poster_url) {
                 Storage::delete($movie->poster_url);
             }
-            $data['poster_url'] = $request->file('poster_url')->store('storage/movie', 'public');
+            $data['poster_url'] = $request->file('poster_url')->store('movie', 'public');
         } else {
             $data['poster_url'] = $movie->poster_url;
         }

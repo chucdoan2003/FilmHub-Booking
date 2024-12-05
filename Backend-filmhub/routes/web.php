@@ -28,8 +28,6 @@ Route::get('admin', function () {
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('theaters', AdminTheaterController::class);
-
-
 });
 
 Route::get('/theaters/rooms', [AdminTheaterController::class, 'indexRoom'])->name('theaters.indexRoom');
@@ -43,7 +41,7 @@ Route::delete('/theaters/rooms/{room}', [AdminTheaterController::class, 'destroy
 
 
 // Payment
-Route::post('/vnpay_payment' ,[PaymentController::class,'vnpay_payment'])->name('vnpay_payment');;
+Route::post('/vnpay_payment', [PaymentController::class, 'vnpay_payment'])->name('vnpay_payment');;
 Route::get('/vnpay-return', [PaymentController::class, 'vnpay_payment_return'])->name('vnpay.return');
 Route::get('/confirmBooking', [PaymentController::class, 'confirmBooking'])->name('confirmBooking');
 
@@ -54,19 +52,24 @@ Route::get('/confirmBooking', [PaymentController::class, 'confirmBooking'])->nam
 
 // Showtimes (Huy)
 use App\Http\Controllers\client\ClientBookingController;
+
 Route::get('/booking/{id}', [ClientBookingController::class, 'index'])->name('booking.index');
 
 use App\Http\Controllers\client\ContactController;
+
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 use App\Http\Controllers\client\ClientCategoryController;
+
 Route::get('/category', [ClientCategoryController::class, 'index'])->name('category.index');
 Route::get('category/{id}', [ClientCategoryController::class, 'show'])->name('category.show');
 Route::get('/search', [ClientCategoryController::class, 'search'])->name('movies.search');
 
 // Đăng nhập, đăng ký ( Chúc)
 use App\Http\Controllers\admin\AuthController;
+use App\Http\Controllers\client\CommentController;
+
 Route::get("auth/login", [AuthController::class, 'getLogin'])->name('getLogin');
 Route::get("auth/register", [AuthController::class, 'getRegister'])->name('getRegister');
 Route::get("auth/forgotPassword", [AuthController::class, 'getForgotPassword'])->name('getForgotPassword');
@@ -76,8 +79,8 @@ Route::post("auth/login", [AuthController::class, "login"])->name('login');
 Route::post("auth/register", [AuthController::class, "register"])->name('register');
 Route::post("auth/forgotPassword", [AuthController::class, "forgotPassword"])->name('forgotPassword');
 Route::post("auth/logout", [AuthController::class, "logout"])->name('logout');
-Route::post('auth/changePassword', [AuthController::class, 'changePassword' ])
-->name('changePassword');
+Route::post('auth/changePassword', [AuthController::class, 'changePassword'])
+    ->name('changePassword');
 
 
 // Đặt ghế ( Hướng)
@@ -87,5 +90,8 @@ Route::post('/detailBooking/{id}', [ClientBookingController::class, 'detailBooki
 
 // Detail ( Khôi)
 use App\Http\Controllers\client\MovieController as FrontendMovieController;
+
 Route::get('/', [FrontendMovieController::class, 'index'])->name('movies.index');
 Route::get('/show/{id}', [FrontendMovieController::class, 'detail'])->name('movies.detail');
+Route::post('/comments', [CommentController::class, 'store'])->name('comments.store'); // Lưu bình luận
+Route::post('/movies/{movie_id}/comments', [CommentController::class, 'store'])->name('comments.store');
