@@ -69,6 +69,7 @@
         alert('{{ session('error') }}');
     </script>
 @endif
+{{-- <h1>{{ session('user_id') }}</h1> --}}
     <!-- prs upcomung Slider Start -->
     <div class="prs_upcom_slider_main_wrapper">
         <div class="container">
@@ -126,7 +127,7 @@
                                                             <p class="movie-genre">
                                                                 @foreach ($mv->genres as $genre)
                                                                     {{ $genre->name }}@if (!$loop->last)
-                                                                        ,
+
                                                                     @endif
                                                                 @endforeach
                                                             </p>

@@ -36,7 +36,8 @@ class MovieController extends Controller
             ->get();
 
         // Trả về view với danh sách phim
-        return view('frontend.movies.index', compact('movieUpcoming1', 'movieUpcoming2', 'movieReleased1', 'movieReleased2'));
+        $genres = Genre::withCount('movies')->get();
+        return view('frontend.movies.index', compact('movieUpcoming1', 'movieUpcoming2', 'movieReleased1', 'movieReleased2', 'genres'));
     }
     public function detail(string $id)
     {
@@ -53,6 +54,7 @@ class MovieController extends Controller
             ->limit(10) // Giới hạn số lượng phim trả về
             ->get();
         // dd($relatedMovies);
-        return view('frontend.movies.detail', compact('movie', 'relatedMovies'));
+        $genres = Genre::withCount('movies')->get();
+        return view('frontend.movies.detail', compact('movie', 'relatedMovies', 'genres'));
     }
 }

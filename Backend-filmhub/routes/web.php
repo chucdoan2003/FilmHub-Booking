@@ -60,6 +60,10 @@ use App\Http\Controllers\client\ContactController;
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
+use App\Http\Controllers\client\ClientCategoryController;
+Route::get('/category', [ClientCategoryController::class, 'index'])->name('category.index');
+Route::get('category/{id}', [ClientCategoryController::class, 'show'])->name('category.show');
+Route::get('/search', [ClientCategoryController::class, 'search'])->name('movies.search');
 
 // Đăng nhập, đăng ký ( Chúc)
 use App\Http\Controllers\admin\AuthController;

@@ -82,7 +82,8 @@
         <input type="text" name="name" value="{{ old('name') }}" class="form-control" required>
 
         <label for="total-price">Total Price:</label>
-        <input type="text" name="total-price" id="total-price" class="form-control" value="0" readonly>
+        <input type="text" name="total-price" id="total-price" class="form-control" value="{{ old('total-price', '0') }}"
+            required>
 
         <div class="mt-4">
             <label for="foods" class="form-label">Foods:</label>

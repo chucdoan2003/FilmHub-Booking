@@ -5,7 +5,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Movie Pro Responsive HTML Template</title>
+    <title>FilmHub</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta name="description" content="Movie Pro" />
     <meta name="keywords" content="Movie Pro" />

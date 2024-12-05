@@ -5,11 +5,12 @@ namespace App\Http\Controllers\client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Contact;
-
+use App\Models\Genre;
 class ContactController extends Controller
 {
     public function index() {
-        return view('frontend.contact.index');
+        $genres = Genre::withCount('movies')->get();
+        return view('frontend.contact.index',compact('genres'));
     }
 
     public function store(Request $request) {
@@ -27,6 +28,7 @@ class ContactController extends Controller
             'user_id' => 1,
         ]);
 
-        return redirect()->route('contact.index')->with('success', 'Message sent successfully!');
+        $genres = Genre::withCount('movies')->get();
+        return redirect()->route('contact.index',compact('genres'))->with('success', 'Message sent successfully!');
     }
 }

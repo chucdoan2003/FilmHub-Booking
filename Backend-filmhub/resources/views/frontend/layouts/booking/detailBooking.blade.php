@@ -6,9 +6,17 @@
 	<input type="hidden" name="showtime_id" value="{{ $showtime->showtime_id }}">
     <input type="hidden" name="user_id" value="{{$user_id}}">
 
+    @php
+    // Lấy thông tin từ cache, nếu không có thì trả về mảng rỗng
+    $selectedSeats = Cache::get('selected_seats_' . session('user_id'), ['seats' => []])['seats'] ?? [];
 
+    $selectedSeats = is_array($selectedSeats) ? $selectedSeats : [];
+@endphp
+{{-- @php
+    dd($selectedSeats);
+@endphp --}}
     <input type="hidden" name="total" value="{{$totalPrice}}">
-    <input type="hidden" name="selected_seats" value="{{ implode(',', $selectedSeats) }}">
+    <input type="hidden" name="selected_seats" value="{{ Cookie::get('selected_seats', '') }}">
     <!-- st top header Start -->
     <div class="st_bt_top_header_wrapper float_left">
         <div class="container">
@@ -64,8 +72,8 @@
                                 <div class="st_cherity_btn float_left">
                                     <h3>SELECT TICKET TYPE</h3>
                                     <ul>
-                                        <li><a href="#"><i class="flaticon-tickets"></i> &nbsp;M-Ticket</a></li>
-                                        <li><a href="#"><i class="flaticon-tickets"></i> &nbsp;Box office Pickup</a></li>
+                                        {{-- <li><a href="#"><i class="flaticon-tickets"></i> &nbsp;M-Ticket</a></li>
+                                        <li><a href="#"><i class="flaticon-tickets"></i> &nbsp;Box office Pickup</a></li> --}}
                                         <li><button type="submit" class="btn btn-success">Proceed to Pay</button></a></li>
                                     </ul>
                                 </div>
@@ -83,15 +91,15 @@
                                 <div class="st_dtts_sb_ul float_left">
                                     <ul id="selected-seats-list">
                                         @if(count($selectedSeats) > 0)
-                                            @foreach ($selectedSeats as $seat)
-                                                <li>{{ $seat }}<br>(1 Ticket) <span>Giá: {{ number_format($totalPrice)}} VNĐ</span></li>
-                                            @endforeach
+
+                                                <li>{{ implode(', ', $seatNumbers->toArray()) }}<br>( Ticket) <span>Giá: {{ number_format($totalPrice)}} VNĐ</span></li>
+
                                         @else
                                             <li>Không có ghế nào được chọn.</li>
                                         @endif
                                     </ul>
-                                    <p>Booking Fees <span>Rs. 60.00</span></p>
-                                    <p>Integrated GST (IGST) @ 18% <span>Rs. 60.00</span></p>
+                                    {{-- <p>Booking Fees <span>Rs. 60.00</span></p>
+                                    <p>Integrated GST (IGST) @ 18% <span>Rs. 60.00</span></p> --}}
                                 </div>
 
                                 <div class="st_dtts_sb_h2 float_left">

@@ -5,7 +5,7 @@ use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Showtime;
-
+use App\Models\Genre;
 class PaymentController extends Controller
 {
     public function vnpay_payment(Request $request)
@@ -292,7 +292,7 @@ class PaymentController extends Controller
     // Lấy thông tin từ session
     $ticketId = $request->session()->get('ticket_id');
     $userId = session('user_id');
-
+    $genres = Genre::withCount('movies')->get();
     // Kiểm tra dữ liệu
     if (!$ticketId || !$userId) {
         return redirect()->route('movies.index')->with('error', 'Không tìm thấy thông tin xác nhận.');
@@ -320,6 +320,7 @@ class PaymentController extends Controller
         'user' => $user,
         'movie' => $showtime->movie,
         'theater' => $showtime->theater,
+         'genres' => $genres
     ]);
 }
 

@@ -1,6 +1,14 @@
-.st_seat_lay_row #c1[type="checkbox"] + label:before {
+
+.st_seat_lay_row input[id^="c"][type="checkbox"] + label:before {
     content: var(--seat-content);
 }
+
+/*.st_seat_lay_row #c1[type="checkbox"] + label:before {
+    content: var(--seat-content);
+}
+
+
+
 .st_seat_lay_row #c2[type="checkbox"] + label:before {
     content: var(--seat-content);
 }
@@ -42,6 +50,7 @@
 }
 
 .st_seat_lay_row #c15[type="checkbox"] + label:before {
+    content: var(--seat-content);
 }
 .st_seat_lay_row #c16[type="checkbox"] + label:before {
 }
@@ -265,3 +274,4 @@
 .st_seat_lay_row #c92[type="checkbox"] + label:before {
     content: "23";
 }
+*/

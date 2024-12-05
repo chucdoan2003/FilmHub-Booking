@@ -9,6 +9,9 @@ use Carbon\Carbon;
 use App\Models\Showtime;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Seat;
+use App\Models\Genre;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Cookie;
 class ClientBookingController extends Controller
 {
     public function index($id, Request $request)
@@ -45,12 +48,14 @@ class ClientBookingController extends Controller
             // Hiển thị toàn bộ showtimes nếu không có ngày chọn
             $selectedShowtimes = $showtimes;
         }
+        $genres = Genre::withCount('movies')->get();
 
         return view('frontend.layouts.booking.index', [
             'showtimesGroupedByDate' => $showtimesGroupedByDate,
             'selectedShowtimes' => $selectedShowtimes,
             'selectedDate' => $selectedDate,
-            'movieId' => $id
+            'movieId' => $id,
+            'genres' => $genres
         ]);
     }
 
@@ -92,20 +97,32 @@ class ClientBookingController extends Controller
 
         $user_id = session('user_id');
 
+
         // Nhận ghế đã chọn từ request
         $selectedSeats = $request->input('selected_seats');
+        session(['selectedSeats' => $selectedSeats]);
         $totalPrice = $request->input('total_price'); // Tổng giá tiền
         $seats = Seat::whereIn('seat_id', $selectedSeats)->get(); // Truy vấn các ghế từ cơ sở dữ liệu
         $seatNumbers = $seats->pluck('seat_number');
         // dd(   $selectedSeats);
+        $genres = Genre::withCount('movies')->get();
 
+        $minutes = 10;
+        Cookie::queue('selected_seats', implode(',', $selectedSeats), $minutes);
+        Cache::put('selected_seats_' . session('user_id'), [
+            'seats' => $selectedSeats,
+            'total_price' => $totalPrice
+        ], now()->addMinutes(60));
+
+        // dd($totalPrice);
         // Truyền dữ liệu đến view
         return view('frontend.layouts.booking.detailBooking', compact(
             'showtime',
             'selectedSeats', // Truyền mảng ghế đã chọn
             'totalPrice',
             'user_id',
-            'seatNumbers'
+            'seatNumbers',
+            'genres'
         ));
     }
 
