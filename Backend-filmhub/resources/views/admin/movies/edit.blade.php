@@ -106,7 +106,7 @@
             @enderror
         </div>
         <div class="mb-3">
-            <label for="status" class="form-label">Status:</label>
+            <label for="status" class="form-label">Director:</label>
             <select name="status" class="form-control" id="status">
                 <option value="{{ $movie->status }}">{{ $movie->status }}</option>
                 <option value="Sắp ra mắt">Sắp ra mắt</option>

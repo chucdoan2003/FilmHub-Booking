@@ -11,6 +11,8 @@ class Shift extends Model
 
     protected $fillable = ['shift_name', 'start_time', 'end_time'];
 
+    protected $table = 'shifts';
+    protected $primaryKey = 'shift_id';
     public function theater()
     {
         return $this->belongsTo(Theater::class, 'theater_id');

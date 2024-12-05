@@ -8947,7 +8947,7 @@ border: 1px solid #4d4f5c;
 	text-align:center;
 	position:absolute;
 	margin-top:30px;
-	    margin-left: 5px;
+	margin-left: 5px;
 }
 .st_seat_lay_row input[type="checkbox"]:checked + label:before {
 	border: 0;

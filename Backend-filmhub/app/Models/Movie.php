@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,13 +18,23 @@ class Movie extends Model
         'release_date',
         'rating',
         'poster_url',
-        'status',
         'director',
         'performer',
         'trailer',
+        'status'
     ];
     public function genres()
     {
         return $this->belongsToMany(Genre::class, 'genre_movie', 'movie_id', 'genre_id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'movie_id');
+    }
+
+    public function showtimes()
+    {
+        return $this->hasMany(Showtime::class, 'movie_id');
     }
 }

@@ -10,12 +10,14 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      */
-    protected function schedule(Schedule $schedule)
-{
-    // Lên lịch chạy lệnh mỗi ngày lúc 00:00
-    $schedule->command('movies:update-status')->dailyAt('00:00');
-}
-
+    // protected $commands = [
+    //     \App\Console\Commands\CheckPendingOrders::class,
+    // ];
+    protected function schedule(Schedule $schedule): void
+    {
+        // $schedule->command('inspire')->hourly();
+        // $schedule->command('check:pending-orders')->everyMinute();
+    }
 
     /**
      * Register the commands for the application.

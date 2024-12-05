@@ -167,7 +167,7 @@
         </div>
     </div>
     {{-- comment --}}
-    <section style="background-color: #eee;">
+    {{-- <section style="background-color: #eee;">
         <div class="container py-5">
             <div class="row d-flex justify-content-center">
                 <div class="col-md-12 col-lg-10 col-xl-8">
@@ -227,7 +227,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
     {{-- End comment --}}
 
     <div class="prs_ms_rm_main_wrapper">
@@ -245,7 +245,7 @@
                                 <div class="item">
                                     <div class="prs_upcom_movie_box_wrapper">
                                         <div class="prs_upcom_movie_img_box">
-                                            <img src="{{ Storage::url($mv->poster_url) }}" alt="movie_img" />
+                                            <img src="{{ Storage::url($mv->poster_url) }} " alt="movie_img" />
                                             <div class="prs_upcom_movie_img_overlay"></div>
                                             <div class="prs_upcom_movie_img_btn_wrapper">
                                                 <ul>
@@ -260,13 +260,13 @@
                                                 </ul>
                                             </div>
                                         </div>
-
                                         <div class="prs_upcom_movie_content_box">
                                             <div class="prs_upcom_movie_content_box_inner">
-                                                <h2><a
+                                                <h2 class="movie-title"><a
                                                         href="{{ route('movies.detail', $mv->movie_id) }}">{{ $mv->title }}</a>
                                                 </h2>
-                                                <p>
+
+                                                <p class="movie-genre">
                                                     @foreach ($mv->genres as $genre)
                                                         {{ $genre->name }}@if (!$loop->last)
                                                             ,

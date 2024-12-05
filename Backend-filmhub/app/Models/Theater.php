@@ -18,8 +18,5 @@ class Theater extends Model
         return $this->hasMany(Room::class, 'theater_id', 'theater_id');
     }
 
-    public function shifts()
-    {
-        return $this->hasMany(Shift::class, 'theater_id', 'theater_id');
-    }
+
 }

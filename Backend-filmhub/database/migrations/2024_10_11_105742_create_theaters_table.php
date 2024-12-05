@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id('theater_id');
             $table->string('name');
             $table->string('location');
-            $table->integer('capacity');
             $table->timestamps();
         });
 
