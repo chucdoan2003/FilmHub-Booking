@@ -121,11 +121,12 @@
                                     <p>Integrated GST (IGST) @ 18% <span>Rs. 60.00</span></p>
                                 </div>
 
+
                                 <div class="st_dtts_sb_h2 float_left">
-                                    <h3>Thành tiền: <span id="totalPriceDisplay">{{ number_format($totalPrice) }}
+                                    <h3>Thành tiền: <span id="totalPriceDisplay">{{ number_format($totalPrice, 0, ',', '.') }}
                                             VNĐ</span></h3>
                                     <h4>Current State is <span>Kerala</span></h4>
-                                    <h5>Số tiền phải trả <span id="totalAmountDisplay">{{ number_format($totalPrice) }}
+                                    <h5>Số tiền phải trả <span id="totalAmountDisplay">{{ number_format($totalPrice, 0, ',', '.') }}
                                             VNĐ</span></h5>
                                 </div>
                             </div>

@@ -5,6 +5,9 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use TCPDF;
+
 
 class TicketController extends Controller
 {
@@ -56,6 +59,30 @@ class TicketController extends Controller
 
         return view('admin.tickets.show', compact('ticket'));
     }
+
+    public function printTicket(Ticket $ticket)
+{
+    // Tạo một instance TCPDF
+    $pdf = new TCPDF();
+
+    // Lặp qua các ghế và tạo một trang mới cho mỗi ghế
+    foreach ($ticket->ticketsSeats as $seat) {
+        // Tạo dữ liệu cho mỗi ghế
+        $data = compact('ticket', 'seat');
+
+        // Đưa thông tin vào PDF (chẳng hạn như render HTML vào PDF)
+        $html = view('admin.tickets.print', $data)->render();
+
+        // Thêm một trang mới cho mỗi ghế
+        $pdf->AddPage();
+
+        // In nội dung vào trang hiện tại
+        $pdf->writeHTML($html);
+    }
+
+    // Xuất PDF và hiển thị trực tiếp trên trình duyệt
+    return response($pdf->Output('ticket_' . $ticket->ticket_id . '.pdf', 'I'));
+}
 
     /**
      * Show the form for editing the specified resource.

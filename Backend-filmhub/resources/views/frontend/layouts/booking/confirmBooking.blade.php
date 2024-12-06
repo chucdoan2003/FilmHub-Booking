@@ -51,6 +51,17 @@
                                             <h5>{{ $theater->name }}</h5>
                                             <h3>{{ \Carbon\Carbon::parse($showtime->datetime)->format('D, d M | h:i A') }}
                                             </h3>
+                                            @if ($ticket->food)
+                                                <h3>Đồ ăn: {{ $ticket->food->name }}</h3>
+                                            @endif
+
+                                            @if ($ticket->drink)
+                                                <h3>Nước uống: {{ $ticket->drink->name }}</h3>
+                                            @endif
+
+                                            @if ($ticket->combo)
+                                                <h3>Combo: {{ $ticket->combo->name }}</h3>
+                                            @endif
                                             {{-- <h6>Carnival: Artech Central Mall,<br>
                                                 Trivandrum Audi-5</h6> --}}
                                         </div>
@@ -67,8 +78,17 @@
                                             </span>
                                         </h3>
                                     </div>
+
+
                                 </div>
 
+                                <div class="st_bcc_tecket_bottom_right_wrapper">
+                                    <!-- Tạo QR Code theo ticket_id -->
+                                    <div>
+                                        {!! QrCode::size(100)->generate(route('admin.tickets.show', ['ticket' => $ticket->ticket_id])) !!}
+                                    </div>
+                                    <h4>Booking ID<br />{{ $ticket->ticket_id }}</h4>
+                                </div>
                                 <div class="st_bcc_tecket_bottom_left_price_wrapper" style="margin-top: 30px !important">
                                     <h4>Total Amount</h4>
                                     <h5>{{ $ticket->total_price }} VND</h5>

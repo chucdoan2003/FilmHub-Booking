@@ -139,7 +139,7 @@
                                             <span style="color: white;">Ghế đã được đặt</span>
                                         @else
                                             <!-- Nếu chưa chọn, hiển thị giá ghế -->
-                                            <span>{{ $seatPrice }} VNĐ</span>
+                                            <span>{{ number_format($seatPrice, 0, ',', '.') }} VNĐ</span>
                                         @endif
 
                                         <input type="checkbox" id="c{{ $seat->seat_id }}" name="selected_seats[]"

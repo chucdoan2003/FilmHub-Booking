@@ -131,6 +131,7 @@ Route::prefix("admin")->group(function(){
     Route::get('booking/list', [BookingController::class, 'index'])->name('bookings.index');
     Route::get('bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');
     Route::post('/book-tickets', [BookingController::class, 'purchaseTicket'])->name('purchase.ticket');
-
-
 });
+
+Route::get('/admin/tickets/{ticket}/qr', [TicketController::class, 'showQr'])->name('admin.tickets.qr');
+Route::get('admin/tickets/{ticket}/print', [TicketController::class, 'printTicket'])->name('admin.tickets.print');

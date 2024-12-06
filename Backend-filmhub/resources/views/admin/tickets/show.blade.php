@@ -59,10 +59,28 @@
                         @endforeach
                     </td>
                 </tr>
-                <tr>
-                    <td>Combo</td>
-                    <td>{{ $ticket->combo ? $ticket->combo->name : 'N/A' }}</td>
-                </tr>
+                @if ($ticket->combo)
+                    <tr>
+                        <td>Combo</td>
+                        <td>{{ $ticket->combo->name }}</td>
+                    </tr>
+                @endif
+
+                @if ($ticket->food)
+                    <tr>
+                        <td>Food</td>
+                        <td>{{ $ticket->food->name }}</td>
+                    </tr>
+                @endif
+
+                @if ($ticket->drink)
+                    <tr>
+                        <td>Drink</td>
+                        <td>{{ $ticket->drink->name }}</td>
+                    </tr>
+                @endif
+
+
                 <tr>
                     <td>Total Price</td>
                     <td>{{ $ticket->total_price }}</td>
@@ -73,5 +91,6 @@
                 </tr>
             </tbody>
         </table>
+        <a href="{{ route('admin.tickets.print', $ticket->ticket_id) }}" class="btn btn-primary">In Vé</a>
     </div>
 @endsection

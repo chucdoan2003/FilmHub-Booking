@@ -1,5 +1,6 @@
 @extends('frontend.layouts.master')
 @section('content')
+
     <style>
         .movie-title,
         .movie-genre {
@@ -312,7 +313,7 @@
                                                             </h2>
 
                                                             <p class="movie-genre">
-                                                                
+
                                                                 @foreach ($mv->genres as $genre)
                                                                     {{ $genre->name }}@if (!$loop->last)
                                                                         ,

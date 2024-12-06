@@ -16,9 +16,14 @@
 
     <!-- Page level custom scripts -->
     <script src="{{ asset('theme/admin/js/demo/datatables-demo.js') }}"></script>
+
+
+
+
 @endsection
 
 @section('content')
+<script src="https://cdn.jsdelivr.net/npm/html5-qrcode/minified/html5-qrcode.min.js"></script>
     <style>
         .description {
             white-space: nowrap;
@@ -30,10 +35,29 @@
             max-width: 200px;
             /* Đặt độ rộng tối đa (tuỳ chỉnh theo giao diện) */
         }
+
+        #reader {
+        width: 100%;
+        height: 300px;
+        border: 1px solid #ccc;
+        display: none; /* Ẩn ban đầu */
+    }
     </style>
     @if (session('message'))
         <h4>{{ session('message') }}</h4>
     @endif
+
+    <div class="card shadow mb-4 mt-3">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Quét Mã QR</h6>
+        </div>
+        <div class="card-body">
+            <button id="scan-qr" class="btn btn-primary">Scan QR</button>
+            <div id="reader" style="width: 600px; height: 300px; display:none;"></div>
+            <div id="result" style="margin-top: 20px;"></div>
+        </div>
+    </div>
+
     <!-- DataTales Example -->
     <div class="card shadow mb-4 mt-3">
         <div class="card-header py-3">
@@ -102,4 +126,45 @@
         </div>
     </div>
     <!-- /.container-fluid -->
+
+    <script>
+        document.getElementById('scan-qr').addEventListener('click', function() {
+            var html5QrCode = new Html5Qrcode("reader");
+
+            // Kiểm tra xem camera có sẵn không
+            Html5Qrcode.getCameras().then(devices => {
+                if (devices.length === 0) {
+                    console.error("No cameras found.");
+                    return;
+                }
+                var cameraId = devices[0].id; // Chọn camera đầu tiên
+
+                html5QrCode.start(
+                    cameraId,
+                    {
+                        fps: 10,
+                        qrbox: { width: 250, height: 250 }
+                    },
+                    function(decodedText, decodedResult) {
+                        // Xử lý khi quét thành công
+                        document.getElementById('result').innerText = "Mã QR: " + decodedText;
+                        html5QrCode.stop();
+
+                        // Chuyển hướng đến liên kết
+                        window.location.href = decodedText; // Chuyển hướng tới URL quét được
+                    },
+                    function(errorMessage) {
+                        // Xử lý khi có lỗi
+                        console.warn("QR code scan error: ", errorMessage);
+                    })
+                .catch(err => {
+                    console.error("Unable to start scanning: ", err);
+                });
+
+                document.getElementById('reader').style.display = "block"; // Hiển thị khu vực quét
+            }).catch(err => {
+                console.error("Error getting cameras: ", err);
+            });
+        });
+    </script>
 @endsection

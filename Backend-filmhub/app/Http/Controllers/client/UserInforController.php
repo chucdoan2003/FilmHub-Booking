@@ -27,6 +27,7 @@ class UserInforController extends Controller
         )
         ->where('tickets.user_id', Auth::user()->user_id)
         ->where('tickets.status','completed')
+        ->orderBy('tickets.ticket_time', 'desc')
         ->get();
         foreach ($tickets as $ticket){
             $seats = DB::table('tickets_seats')

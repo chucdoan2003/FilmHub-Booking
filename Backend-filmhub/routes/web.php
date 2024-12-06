@@ -3,6 +3,7 @@
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\AdminTheaterController;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 
 use App\Http\Controllers\admin\ShowtimesController;
@@ -65,6 +66,10 @@ Route::get('/category', [ClientCategoryController::class, 'index'])->name('categ
 Route::get('category/{id}', [ClientCategoryController::class, 'show'])->name('category.show');
 Route::get('/search', [ClientCategoryController::class, 'search'])->name('movies.search');
 
+// Route::get('qr-code', function () {
+//     return QrCode::size(500)->generate('Welcome to kerneldev.com!');
+// });
+
 // Đăng nhập, đăng ký ( Chúc)
 use App\Http\Controllers\admin\AuthController;
 Route::get("auth/login", [AuthController::class, 'getLogin'])->name('getLogin');
@@ -85,6 +90,7 @@ Route::get('userOverview', [UserInforController::class, 'overview'])->name('user
 Route::get('user/edit', [UserInforController::class, 'edit'])->name('editUserInfor');
 
 Route::post('user/update', [UserInforController::class, 'update'])->name('updateUserInfor');
+
 
 
 // Đặt ghế ( Hướng)

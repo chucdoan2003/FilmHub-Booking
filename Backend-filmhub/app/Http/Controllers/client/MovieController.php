@@ -38,6 +38,7 @@ class MovieController extends Controller
 
         // dd($topMovies);
         // Trả về view với danh sách phim
+
         return view('frontend.movies.index', compact('movieUpcoming1', 'movieUpcoming2', 'movieReleased1', 'movieReleased2', 'genres'));
     }
     public function detail(string $id)
