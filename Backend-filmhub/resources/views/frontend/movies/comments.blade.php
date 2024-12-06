@@ -96,24 +96,19 @@
 </style>
 <div class="comment-form mt-4 w-75 mx-auto">
     <h1 class="text-center">Bình luận</h1>
+    @if(session('user_id'))
     <form class="" action="{{ route('comments.store', ['movie_id' => $movie->movie_id]) }}" method="POST">
         @csrf
         <div class="comment-box">
             <div class="d-flex mb-1">
+                @if(Auth::user() && Auth::user()->avt)
                 <img src="{{ Storage::url(Auth::user()->avt) }}" alt="Avatar" style="margin-left: 50px" class="rounded-circle" width="50px" height="50px">
-
-                <!-- Star Rating -->
                 <div class="star-rating">
-                    <input type="radio" name="rating" id="star5" value="5"><label for="star5"
-                        title="Amazing">★</label>
-                    <input type="radio" name="rating" id="star4" value="4"><label for="star4"
-                        title="Good">★</label>
-                    <input type="radio" name="rating" id="star3" value="3"><label for="star3"
-                        title="Okay">★</label>
-                    <input type="radio" name="rating" id="star2" value="2"><label for="star2"
-                        title="Poor">★</label>
-                    <input type="radio" name="rating" id="star1" value="1"><label for="star1"
-                        title="Terrible">★</label>
+                    <input type="radio" name="rating" id="star5" value="5"><label for="star5" title="Amazing">★</label>
+                    <input type="radio" name="rating" id="star4" value="4"><label for="star4" title="Good">★</label>
+                    <input type="radio" name="rating" id="star3" value="3"><label for="star3" title="Okay">★</label>
+                    <input type="radio" name="rating" id="star2" value="2"><label for="star2" title="Poor">★</label>
+                    <input type="radio" name="rating" id="star1" value="1"><label for="star1" title="Terrible">★</label>
                 </div>
             </div>
             <!-- Comment Box -->
@@ -121,8 +116,13 @@
             <!-- Submit Button -->
             <br>
             <button type="submit" class="btn btn-success" id="submit-comment">Send</button>
+            @endif
+
+                <!-- Star Rating -->
+
         </div>
     </form>
+@endif
 </div>
 <div class="comments-section w-75 mx-auto mb-5">
     @if (session('error'))

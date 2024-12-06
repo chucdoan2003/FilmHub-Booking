@@ -24,9 +24,23 @@
             background-color: grey !important;
             color: white !important;
         }
+
+        .timer {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #ff0000;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
     </style>
     <!-- color picker start -->
     <!-- st top header Start -->
+    <div class="timer">
+        Thời gian còn lại: <span id="time-remaining">10:00</span>
+    </div>
     <form action="{{ route('detailBooking', $showtime->showtime_id) }}" method="post" enctype="multipart/form-data">
         @csrf
         <!-- Thông tin ghế đã chọn -->
@@ -55,6 +69,8 @@
                             <input type="hidden" name="product_id" />
                         </div> --}}
                     </div>
+
+
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                         <div class="st_bt_top_center_heading st_bt_top_center_heading_seat_book_page float_left">
                             <!-- tên phim -->
@@ -163,6 +179,8 @@
                 return false; // Dừng việc submit form
             }
         });
+
+
         document.addEventListener("DOMContentLoaded", function() {
             const seatCheckboxes = document.querySelectorAll(".seat-checkbox");
             const selectedSeatsInput = document.getElementById("selected-seats");
@@ -191,6 +209,8 @@
                 });
             });
         });
+
+
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -241,4 +261,30 @@
             }
         }
     </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let countdownTime = 600; // 10 phút = 600 giây
+        const timerElement = document.getElementById("time-remaining");
+
+        function updateTimer() {
+            const minutes = Math.floor(countdownTime / 60);
+            const seconds = countdownTime % 60;
+
+            // Cập nhật hiển thị
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            if (countdownTime <= 0) {
+                // Hết thời gian, chuyển hướng về trang chủ
+                alert("Hết thời gian! Bạn sẽ được chuyển về trang chủ.");
+                window.location.href = "{{ route('movies.index') }}";
+            } else {
+                countdownTime--;
+            }
+        }
+
+        // Cập nhật mỗi giây
+        setInterval(updateTimer, 1000);
+    });
+</script>
 @endsection

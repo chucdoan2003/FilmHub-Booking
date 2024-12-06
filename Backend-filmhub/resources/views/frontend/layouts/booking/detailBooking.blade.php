@@ -1,6 +1,6 @@
 @extends('frontend.layouts.master3')
 @section('content')
-<form action="{{route('vnpay_payment')}}" method="post" enctype="multipart/form-data" id="payment-form">
+<form action="{{route('vnpay_payment')}}" method="post" enctype="multipart/form-data" id="payment-form" onsubmit="return confirmSubmission()">
 	@csrf
 
 	<input type="hidden" name="showtime_id" value="{{ $showtime->showtime_id }}">
@@ -86,7 +86,7 @@
                                     <ul>
                                         {{-- <li><a href="#"><i class="flaticon-tickets"></i> &nbsp;M-Ticket</a></li>
                                         <li><a href="#"><i class="flaticon-tickets"></i> &nbsp;Box office Pickup</a></li> --}}
-                                        <li><button type="submit" class="btn btn-success">Proceed to Pay</button></a></li>
+                                        <li><button type="submit" class="btn btn-success" >Proceed to Pay</button></a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -172,6 +172,10 @@
             var comboName = selectedOption.text;
             document.getElementById('selectedComboDisplay').innerText = comboName;
         }
+
+        function confirmSubmission() {
+        return confirm("Bạn có chắc chắn muốn đặt vé không? Sau khi đặt, bạn sẽ không thể hoàn tiền hoặc hủy bỏ.");
+    }
     </script>
     <!-- st dtts section End -->
 </form>

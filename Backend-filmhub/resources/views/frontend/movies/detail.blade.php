@@ -102,7 +102,7 @@
                         </div>
                     </div>
                     <div class="prs_ms_trailer_slider_right_wrapper">
-                        <h2 class="mb-2">{{ $movie->title }}</h2>
+                        <h2 class="mb-2 performer">{{ $movie->title }}</h2>
                         <h3>{{ $movie->release_date }}</h3>
                         <h5 class="performer"><span>Starring -</span> {{ $movie->performer }}
                         </h5>

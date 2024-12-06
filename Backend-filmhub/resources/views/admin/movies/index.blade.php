@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Danh sách phim
+    List Movies
 @endsection
 
 @section('style-libs')
@@ -47,7 +47,6 @@
                             <th>ID</th>
                             <th>Title</th>
                             <th>Duration</th>
-                            <th>Release date</th>
                             <th>Genre</th>
                             <th>Rating</th>
                             <th>Poster</th>
@@ -60,7 +59,6 @@
                             <th>ID</th>
                             <th>Title</th>
                             <th>Duration</th>
-                            <th>Release date</th>
                             <th>Genre</th>
                             <th>Rating</th>
                             <th>Poster</th>
@@ -74,7 +72,6 @@
                                 <td>{{ $movie->movie_id }}</td>
                                 <td>{{ $movie->title }}</td>
                                 <td>{{ $movie->duration }} Phút</td>
-                                <td>{{ $movie->release_date }}</td>
                                 <td>
                                     @foreach ($movie->genres as $genre)
                                         {{ $genre->name }}@if (!$loop->last)
@@ -82,7 +79,12 @@
                                         @endif
                                     @endforeach
                                 </td>
-                                <td>{{ $movie->rating }}</td>
+                                <td>
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <i
+                                            class="fa fa-star {{ $movie->rating >= $i ? 'text-warning' : 'text-muted' }}"></i>
+                                    @endfor
+                                </td>
                                 <td><img src="{{ Storage::url($movie->poster_url) }}" style="width: 100px; height: 100px;"
                                         alt=""></td>
                                 <td>{{ $movie->status }}</td>

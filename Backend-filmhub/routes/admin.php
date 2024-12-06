@@ -73,11 +73,14 @@ Route::prefix('admin/drinks')->group(function () {
 use App\Http\Controllers\admin\MovieController;
 use App\Http\Controllers\admin\GenreController;
 use App\Http\Controllers\admin\TicketController;
+use App\Http\Controllers\admin\CommentController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('/movies', MovieController::class);
     Route::resource('/genres', GenreController::class);
     Route::resource('/tickets', TicketController::class);
+    Route::get('/comments', [CommentController::class, 'showComments'])->name('comments.index');
+    Route::delete('/comments/{id}', [CommentController::class, 'deleteComment'])->name('comments.delete');
 });
 
 Route::prefix('admin/shifts')->group(function () {
