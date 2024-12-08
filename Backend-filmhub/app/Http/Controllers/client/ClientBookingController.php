@@ -3,15 +3,17 @@
 namespace App\Http\Controllers\client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Combo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Showtime;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Seat;
-use App\Models\Genre;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Cookie;
+use App\Models\SelectedSeat;
+use App\Models\Voucher;
+
+
 class ClientBookingController extends Controller
 {
     public function index($id, Request $request)
@@ -48,14 +50,12 @@ class ClientBookingController extends Controller
             // Hiển thị toàn bộ showtimes nếu không có ngày chọn
             $selectedShowtimes = $showtimes;
         }
-        $genres = Genre::withCount('movies')->get();
 
         return view('frontend.layouts.booking.index', [
             'showtimesGroupedByDate' => $showtimesGroupedByDate,
             'selectedShowtimes' => $selectedShowtimes,
             'selectedDate' => $selectedDate,
-            'movieId' => $id,
-            'genres' => $genres
+            'movieId' => $id
         ]);
     }
 
@@ -65,9 +65,9 @@ class ClientBookingController extends Controller
 
 
         $showtime = Showtime::with([
-            'movies',
+            'movie',
             'rooms.rows.seats.types', // Tải trước hàng và ghế
-            'rooms.theaters',
+            'rooms.theater',
             'shifts'
         ])
             ->where('showtime_id', $showtime_id)
@@ -89,32 +89,41 @@ class ClientBookingController extends Controller
     public function detailBooking(Request $request, $showtime_id)
     {
         if (!Auth::check()) {
-
             return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để tiếp tục.');
         }
 
         $showtime = Showtime::findOrFail($showtime_id); // Lấy thông tin showtime
-
-        $user_id = session('user_id');
-
+        $user_id = Auth::id();
 
         // Nhận ghế đã chọn từ request
-        $selectedSeats = $request->input('selected_seats');
-        session(['selectedSeats' => $selectedSeats]);
+        $selectedSeats = $request->input('selected_seats', []); // Mặc định là mảng rỗng nếu không có dữ liệu
         $totalPrice = $request->input('total_price'); // Tổng giá tiền
+
+        // Lưu thông tin ghế vào bảng `selected_seats`
+        foreach ($selectedSeats as $seat_id) {
+            SelectedSeat::create([
+                'user_id' => $user_id,
+                'showtime_id' => $showtime_id,
+                'seat_id' => $seat_id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        // Lấy thông tin ghế đã chọn từ bảng `selected_seats`
         $seats = Seat::whereIn('seat_id', $selectedSeats)->get(); // Truy vấn các ghế từ cơ sở dữ liệu
         $seatNumbers = $seats->pluck('seat_number');
-        // dd(   $selectedSeats);
-        $genres = Genre::withCount('movies')->get();
 
-        $minutes = 10;
-        Cookie::queue('selected_seats', implode(',', $selectedSeats), $minutes);
-        Cache::put('selected_seats_' . session('user_id'), [
-            'seats' => $selectedSeats,
-            'total_price' => $totalPrice
-        ], now()->addMinutes(60));
+        // Tải danh sách combos và vouchers
+        $combos = Combo::all();
+        $vouchers = Voucher::all();
 
-        // dd($totalPrice);
+        // Kiểm tra mã giảm giá đã sử dụng
+        $usedVoucher = DB::table('vourcher_user')
+            ->where('user_id', $user_id)
+            ->pluck('vourcher_id')
+            ->first(); // Lấy mã giảm giá đầu tiên mà người dùng đã sử dụng
+
         // Truyền dữ liệu đến view
         return view('frontend.layouts.booking.detailBooking', compact(
             'showtime',
@@ -122,9 +131,9 @@ class ClientBookingController extends Controller
             'totalPrice',
             'user_id',
             'seatNumbers',
-            'genres'
+            'combos',
+            'vouchers',
+            'usedVoucher'
         ));
     }
-
-
 }
