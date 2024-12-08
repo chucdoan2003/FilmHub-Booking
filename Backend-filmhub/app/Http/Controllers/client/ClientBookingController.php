@@ -12,6 +12,7 @@ use App\Models\Seat;
 use App\Models\Genre;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
+use App\Models\SelectedSeat;
 use App\Models\Combo;
 class ClientBookingController extends Controller
 {
@@ -94,21 +95,81 @@ class ClientBookingController extends Controller
             return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để tiếp tục.');
         }
 
-        $showtime = Showtime::findOrFail($showtime_id); // Lấy thông tin showtime
+        $showtime = Showtime::find($showtime_id);
+        if ($showtime) {
+            $showtimeId = $showtime->showtime_id;
 
+        }
+
+
+        // dd( $showtimeId);
         $user_id = session('user_id');
+        // dd($user_id);
 
         $foods = DB::table('foods')->get();
         $drinks = DB::table('drinks')->get();
         $combos = DB::table('combos')->get();
 
+
+        // dd($request->input('selected_seats'));
         // Nhận ghế đã chọn từ request
         $selectedSeats = $request->input('selected_seats');
+
+        // if (!empty($selectedSeats)) {
+        //     // Lưu ghế đã chọn vào session
+        //     session(['selected_seats' => $selectedSeats]);
+        // } else {
+        //     // Nếu không có ghế nào được chọn từ request, lấy từ session
+        //     $selectedSeats = session('selected_seats', []);
+        // }
+
+        // dd(   $selectedSeats);
         // session(['selectedSeats' => $selectedSeats]);
         $totalPrice = $request->input('total_price'); // Tổng giá tiền
+
+         // if (!empty($selectedSeats)) {
+        //     $existingSeats = SelectedSeat::where('showtime_id', $showtimeId)
+        //         ->where('user_id', $user_id)
+        //         ->whereIn('seat_id', $selectedSeats)
+        //         ->exists();
+
+        //     if ($existingSeats) {
+        //         return redirect()->back()->withErrors(['error' => 'Bạn không thể chọn lại ghế mà bạn đã chọn.']);
+        //     }
+
+        //     // Nếu không có lỗi, tiếp tục với logic của bạn
+        // } else {
+        //     return redirect()->back()->with('error', 'Không có ghế nào được chọn.');
+        // }
+
+        $existingSeats = SelectedSeat::where('showtime_id', $showtimeId)
+            ->where('user_id', $user_id)
+            ->whereIn('seat_id', $selectedSeats)
+            ->exists();
+
+        if ($existingSeats) {
+            return redirect()->back()->withErrors(['error' => 'Bạn không thể chọn lại ghế mà bạn đã chọn.']);
+        }
+
+
+
+        if (!empty($selectedSeats)) {
+            foreach ($selectedSeats as $seatId) {
+                SelectedSeat::create([
+                    'user_id' => $user_id,
+                    'showtime_id' => $showtimeId,
+                    'seat_id' => $seatId,
+                ]);
+            }
+        }
+
+        $selectedSeats2 = SelectedSeat::where('user_id', $user_id)
+            ->where('showtime_id', $showtimeId)
+            ->with(['seat', 'seat.rows', 'seat.types'])
+            ->get();
         $seats = Seat::whereIn('seat_id', $selectedSeats)->get(); // Truy vấn các ghế từ cơ sở dữ liệu
         $seatNumbers = $seats->pluck('seat_number');
-        // dd(   $selectedSeats);
+
         $genres = Genre::withCount('movies')->get();
 
         // $minutes = 10;
@@ -127,7 +188,7 @@ class ClientBookingController extends Controller
         // Truyền dữ liệu đến view
         return view('frontend.layouts.booking.detailBooking', compact(
             'showtime',
-            'selectedSeats', // Truyền mảng ghế đã chọn
+            'selectedSeats2', // Truyền mảng ghế đã chọn
             'totalPrice',
             'user_id',
             'seatNumbers',

@@ -1,22 +1,13 @@
 @extends('frontend.layouts.master3')
 @section('content')
-<form action="{{route('vnpay_payment')}}" method="post" enctype="multipart/form-data" id="payment-form" onsubmit="return confirmSubmission()">
-	@csrf
+<form action="{{ route('vnpay_payment') }}" method="post" enctype="multipart/form-data">
+    @csrf
 
-	<input type="hidden" name="showtime_id" value="{{ $showtime->showtime_id }}">
-    <input type="hidden" name="user_id" value="{{$user_id}}">
+    <input type="hidden" name="showtime_id" value="{{ $showtime->showtime_id }}">
+    <input type="hidden" name="user_id" value="{{ $user_id }}">
+    <input type="hidden" name="total" value="{{ $totalPrice }}">
+    <input type="hidden" name="selected_seats" value="{{ implode(',', $selectedSeats2->pluck('seat_id')->toArray()) }}">
 
-    {{-- @php
-    // Lấy thông tin từ cache, nếu không có thì trả về mảng rỗng
-    $selectedSeats = Cache::get('selected_seats_' . session('user_id'), ['seats' => []])['seats'] ?? [];
-
-    $selectedSeats = is_array($selectedSeats) ? $selectedSeats : [];
-@endphp --}}
-{{-- @php
-    dd($selectedSeats);
-@endphp --}}
-    <input type="hidden" name="total" value="{{$totalPrice}}">
-    <input type="hidden" name="selected_seats" value="{{ implode(',', $selectedSeats) }}">
     <!-- st top header Start -->
     <div class="st_bt_top_header_wrapper float_left">
         <div class="container">
@@ -49,7 +40,15 @@
                                         <li><span class="dtts1">Ngày chiếu:</span> {{ \Carbon\Carbon::parse($showtime->datetime)->format('d/m/Y ') }}</li>
                                         <li><span class="dtts1">Ca chiếu:</span> <span class="dtts2">{{ $showtime->shifts->shift_name }}: {{ \Carbon\Carbon::parse($showtime->shifts->start_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($showtime->shifts->end_time)->format('H:i') }}</span></li>
                                         <li><span class="dtts1">Rạp chiếu:</span> <span class="dtts2">{{ $showtime->rooms->theaters->name }}</span></li>
-                                        <li><span class="dtts1">Ghế đã chọn:</span> <span class="dtts2">{{ implode(', ', $seatNumbers->toArray()) }}</span></li>
+                                        <li><span class="dtts1">Ghế đã chọn:</span>
+                                            <span class="dtts2">
+                                                @if ($selectedSeats2->isNotEmpty())
+                                                    {{ implode(', ', $selectedSeats2->pluck('seat.seat_number')->toArray()) }}
+                                                @else
+                                                    Không có ghế nào được chọn.
+                                                @endif
+                                            </span>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -60,9 +59,7 @@
                                     </div>
                                     <div class="st_cherity_img_cont float_left">
                                         <div class="box">
-                                            {{-- <label for="combo">Chọn Combo:</label> --}}
-                                            <select id="combo" name="combo_id" class="form-control"
-                                                onchange="updateTotalPrice()">
+                                            <select id="combo" name="combo_id" class="form-control" onchange="updateTotalPrice()">
                                                 <option value="">Chọn combo</option>
                                                 @foreach ($combos as $combo)
                                                     <option value="{{ $combo->id }}"
@@ -73,7 +70,6 @@
                                                     </option>
                                                 @endforeach
                                             </select>
-                                            <!-- Input ẩn để lưu food_id và drink_id -->
                                             <input type="hidden" name="food_id" id="food_id" value="">
                                             <input type="hidden" name="drink_id" id="drink_id" value="">
                                         </div>
@@ -84,9 +80,7 @@
                                 <div class="st_cherity_btn float_left">
                                     <h3>SELECT TICKET TYPE</h3>
                                     <ul>
-                                        {{-- <li><a href="#"><i class="flaticon-tickets"></i> &nbsp;M-Ticket</a></li>
-                                        <li><a href="#"><i class="flaticon-tickets"></i> &nbsp;Box office Pickup</a></li> --}}
-                                        <li><button type="submit" class="btn btn-success" >Proceed to Pay</button></a></li>
+                                        <li><button type="submit" class="btn btn-success">Proceed to Pay</button></li>
                                     </ul>
                                 </div>
                             </div>
@@ -102,10 +96,9 @@
                                 </div>
                                 <div class="st_dtts_sb_ul float_left">
                                     <ul id="selected-seats-list">
-                                        @if (count($selectedSeats) > 0)
-                                            @foreach ($selectedSeats as $seat)
-                                                <li>{{ $seat }}<br>(1 Ticket) <span>Giá:
-                                                        {{ number_format($totalPrice) }} VNĐ</span></li>
+                                        @if ($selectedSeats2->isNotEmpty())
+                                            @foreach ($selectedSeats2 as $seat)
+                                                <li>{{ $seat->seat->seat_number }}<br>(1 Ticket) <span>Giá: {{ number_format($totalPrice) }} VNĐ</span></li>
                                             @endforeach
                                         @else
                                             <li>Không có ghế nào được chọn.</li>
@@ -120,63 +113,47 @@
                                     <p>Booking Fees <span>Rs. 60.00</span></p>
                                     <p>Integrated GST (IGST) @ 18% <span>Rs. 60.00</span></p>
                                 </div>
-
-
                                 <div class="st_dtts_sb_h2 float_left">
-                                    <h3>Thành tiền: <span id="totalPriceDisplay">{{ number_format($totalPrice, 0, ',', '.') }}
-                                            VNĐ</span></h3>
+                                    <h3>Thành tiền: <span id="totalPriceDisplay">{{ number_format($totalPrice, 0, ',', '.') }} VNĐ</span></h3>
                                     <h4>Current State is <span>Kerala</span></h4>
-                                    <h5>Số tiền phải trả <span id="totalAmountDisplay">{{ number_format($totalPrice, 0, ',', '.') }}
-                                            VNĐ</span></h5>
+                                    <h5>Số tiền phải trả <span id="totalAmountDisplay">{{ number_format($totalPrice, 0, ',', '.') }} VNĐ</span></h5>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </div>
     <script>
         function updateTotalPrice() {
-            var totalPrice = {{ $totalPrice }}; // Giá hiện tại
+            var totalPrice = {{ $totalPrice }};
             var comboSelect = document.getElementById('combo');
             var selectedOption = comboSelect.options[comboSelect.selectedIndex];
-            var comboPrice = selectedOption.dataset.price ? parseFloat(selectedOption.dataset.price) : 0; // Giá combo
+            var comboPrice = selectedOption.dataset.price ? parseFloat(selectedOption.dataset.price) : 0;
 
-            totalPrice += comboPrice; // Cộng giá combo vào tổng
+            totalPrice += comboPrice;
 
-            // Cập nhật giá thành hiển thị
             document.getElementById('totalPriceDisplay').innerText = new Intl.NumberFormat('vi-VN', {
                 style: 'currency',
                 currency: 'VND'
             }).format(totalPrice) + ' VNĐ';
 
-            // Cập nhật số tiền phải trả hiển thị
             document.getElementById('totalAmountDisplay').innerText = new Intl.NumberFormat('vi-VN', {
                 style: 'currency',
                 currency: 'VND'
             }).format(totalPrice) + ' VNĐ';
 
-
-            // Cập nhật giá tổng vào input
             document.querySelector('input[name="total"]').value = totalPrice;
-            // Lưu food_id và drink_id vào các input ẩn
             var foodId = selectedOption.dataset.foodId;
             var drinkId = selectedOption.dataset.drinkId;
 
             document.querySelector('input[name="food_id"]').value = foodId;
             document.querySelector('input[name="drink_id"]').value = drinkId;
 
-            // Cập nhật thông tin combo đã chọn
             var comboName = selectedOption.text;
             document.getElementById('selectedComboDisplay').innerText = comboName;
         }
-
-        function confirmSubmission() {
-        return confirm("Bạn có chắc chắn muốn đặt vé không? Sau khi đặt, bạn sẽ không thể hoàn tiền hoặc hủy bỏ.");
-    }
     </script>
     <!-- st dtts section End -->
 </form>

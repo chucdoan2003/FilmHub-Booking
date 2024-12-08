@@ -38,9 +38,15 @@
     </style>
     <!-- color picker start -->
     <!-- st top header Start -->
-    <div class="timer">
+    {{-- <div class="timer">
         Thời gian còn lại: <span id="time-remaining">10:00</span>
-    </div>
+    </div> --}}
+
+    @if ($errors->any())
+    <script>
+        alert("{{ $errors->first() }}");
+    </script>
+@endif
     <form action="{{ route('detailBooking', $showtime->showtime_id) }}" method="post" enctype="multipart/form-data">
         @csrf
         <!-- Thông tin ghế đã chọn -->
@@ -142,10 +148,8 @@
                                             <span>{{ number_format($seatPrice, 0, ',', '.') }} VNĐ</span>
                                         @endif
 
-                                        <input type="checkbox" id="c{{ $seat->seat_id }}" name="selected_seats[]"
-                                            value="{{ $seat->seat_id }}" class="seat-checkbox"
-                                            data-price="{{ $seatPrice }}"
-                                            @if ($isBooked) disabled @endif  style="background-color: {{ $isBooked ? 'red' : 'none' }} !important;">
+                                        <input type="checkbox" id="c{{ $seat->seat_id }}" name="selected_seats[]" value="{{ $seat->seat_id }}"
+                                        class="seat-checkbox" data-price="{{ $seatPrice }}" @if ($isBooked) disabled @endif>
                                         <label for="c{{ $seat->seat_id }}" class="seat-label"
                                             data-seat-number="{{ $seat->seat_number }}"
                                             style="background-color: {{ $isBooked ? 'red' : 'none' }} !important;">
@@ -178,37 +182,48 @@
                 // window.history.back(); // Điều này sẽ quay lại trang trước trong trình duyệt
                 return false; // Dừng việc submit form
             }
+
+            const isConfirmed = confirm(
+            "Sau khi chọn ghế, nếu không thanh toán sau 3 phút, ghế bạn đã chọn sẽ tự động bị bỏ . Bạn có chắc chắn muốn tiếp tục?"
+        );
+
+        if (!isConfirmed) {
+            // Người dùng hủy thanh toán
+            event.preventDefault();
+            return false; // Ngăn form được gửi đi
+        }
         });
+
+
 
 
         document.addEventListener("DOMContentLoaded", function() {
-            const seatCheckboxes = document.querySelectorAll(".seat-checkbox");
-            const selectedSeatsInput = document.getElementById("selected-seats");
-            const totalPriceInput = document.getElementById("total-price");
+    const seatCheckboxes = document.querySelectorAll(".seat-checkbox");
+    const selectedSeatsInput = document.getElementById("selected-seats");
+    const totalPriceInput = document.getElementById("total-price");
 
-            seatCheckboxes.forEach(checkbox => {
-                checkbox.addEventListener("change", function() {
-                    let totalPrice = 0; // Reset totalPrice mỗi lần thay đổi checkbox
-                    const selectedSeats = [];
+    seatCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener("change", function() {
+            let totalPrice = 0; // Reset totalPrice mỗi lần thay đổi checkbox
+            const selectedSeats = [];
 
-                    // Lặp qua tất cả các checkbox ghế
-                    seatCheckboxes.forEach(cb => {
-                        if (cb.checked) {
-                            selectedSeats.push(cb.value); // Lưu các ghế đã chọn
+            // Lặp qua tất cả các checkbox ghế
+            seatCheckboxes.forEach(cb => {
+                if (cb.checked) {
+                    selectedSeats.push(cb.value); // Lưu các ghế đã chọn
 
-                            const price = parseFloat(cb.getAttribute("data-price"));
-                            if (!isNaN(price)) {
-                                totalPrice += price; // Cộng giá ghế vào tổng tiền
-                            }
-                        }
-                    });
-
-                    selectedSeatsInput.value = selectedSeats.join(
-                        ","); // Gửi các ghế đã chọn dưới dạng chuỗi
-                    totalPriceInput.value = totalPrice.toFixed(0); // Đảm bảo tổng tiền là số nguyên
-                });
+                    const price = parseFloat(cb.getAttribute("data-price"));
+                    if (!isNaN(price)) {
+                        totalPrice += price; // Cộng giá ghế vào tổng tiền
+                    }
+                }
             });
+
+            selectedSeatsInput.value = selectedSeats.join(","); // Cập nhật giá trị cho input hidden
+            totalPriceInput.value = totalPrice.toFixed(0); // Đảm bảo tổng tiền là số nguyên
         });
+    });
+});
 
 
     </script>
@@ -262,7 +277,7 @@
         }
     </script>
 
-<script>
+{{-- <script>
     document.addEventListener("DOMContentLoaded", function () {
         let countdownTime = 600; // 10 phút = 600 giây
         const timerElement = document.getElementById("time-remaining");
@@ -286,5 +301,5 @@
         // Cập nhật mỗi giây
         setInterval(updateTimer, 1000);
     });
-</script>
+</script> --}}
 @endsection

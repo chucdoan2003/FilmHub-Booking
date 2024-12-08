@@ -45,7 +45,9 @@ class AuthController extends Controller
 
     if (Auth::attempt($credentials)) {
         // Lấy thông tin người dùng sau khi đăng nhập thành công
-        $user = Auth::user();
+        $isLogin = true;
+            $user = Auth::user();
+            session(['user_id' => $user->user_id]);
 
         // Kiểm tra `status` của người dùng
         if ($user->status === 'admin' || $user->status === 'manager') {

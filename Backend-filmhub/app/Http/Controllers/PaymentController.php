@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Showtime;
 use App\Models\Genre;
+use App\Models\SelectedSeat;
 class PaymentController extends Controller
 {
     public function vnpay_payment(Request $request)
@@ -28,6 +29,19 @@ class PaymentController extends Controller
             'combo_id' => 'nullable|integer',
         ]);
         // dd($data['showtime_id']);
+
+        $userId = $data['user_id'];
+
+        // Kiểm tra xem người dùng có vé nào chưa thanh toán không (status = 'pending')
+        $pendingTicket = \DB::table('tickets')
+            ->where('user_id', $userId)
+            ->where('status', 'pending')
+            ->first();
+
+        // Nếu có vé chưa thanh toán, trả về thông báo yêu cầu thanh toán vé cũ trước
+        if ($pendingTicket) {
+            return redirect()->route('movies.index')->with('error', 'Bạn cần hoàn thành thanh toán vé chưa hoàn thành trước khi đặt vé mới.');
+        }
 
 
         $showtimeId = $data['showtime_id'];
@@ -288,41 +302,46 @@ class PaymentController extends Controller
         }
     }
     public function confirmBooking(Request $request)
-{
-    // Lấy thông tin từ session
-    $ticketId = $request->session()->get('ticket_id');
-    $userId = session('user_id');
-    $genres = Genre::withCount('movies')->get();
-    // Kiểm tra dữ liệu
-    if (!$ticketId || !$userId) {
-        return redirect()->route('movies.index')->with('error', 'Không tìm thấy thông tin xác nhận.');
+    {
+        // Lấy thông tin từ session
+        $ticketId = $request->session()->get('ticket_id');
+        $userId = session('user_id');
+        $genres = Genre::withCount('movies')->get();
+        // Kiểm tra dữ liệu
+        if (!$ticketId || !$userId) {
+            return redirect()->route('movies.index')->with('error', 'Không tìm thấy thông tin xác nhận.');
+        }
+
+        // Lấy thông tin vé
+        $ticket = Ticket::with('ticketsSeats.seat')->where('ticket_id', $ticketId)->first();
+
+        if (!$ticket) {
+            return redirect()->route('movies.index')->with('error', 'Không tìm thấy vé.');
+        }
+
+        $showtimeId = $ticket->showtime_id; // Giả sử bạn đã lưu showtime_id trong ticket
+    SelectedSeat::where('user_id', $userId)
+        ->where('showtime_id', $showtimeId)
+        ->delete();
+
+        // Lấy thông tin suất chiếu và người dùng
+        $showtime = Showtime::with('movie')->find($ticket->showtime_id);
+        $user = User::find($userId);
+
+        if (!$showtime || !$user) {
+            return redirect()->route('movies.index')->with('error', 'Dữ liệu không đầy đủ để xác nhận.');
+        }
+
+        // Trả về view xác nhận với dữ liệu cần thiết
+        return view('frontend.layouts.booking.confirmBooking', [
+            'ticket' => $ticket,
+            'showtime' => $showtime,
+            'user' => $user,
+            'movie' => $showtime->movie,
+            'theater' => $showtime->theater,
+            'genres' => $genres
+        ]);
     }
-
-    // Lấy thông tin vé
-    $ticket = Ticket::with('ticketsSeats.seat')->where('ticket_id', $ticketId)->first();
-
-    if (!$ticket) {
-        return redirect()->route('movies.index')->with('error', 'Không tìm thấy vé.');
-    }
-
-    // Lấy thông tin suất chiếu và người dùng
-    $showtime = Showtime::with('movie')->find($ticket->showtime_id);
-    $user = User::find($userId);
-
-    if (!$showtime || !$user) {
-        return redirect()->route('movies.index')->with('error', 'Dữ liệu không đầy đủ để xác nhận.');
-    }
-
-    // Trả về view xác nhận với dữ liệu cần thiết
-    return view('frontend.layouts.booking.confirmBooking', [
-        'ticket' => $ticket,
-        'showtime' => $showtime,
-        'user' => $user,
-        'movie' => $showtime->movie,
-        'theater' => $showtime->theater,
-         'genres' => $genres
-    ]);
-}
 
 
 }
