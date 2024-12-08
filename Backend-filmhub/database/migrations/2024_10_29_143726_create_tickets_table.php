@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('food_id')->nullable();
             $table->unsignedBigInteger('drink_id')->nullable();
             $table->unsignedBigInteger('combo_id')->nullable();
-            $table->string('qr_code')->nullable(); // Lưu đường dẫn QR code
+
             // Indexes
 
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');

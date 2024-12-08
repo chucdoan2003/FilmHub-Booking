@@ -47,7 +47,7 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Type</th>
-                                <th>Image</th>
+                                <th>Theater</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -59,9 +59,16 @@
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->email}}</td>
                                         <td>{{ $item->status }}</td>
-                                        <td><img src="" alt=""></td>
+                                        <td>
+                                            @if ($item->theater)
+                                                {{ $item->theater->name }}
+                                            @else
+                                                Không có theater
+                                            @endif
+                                        </td>
                                         <td>
                                             <a href="{{ route('users.edit', $item->user_id) }}"><button class="btn-warning my-2">Edit</button></a>
+
 
                                             <form action="{{ route('users.destroy', $item->user_id) }}" method="POST">
                                                 @csrf

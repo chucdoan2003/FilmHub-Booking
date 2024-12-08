@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use App\Models\Theater;
 
 class UserController extends Controller
 {
@@ -16,15 +17,14 @@ class UserController extends Controller
     public function index()
     {
         try {
-            $users= User::query()->latest()->paginate(5);
+            $users = User::with('theater')->latest()->paginate(5);
             return view("admin.users.list", compact('users'));
         } catch (\Throwable $th) {
-            Log::error(__CLASS__ ."@".__FUNCTION__,[
-                "line"=>$th->getLine(),
-                "message"=>$th->getMessage()
-            ]  );
+            Log::error(__CLASS__ ."@".__FUNCTION__, [
+                "line" => $th->getLine(),
+                "message" => $th->getMessage()
+            ]);
             return view("errors.404");
-
         }
 
 
@@ -69,39 +69,46 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        $user = User::query()
-            ->where("user_id", $id)
-            ->select("user_id","name", "email","password", "status")
-            ->first()
-            ;
-        return view('admin.users.edit',compact('user') );
+        $user = User::query()->where("user_id", $id)->first();
+
+        // Lấy tất cả các theater để hiển thị trong select box
+        $theaters = Theater::all();
+
+        return view('admin.users.edit', compact('user', 'theaters'));
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
-        try {
-            $validate= $request->validate([
-                "name"=>"required",
-                "email"=>"required|email",
-                ]
-            );
-            $user = User::query()->where('user_id', $id)->update([
-                "name"=>$request->name,
-                "email"=>$request->email,
+{
+    // Xác thực dữ liệu đầu vào
+    $request->validate([
+        "name" => "required",
+        "email" => "required|email",
+        "theater_id" => "nullable|exists:theaters,theater_id", // Kiểm tra theater_id hợp lệ
+    ]);
+    // dd($request);
 
-            ]);
-           return redirect()->route('users.index');
-        } catch (\Throwable $th) {
-            Log::error(__CLASS__ . "@". __FUNCTION__,[
-                "line"=>$th->getLine(),
-                "message"=>$th->getMessage()
-            ]);
-            return view("errors.404");
-        }
+    // Cập nhật thông tin người dùng
+    $user = User::query()->where('user_id', $id)->first();
+
+    if ($request->theater_id) {
+        $user->update([
+            "status" => 'manager', // Đổi status thành 'manager' nếu có theater_id
+        ]);
     }
+
+    // Cập nhật thông tin người dùng
+    $user->update([
+        "name" => $request->name,
+        "email" => $request->email,
+        "theater_id" => $request->theater_id,  // Cập nhật theater_id
+        "status" => $request->theater_id ? 'manager' : $user->status,
+    ]);
+
+    return redirect()->route('users.index');
+}
 
     /**
      * Remove the specified resource from storage.

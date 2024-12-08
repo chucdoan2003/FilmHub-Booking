@@ -30,7 +30,9 @@ class User extends Authenticatable
         'password',
         'phone_number',
         'role',
-        'member_point'
+        'member_point',
+        'theater_id',
+        'status'
     ];
 
     /**
@@ -66,5 +68,10 @@ class User extends Authenticatable
     public function comments()
     {
         return $this->hasMany(Comment::class, 'user_id');
+    }
+
+    public function theater()
+    {
+        return $this->belongsTo(Theater::class, 'theater_id', 'theater_id');
     }
 }
