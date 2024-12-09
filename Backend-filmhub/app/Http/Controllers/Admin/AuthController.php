@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -26,36 +27,69 @@ class AuthController extends Controller
         return view("frontend.auth.forgotPassword");
     }
     public function login(Request $request){
+        $validator= $request->validate(
+            [
+            "email"=>"required|email",
+            "password"=>"required"
+            ]
+        );
         $credentials = [
             "email"=>$request->email,
             "password"=>$request->password
         ];
+        $isLogin=  false;
 
     if (Auth::attempt($credentials)) {
         // Đăng nhập thành công và Laravel tự động tạo session
-        $user = Auth::user();
-        return view("frontend.auth.login", compact('user'));
+        $isLogin = true;
+        
+        
+        return view("frontend.auth.login", compact('isLogin'));
+    }else{
+        $isLogin=  false;
+        return view("frontend.auth.login", compact('isLogin'));
     }
     }
-    public function register(StoreUserRequest $request){
+    public function register(Request $request){
         // Thêm người dùng vào cơ sở dữ liệu
-        try {
+        // try {
+            $validator= $request->validate(
+                [
+                "email"=>"required|email",
+                "password"=>["required", 
+                "string", 
+                "min:8",  // Tối thiểu 8 ký tự
+                "max:20", // Tối đa 20 ký tự
+                "regex:/[a-z]/", // Ít nhất một ký tự thường
+                "regex:/[A-Z]/", // Ít nhất một ký tự in hoa
+                "regex:/[0-9]/", // Ít nhất một chữ số
+                "regex:/[@$!%*?&]/", // Ít nhất một ký tự đặc biệt],
+            
+            ],
+                "password_confirmation"=>"required|same:password"
+                ]
+            );
+           
             
             $user = User::query()->create($request->all());
             return view('frontend.auth.register', compact('user'));
-        } catch (\Throwable $th) {
-            Log::error(__CLASS__ . "@". __FUNCTION__,[
-                "line"=>$th->getLine(),
-                "message"=>$th->getMessage()
-            ]);
-            return response()->json([
-                    "message"=>"Add User is fails",
-                    "RC"=>-1
-                ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }   
+        // } catch (\Throwable $th) {
+        //     Log::error(__CLASS__ . "@". __FUNCTION__,[
+        //         "line"=>$th->getLine(),
+        //         "message"=>$th->getMessage()
+        //     ]);
+        //     return response()->json([
+        //             "message"=>"Add User is fails",
+        //             "RC"=>-1
+        //         ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        // }   
     }
-    public function logout(){
+    public function logout(Request $request){
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        Cookie::queue(Cookie::forget('remember_web'));
+        session()->flush(); 
         return redirect()->route('login');
     }
     public function forgotPassword(Request $request){
@@ -74,13 +108,28 @@ class AuthController extends Controller
         return view('frontend.auth.changePassword', compact('email'));
     }
     public function changePassword(Request $request){
+        $validator= $request->validate(
+            [
+            "password"=>["required", 
+                "string", 
+                "min:8",  // Tối thiểu 8 ký tự
+                "max:20", // Tối đa 20 ký tự
+                "regex:/[a-z]/", // Ít nhất một ký tự thường
+                "regex:/[A-Z]/", // Ít nhất một ký tự in hoa
+                "regex:/[0-9]/", // Ít nhất một chữ số
+                "regex:/[@$!%*?&]/", // Ít nhất một ký tự đặc biệt],
+            
+            ],
+            "password_confirmation"=>"required|same:password"
+            ]
+        );
+
+        
         if($request->password == $request->password_confirmation){
             $user= DB::table("users")
             ->where('email',$request->email)
             ->update(['password'=>Hash::make($request->password)]);
-            return response()->json([
-                'message' => 'Password changed successfully',
-            ]);
+            return view('frontend.auth.changePassword', compact('user'));
         } 
     }
 }

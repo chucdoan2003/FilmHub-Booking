@@ -49,7 +49,7 @@
                         <!-- Card Header - Dropdown -->
                         <div
                             class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-primary">Movie</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Date</h6>
                         </div>
                     
                         <!-- Card Body -->
@@ -63,6 +63,27 @@
                         </div>
 
                 </div>
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div
+                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Theaters</h6>
+                    </div>
+                
+                    <!-- Card Body -->
+                    
+                    <div class="card-body">
+                        <select name="thearter" id="" disabled>
+                            @foreach ($thearters as $item)
+                                <option value="{{$item->id}}"
+                                     @if($item->id == $thearter)
+                                        @selected(true)
+                                    @endif>{{$item->name}}</option>
+                            @endforeach
+                        </select>       
+                    </div>
+
+                </div> 
 
                 <div class="card shadow mb-4">
                     <!-- Card Header - Dropdown -->
@@ -124,10 +145,10 @@
 <script>
   document.getElementById('myForm').addEventListener('submit', function() {
     // const select1 = document.querySelector('select[name="movie"]');
-    // const select2 = document.querySelector('select[name="room"]');
+    const select2 = document.querySelector('select[name="thearter"]');
     const select3 = document.querySelector('input[name="datetime"]');
     // select1.disabled = false;  // Kích hoạt lại trước khi submit
-    // select2.disabled = false;  // Kích hoạt lại trước khi submit
+    select2.disabled = false;  // Kích hoạt lại trước khi submit
     select3.disabled = false;  // Kích hoạt lại trước khi submit
   });
 </script>

@@ -44,9 +44,11 @@
                         <thead>
                             <tr>
                                 <th>Id</th>
+                                <th>Thearter</th>
                                 <th>Movie</th>
                                 <th>Room</th>
                                 <th>Shift</th>
+                                <th>Price</th>
                                 <th>Start time</th>
                                 <th>End time</th>
                                 <th>Date</th>
@@ -57,10 +59,13 @@
                             @foreach ($showtimes as $item)
                                 <tr>
                                     <td>{{ $item->id  }}</td>
+                                    <td>{{ $item->thearter_name }}</td>
                                     <td>{{ $item->movie_name }}</td>
                                     <td>{{ $item->room_name }}</td>
                                     <td>{{ $item->shift_name }}</td>
+                                    <td>{{ $item->price }}</td>
                                     <td>{{ $item->start_time }}</td>
+
                                     <td>{{ $item->end_time}}</td>
                                     <td>{{ $item->datetime }}</td>
                                     <td>

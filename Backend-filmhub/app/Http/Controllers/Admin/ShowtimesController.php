@@ -17,21 +17,29 @@ class ShowtimesController extends Controller
         ->join('movies', 'showtimes.movie_id', '=', 'movies.id') 
         ->join('rooms', 'showtimes.room_id', '=', 'rooms.id')   // Join với bảng rooms
         ->join('shifts', 'showtimes.shift_id', '=', 'shifts.id') // Join với bảng shifts
-        ->select('showtimes.*', 'movies.name as movie_name','rooms.name as room_name', 'shifts.name as shift_name', 'shifts.start_time', 'shifts.end_time')
+        ->join('thearters', 'showtimes.shift_id', '=', 'thearters.id')
+        ->select('showtimes.*', 'movies.name as movie_name','rooms.name as room_name', 'shifts.name as shift_name','thearters.name as thearter_name', 'shifts.start_time', 'shifts.end_time')
         ->paginate(10);
         return view('admin.showtimes.list', compact('showtimes'));
     }
     function create(){
-        return view('admin.showtimes.add');
+        $thearters = DB::table('thearters')->get();
+        return view('admin.showtimes.add', compact('thearters'));
+    }
+    public function create3(){
+        return view("admin.showtimes.add3");
     }
     function create2(Request $request){
         $datetime= $request->datetime;
+        $thearter= $request->thearter;
+        $thearters = DB::table('thearters')->get();
         $movies = DB::table('movies')->get();
         $rooms = DB::table('rooms')->get();
         $shifts = DB::table('shifts')->get();
         $showtimes=DB::table('showtimes')
         ->select('room_id', DB::raw('COUNT(*) as total_showtimes'))
         ->whereDate('datetime', $datetime)
+        ->where("thearter_id", $thearter)
         ->groupBy('room_id')
         ->get();
         $room_over=[];
@@ -40,15 +48,18 @@ class ShowtimesController extends Controller
                 $room_over[]= $item->room_id;
             }
         }
-        return view('admin.showtimes.add2', compact('movies', 'rooms', 'datetime', 'room_over'));
+        return view('admin.showtimes.add2', compact('movies', 'rooms', 'datetime', 'room_over', 'thearter', 'thearters'));
 
     }
     function store(Request $request){
         $movie_id= $request->movie;
         $room_id = $request->room;
         $datetime= $request->datetime;
+        $thearter = $request->thearter;
+        $thearters = DB::table("thearters")->get();
         $showtimes=  DB::table('showtimes')
         ->where('datetime', $datetime)
+        ->where('thearter_id', $thearter)
         ->where('room_id', $room_id)
         ->get();
        $shiftInroomBook = [];
@@ -59,24 +70,28 @@ class ShowtimesController extends Controller
         $rooms = DB::table('rooms')->get();
         $shifts = DB::table('shifts')->get();
 
-        return view('admin.showtimes.addshift', compact('movies', 'rooms', 'shifts', 'movie_id', 'room_id', 'datetime', 'shiftInroomBook' ));
+        return view('admin.showtimes.addshift', compact('movies', 'rooms', 'shifts', 'movie_id', 'room_id', 'datetime', 'shiftInroomBook', 'thearters', 'thearter' ));
     }
     function addshowtime(Request $request){
         $shift_id = $request->shift;
         $movie_id= $request->movie;
         $room_id = $request->room;
         $datetime =$request->datetime;
+        $thearter = $request->thearter;
+        $price = $request->price;
         DB::table('showtimes')->insert([
+            "thearter_id" => $thearter,
             "movie_id"=>$movie_id,
             "room_id"=>$room_id,
             "shift_id"=>$shift_id,
-            'datetime'=> $datetime
+            'datetime'=> $datetime,
+            'price'=>$price,
         ]);
         
 
        
         
-        return redirect()->route('showtimes.create');
+        return redirect()->route('showtimes.index');
         
 
         

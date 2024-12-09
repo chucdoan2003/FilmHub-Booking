@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ShowtimesController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VourcherAdmminController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Frontend\UserInforController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,7 @@ Route::get('admin', function () {
 Route::prefix("admin")->group(function(){
     Route::resource("users", UserController::class);
     Route::get('showtime/list', [ShowtimesController::class, "list"])->name('showtimes.index');
+    // Route::get('showtime/create3', [ShowtimesController::class, "create3"])->name('showtimes.create');// hiển thị giao diện thearter
     Route::get('showtime/create', [ShowtimesController::class, "create"])->name('showtimes.create');// hiển thị giao diện thêm ngày
     Route::post('showtime/create2', [ShowtimesController::class, "create2"])->name('showtimes.store1'); // hiển thị movie và room trong theo ngày valid room nếu full ca
     Route::post('showtime/store', [ShowtimesController::class, "store"])->name('showtimes.store2');// hiển thị ca chiếu theo phòng, valid ca chiếu chọn r thì không chọn được nx
@@ -53,5 +55,10 @@ Route::post("auth/logout", [AuthController::class, "logout"])->name('logout');
 Route::post('auth/changePassword', [AuthController::class, 'changePassword' ])
 ->name('changePassword');
 
+Route::get('user/history', [UserInforController::class, 'history'])->name('ticketHistory');
+Route::get('userOverview', [UserInforController::class, 'overview'])->name('userOverview');
+Route::get('user/edit', [UserInforController::class, 'edit'])->name('editUserInfor');
+
+Route::post('user/update', [UserInforController::class, 'update'])->name('updateUserInfor');
 
 

@@ -56,11 +56,11 @@ Route::post('auth/register', [AuthController::class, 'register' ]);
 Route::post('auth/fogotPassword', [AuthController::class, 'fogotPassword' ]);
 
 //lấy view thay đổi mật khẩu
-Route::get('auth/changePassword1/{email}', [AuthController::class, 'getchangePassword' ])
-->name('getChangePassword');
+// Route::get('auth/changePassword1/{email}', [AuthController::class, 'getchangePassword' ])
+// ->name('getChangePassword');
 //Thay mật khẩu mới
-Route::post('auth/changePassword', [AuthController::class, 'changePassword' ])
-->name('changePassword');
+// Route::post('auth/changePassword', [AuthController::class, 'changePassword' ])
+// ->name('changePassword');
 
 Route::get('showtime/{id}', [ApiShowtimes::class, 'showtime' ])->name('showtime');
 

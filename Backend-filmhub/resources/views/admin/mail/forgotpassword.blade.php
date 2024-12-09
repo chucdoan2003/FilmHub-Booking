@@ -8,6 +8,6 @@
 </head>
 <body>
     <h3>Xin chào, Bạn mới yêu cầu đổi mật khẩu mới</h3>
-    <p>Bấm vào link này để thay đổi mật khẩu  <a href="{{route('getChangePassword', $email)}}"> change password</a></p>
+    <p>Bấm vào link này để thay đổi mật khẩu <a href="{{route('getChangePassword', $email)}}"> change password</a></p>
 </body>
 </html>

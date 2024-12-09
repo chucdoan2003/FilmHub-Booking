@@ -27,11 +27,11 @@
         <form action="{{ route('showtimes.addshowtime') }}" method="POST" id="myForm">
             @csrf
             @method("POST")
-<div class="card shadow mb-4">
+                    <div class="card shadow mb-4">
                         <!-- Card Header - Dropdown -->
                         <div
                             class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-primary">Movie</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Date</h6>
                         </div>
                     
                         <!-- Card Body -->
@@ -50,6 +50,27 @@
                         </div>
 
                 </div>
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div
+                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Theaters</h6>
+                    </div>
+                
+                    <!-- Card Body -->
+                    
+                    <div class="card-body">
+                        <select name="thearter" id="" disabled>
+                            @foreach ($thearters as $item)
+                                <option value="{{$item->id}}"
+                                     @if($item->id == $thearter)
+                                        @selected(true)
+                                    @endif>{{$item->name}}</option>
+                            @endforeach
+                        </select>       
+                    </div>
+
+                </div> 
 
                 <div class="card shadow mb-4">
                     <!-- Card Header - Dropdown -->
@@ -86,7 +107,7 @@
                     <!-- Card Header - Dropdown -->
                     <div
                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Phòng</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Room</h6>
                     </div>
                 
                     <!-- Card Body -->
@@ -129,6 +150,21 @@
                     </div>
 
                 </div>
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div
+                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Price</h6>
+                    </div>
+                
+                    <!-- Card Body -->
+                    
+                    <div class="card-body">
+                        <input type="text" class="form-control form-control-user form-radius" id="exampleLastName"
+                        placeholder="100.000" name="price">
+                    </div>
+
+                </div>
                 
             <button class="btn btn-primary btn-user btn-block">
                         Submit
@@ -140,9 +176,11 @@
     const select1 = document.querySelector('select[name="movie"]');
     const select2 = document.querySelector('select[name="room"]');
     const select3 = document.querySelector('input[name="datetime"]');
+    const select4 = document.querySelector('select[name="thearter"]');
     select1.disabled = false;  // Kích hoạt lại trước khi submit
     select2.disabled = false;  // Kích hoạt lại trước khi submit
     select3.disabled = false;  // Kích hoạt lại trước khi submit
+    select4.disabled = false;  // Kích hoạt lại trước khi submit
   });
 </script>
 @endsection

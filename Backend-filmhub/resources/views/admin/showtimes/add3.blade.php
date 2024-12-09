@@ -49,43 +49,19 @@
                         <!-- Card Header - Dropdown -->
                         <div
                             class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-primary">Date</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Theaters</h6>
                         </div>
                     
                         <!-- Card Body -->
                         
                         <div class="card-body">
-                            <input type="date" name="datetime">
-                            
-                                
-                                
-                                
-                                
-
-                    
-
-                            
+                            <select name="thearters" id="" >
+                                <option value="">thearter 1</option>
+                                <option value="">thearter 2</option>
+                            </select>       
                         </div>
 
-                </div>     
-                <div class="card shadow mb-4">
-                    <!-- Card Header - Dropdown -->
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Theaters</h6>
-                    </div>
-                
-                    <!-- Card Body -->
-                    
-                    <div class="card-body">
-                        <select name="thearter" id="" >
-                            @foreach ($thearters as $item)
-                                <option value="{{$item->id}}">{{$item->name}}</option>
-                            @endforeach
-                        </select>       
-                    </div>
-
-                </div>         
+                </div>          
             <button class="btn btn-primary btn-user btn-block">
                         Continue...
             </button>

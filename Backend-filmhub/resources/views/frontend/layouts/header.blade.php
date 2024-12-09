@@ -4,7 +4,7 @@
     </div>
 </div>
 <!-- color picker start -->
-<div id="style-switcher">
+{{-- <div id="style-switcher">
     <div>
         <h3>Choose Color</h3>
         <ul class="colors">
@@ -29,7 +29,7 @@
         </ul>
     </div>
     <div class="bottom"> <a href="#" class="settings"><i class="fa fa-gear"></i></a> </div>
-</div>
+</div> --}}
 <!-- color picker end -->
 <!-- prs navigation Start -->
 <div class="prs_navigation_main_wrapper">
@@ -339,10 +339,11 @@
                 <div class="prs_animate_btn1">
                     <ul>
                         @if (Auth::check())
-                        <form action="{{route("logout")}}" method="POST">
+                        <form action="{{route("logout")}}" method="POST" id="logout-form">
                             @csrf
                             @method("POST")
-                                <li><a href="{{route('getLogin')}}" class="button button--tamaya" type="submit" data-text="Logout" ><span>Log out</span></a>
+                                <li>
+                                    <a href="" class="button button--tamaya" onclick="document.getElementById('logout-form').submit(); return false;" type="submit" data-text="Logout" ><span>Log out</span></a>
                                 </li>
                             {{-- <button type="submit" style="margin: 6px 0 0 0 ; padding: 8px 12px;background-color: beige; border:none; border-radius: 5px">Logout</button> --}}
                         </form>
@@ -378,7 +379,7 @@
             <div class="mobile-nav-box">
                 <div class="mobile-logo">
                     <a href="index.html" class="mobile-main-logo">
-                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="46.996px"
                             height="40px" viewBox="0 0 46.996 40" enable-background="new 0 0 46.996 40"
                             xml:space="preserve">
@@ -401,23 +402,16 @@
         C37.652,36.448,45.953,40,45.953,40l1.043-8.658C41.41,30.454,38.125,32.244,35.314,34.585z" />
                                 </g>
                             </g>
-                        </svg><span>Movie Pro</span>
+                        </svg><span>User Information</span>
                     </a>
                     <a href="#" class="manu-close"><i class="fa fa-times"></i></a>
                 </div>
                 <ul class="mobile-list-nav">
-                    <li><a href="about.html">OVERVIEW</a>
+                    <li><a href="{{route('userOverview')}}">OVERVIEW</a>
                     </li>
-                    <li><a href="movie_single.html">MOVIE</a>
+                    <li><a href="{{route("ticketHistory")}}">TICHKETS BOOKED</a>
                     </li>
-                    <li><a href="event_single.html">EVENT</a>
-                    </li>
-                    <li><a href="gallery.html">GALLERY</a>
-                    </li>
-                    <li><a href="blog_single.html">BLOG</a>
-                    </li>
-                    <li><a href="contact.html">CONTACT</a>
-                    </li>
+                    
                 </ul>
                 <div class="product-heading prs_slidebar_searchbar_wrapper">
                     <div class="con">
