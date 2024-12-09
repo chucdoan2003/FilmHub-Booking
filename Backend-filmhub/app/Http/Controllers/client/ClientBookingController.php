@@ -114,6 +114,7 @@ class ClientBookingController extends Controller
         // dd($request->input('selected_seats'));
         // Nhận ghế đã chọn từ request
         $selectedSeats = $request->input('selected_seats');
+        $existingSelectedSeats = session('selected_seats', []);
 
         // if (!empty($selectedSeats)) {
         //     // Lưu ghế đã chọn vào session
@@ -127,7 +128,10 @@ class ClientBookingController extends Controller
         // session(['selectedSeats' => $selectedSeats]);
         $totalPrice = $request->input('total_price'); // Tổng giá tiền
 
-         // if (!empty($selectedSeats)) {
+
+
+
+        // if (!empty($selectedSeats)) {
         //     $existingSeats = SelectedSeat::where('showtime_id', $showtimeId)
         //         ->where('user_id', $user_id)
         //         ->whereIn('seat_id', $selectedSeats)
@@ -142,34 +146,55 @@ class ClientBookingController extends Controller
         //     return redirect()->back()->with('error', 'Không có ghế nào được chọn.');
         // }
 
-        $existingSeats = SelectedSeat::where('showtime_id', $showtimeId)
-            ->where('user_id', $user_id)
-            ->whereIn('seat_id', $selectedSeats)
-            ->exists();
-
-        if ($existingSeats) {
-            return redirect()->back()->withErrors(['error' => 'Bạn không thể chọn lại ghế mà bạn đã chọn.']);
-        }
-
-
-
         if (!empty($selectedSeats)) {
             foreach ($selectedSeats as $seatId) {
-                SelectedSeat::create([
-                    'user_id' => $user_id,
-                    'showtime_id' => $showtimeId,
-                    'seat_id' => $seatId,
-                ]);
+                $existingSeat = SelectedSeat::where('showtime_id', $showtime_id)
+                    ->where('user_id', $user_id)
+                    ->where('seat_id', $seatId)
+                    ->first();
+
+                // Nếu ghế đã được chọn cho showtime này, trả về thông báo lỗi
+                if ($existingSeat) {
+                    return redirect()->route('detailBooking', $showtimeId)->with('error', 'Ghế này đã được chọn , vui lòng chọn ghế khác');
+                }
+
+                // Thêm ghế vào cơ sở dữ liệu nếu chưa chọn
+                try {
+                    SelectedSeat::create([
+                        'user_id' => $user_id,
+                        'showtime_id' => $showtime_id,
+                        'seat_id' => $seatId,
+                        'totalPrice' =>  $totalPrice
+                    ]);
+                } catch (\Exception $e) {
+                    return redirect()->back()->withErrors(['error' => 'Lỗi khi lưu ghế.']);
+                }
             }
         }
+
 
         $selectedSeats2 = SelectedSeat::where('user_id', $user_id)
             ->where('showtime_id', $showtimeId)
             ->with(['seat', 'seat.rows', 'seat.types'])
             ->get();
-        $seats = Seat::whereIn('seat_id', $selectedSeats)->get(); // Truy vấn các ghế từ cơ sở dữ liệu
+
+        // Trích xuất danh sách seat_id
+        $seatIds = $selectedSeats2->pluck('seat_id')->toArray();
+
+        $seats = Seat::whereIn('seat_id', $seatIds)->get();
+
+        // Lấy danh sách seat_number
         $seatNumbers = $seats->pluck('seat_number');
 
+        // Kiểm tra ghế đã chọn
+        // $existingSeats = SelectedSeat::where('showtime_id', $showtimeId)
+        //     ->where('user_id', $user_id)
+        //     ->whereIn('seat_id', $seatIds) // Sử dụng $seatIds thay vì $selectedSeats2
+        //     ->exists();
+
+        // if ($existingSeats) {
+        //     return redirect()->back()->withErrors(['error' => 'Bạn không thể chọn lại ghế mà bạn đã chọn.']);
+        // }
         $genres = Genre::withCount('movies')->get();
 
         // $minutes = 10;

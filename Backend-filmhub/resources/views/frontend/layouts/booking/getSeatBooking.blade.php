@@ -184,7 +184,7 @@
             }
 
             const isConfirmed = confirm(
-            "Sau khi chọn ghế, nếu không thanh toán sau 3 phút, ghế bạn đã chọn sẽ tự động bị bỏ . Bạn có chắc chắn muốn tiếp tục?"
+            "Sau khi chọn ghế, nếu không thanh toán sau 5 phút, ghế bạn đã chọn sẽ tự động bị bỏ . Bạn có chắc chắn muốn tiếp tục?"
         );
 
         if (!isConfirmed) {

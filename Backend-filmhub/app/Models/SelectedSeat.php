@@ -12,7 +12,7 @@ class SelectedSeat extends Model
     protected $table = 'selected_seats';
     protected $primaryKey = 'selected_seat_id';
 
-    protected $fillable = ['seat_id', 'showtime_id' ,'user_id', 'created_at', 'updated_at'];
+    protected $fillable = ['seat_id', 'showtime_id' ,'user_id', 'totalPrice', 'created_at', 'updated_at'];
 
     public function seat()
 {
