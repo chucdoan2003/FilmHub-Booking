@@ -16,7 +16,8 @@ class Row extends Model
     public function seats() {
         return $this->hasMany(Seat::class, 'row_id');
     }
-    public function rooms() {
-        return $this->belongsTo(Room::class, 'room_id'); 
-    }
+    public function room()
+{
+    return $this->belongsTo(Room::class, 'room_id');
+}
 }

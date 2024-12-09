@@ -36,7 +36,7 @@
                 <div
                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">List Showtimes</h6>
-                    <a href="{{ route('showtimes.create') }}"><button class="btn-success"> Add new showtimes</button></a>
+                    <a href="{{ route("showtimes.create") }}"><button class="btn-success"> Add new showtimes</button></a>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
@@ -44,34 +44,38 @@
                         <thead>
                             <tr>
                                 <th>Id</th>
-                                <th>Phim</th>
-                                <th>Phòng</th>
-                                <th>Ca chiếu</th>
-                                <th>Ngày chiếu</th>
-                                <th>Thời gian bắt đầu</th>
-                                <th>Thời gian kết thúc</th>
-                                <th>Giá tiền</th>
-                                <th>Hành động</th>
+                                <th>Thearter</th>
+                                <th>Movie</th>
+                                <th>Room</th>
+                                <th>Shift</th>
+                                <th>Price</th>
+                                <th>Vip Price</th>
+                                <th>Start time</th>
+                                <th>End time</th>
+                                <th>Date</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($showtimes as $item)
                                 <tr>
                                     <td>{{ $item->showtime_id  }}</td>
+                                    <td>{{ $item->thearter_name }}</td>
                                     <td>{{ $item->movie_name }}</td>
                                     <td>{{ $item->room_name }}</td>
                                     <td>{{ $item->shift_name }}</td>
-                                    <td>{{ $item->datetime}}</td>
-                                    <td>{{ $item->shift_start_time}}</td>
-                                    <td>{{ $item->shift_end_time}}</td>
-                                    <td>{{ number_format($item->value, 0, ',', '.') }} VND</td>
+                                    <td>{{ $item->normal_price }}</td>
+                                    <td>{{ $item->vip_price }}</td>
+                                    <td>{{ $item->start_time }}</td>
 
+                                    <td>{{ $item->end_time}}</td>
+                                    <td>{{ $item->datetime }}</td>
                                     <td>
                                         <a href="{{ route('showtimes.edit', $item->showtime_id) }}"><button class="btn-warning">Edit</button></a>
                                         <form action="{{ route('showtimes.destroy', $item->showtime_id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                        <button class="btn-danger" onclick="return confirm('Bạn có muốn xóa không?')">Delete</button>
+                                        <button class="btn-danger" onclick="return confirm('Do you want to delete this showtime ?')">Delete</button>
 
 
                                         </form>

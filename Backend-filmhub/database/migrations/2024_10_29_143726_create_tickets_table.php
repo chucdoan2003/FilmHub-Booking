@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -22,6 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('food_id')->nullable();
             $table->unsignedBigInteger('drink_id')->nullable();
             $table->unsignedBigInteger('combo_id')->nullable();
+
             // Indexes
 
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
@@ -30,6 +30,7 @@ return new class extends Migration
             $table->foreign('drink_id')->references('id')->on('drinks')->onDelete('set null');
             $table->foreign('combo_id')->references('id')->on('combos')->onDelete('set null');
         });
+
     }
 
     /**
@@ -37,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tickets');
+        //
     }
 };

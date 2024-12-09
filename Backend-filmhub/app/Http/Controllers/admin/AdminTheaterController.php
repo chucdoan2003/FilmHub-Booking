@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Theater;
@@ -45,7 +45,12 @@ class AdminTheaterController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'location' => 'required|string|max:255',
-           
+            // 'number_of_rooms' => 'required|integer|min:1',
+            // 'number_of_shifts' => 'required|integer|min:1',
+            // 'shift_start_time' => 'required|array',
+            // 'shift_start_time.*' => 'date_format:H:i',
+            // 'shift_end_time' => 'required|array',
+            // 'shift_end_time.*' => 'date_format:H:i',
         ]);
 
         // Lưu theater
@@ -54,7 +59,24 @@ class AdminTheaterController extends Controller
             'location' => $request->location,
         ]);
 
-       
+        // // Thêm phòng vào bảng rooms
+        // for ($i = 1; $i <= $request->number_of_rooms; $i++) {
+        //     $room_name = 'Phòng ' . $i; // Tạo tên phòng
+        //     $theater->rooms()->create([
+        //         'room_name' => $room_name,
+
+        //     ]);
+        // }
+
+        // // Lưu thời gian ca chiếu vào bảng shifts
+        // for ($i = 1; $i <= $request->number_of_shifts; $i++) {
+        //     $shift_name = 'Ca ' . $i; // Tên ca chiếu
+        //     $theater->shifts()->create([
+        //         'start_time' => $request->shift_start_time[$i - 1],
+        //         'end_time' => $request->shift_end_time[$i - 1],
+        //         'shift_name' => $shift_name,
+        //     ]);
+        // }
 
         return redirect()->route('admin.theaters.index')->with('success', 'Thêm mới rạp thành công');
     }
@@ -78,10 +100,10 @@ class AdminTheaterController extends Controller
      */
     public function edit(Theater $theater)
     {
-       
+        $shifts = $theater->shifts;
         $rooms = $theater->rooms;
         $roomsCount = $theater->rooms()->count();
-        return view('admin.theaters.edit', compact('theater', 'rooms', 'roomsCount'));
+        return view('admin.theaters.edit', compact('theater', 'shifts', 'rooms', 'roomsCount'));
     }
 
     /**
@@ -103,6 +125,45 @@ class AdminTheaterController extends Controller
             'location' => $request->location,
         ]);
 
+        // $currentRoomCount = $theater->rooms()->count();
+        // $newRoomCount = $request->number_of_rooms;
+
+        // if ($newRoomCount != $currentRoomCount) {
+        //     // Xóa tất cả các phòng hiện tại
+        //     $theater->rooms()->delete();
+
+        //     // Thêm các phòng mới
+        //     for ($i = 0; $i < $newRoomCount; $i++) {
+        //         $room_name = 'Phòng ' . ($i + 1);
+        //         $theater->rooms()->create([
+        //             'room_name' => $room_name,
+        //             'theater_id' => $theater->theater_id,
+        //         ]);
+        //     }
+        // }
+
+
+
+
+        // // Cập nhật ca chiếu
+        // $currentShiftCount = $theater->shifts()->count();
+        // $newShiftCount = $request->number_of_shifts;
+
+        // // Nếu số lượng ca chiếu mới khác với số lượng hiện tại
+        // if ($newShiftCount != $currentShiftCount) {
+        //     // Xóa các ca cũ
+        //     $theater->shifts()->delete();
+
+        //     // Thêm ca chiếu mới
+        //     for ($i = 0; $i < $newShiftCount; $i++) {
+        //         $shift_name = 'Ca ' . ($i + 1); // Tên ca chiếu
+        //         $theater->shifts()->create([
+        //             'start_time' => $request->shift_start_time[$i],
+        //             'end_time' => $request->shift_end_time[$i],
+        //             'shift_name' => $shift_name,
+        //         ]);
+        //     }
+        // }
 
         return redirect()->route('admin.theaters.index')->with('success', 'Cập nhật rạp thành công');
 
@@ -127,33 +188,21 @@ class AdminTheaterController extends Controller
         return view('admin.theaters.createRoom', compact('theaters'));
     }
     public function storeRoom(Request $request)
-    {
-        $request->validate([
-            'room_name' => 'required|string|max:255',
-            'theater_id' => 'required|exists:theaters,theater_id',
-            'capacity' => 'required|integer|min:1',
-        ]);
+{
+    $request->validate([
+        'room_name' => 'required|string|max:255',
+        'theater_id' => 'required|exists:theaters,theater_id',
+    ]);
+
+    // Tạo phòng
+     Room::create([
+        'room_name' => $request->room_name,
+        'theater_id' => $request->theater_id,
+    ]);
 
 
-
-        $room = Room::create([
-            'room_name' => $request->room_name,
-            'theater_id' => $request->theater_id,
-            'capacity' => $request->capacity,
-        ]);
-
-
-        for ($i = 1; $i <= $request->capacity; $i++) {
-            Seat::create([
-                'room_id' => $room->room_id,
-                'seat_number' => $i,
-
-            ]);
-        }
-
-
-        return redirect()->route('theaters.createRoom')->with('success', 'Thêm phòng thành công');
-    }
+    return redirect()->route('theaters.createRoom')->with('success', 'Thêm phòng và ghế thành công');
+}
 
     public function destroyRoom(Room $room)
     {
@@ -164,20 +213,21 @@ class AdminTheaterController extends Controller
     public function editRoom($id)
     {
         $room = Room::findOrFail($id);
-        return view('admin.theaters.editRoom', compact('room'));
+        $theaters = Theater::pluck('name', 'theater_id')->toArray();
+        return view('admin.theaters.editRoom', compact('room', 'theaters'));
     }
 
     public function updateRoom(Request $request, $id)
     {
         $request->validate([
             'room_name' => 'required|string|max:255',
-            'capacity' => 'required|integer|min:1',
+            'theater_id' => 'required|exists:theaters,theater_id',
         ]);
 
         $room = Room::findOrFail($id);
         $room->update([
             'room_name' => $request->room_name,
-            'capacity' => $request->capacity,
+            'theater_id' => $request->theater_id, // Cập nhật rạp
         ]);
 
         return redirect()->route('theaters.indexRoom')->with('success', 'Cập nhật phòng thành công!');

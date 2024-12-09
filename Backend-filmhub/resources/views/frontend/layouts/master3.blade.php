@@ -16,7 +16,7 @@ Author: Webstrot
 
 <head>
     <meta charset="utf-8" />
-    <title>Movie Pro Responsive HTML Template</title>
+    <title>FilmHub</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta name="description" content="Movie Pro" />
     <meta name="keywords" content="Movie Pro" />
@@ -48,8 +48,11 @@ Author: Webstrot
 
 <body>
     @yield('content')
-    
+
     @include('frontend.layouts.login.login')
+
+
+
     <!-- st login wrapper End -->
     <!--main js file start-->
     <script src="{{ asset('website/js/jquery_min.js') }}"></script>

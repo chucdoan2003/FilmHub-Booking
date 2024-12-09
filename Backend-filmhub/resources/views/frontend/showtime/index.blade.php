@@ -1,5 +1,6 @@
 @extends('frontend.layouts.master2');
-@section('content');
+@section('content')
+    ;
     <!-- prs video top Start -->
     <div class="prs_booking_main_div_section_wrapper">
         <div class="prs_top_video_section_wrapper">
@@ -113,14 +114,14 @@
                                                                     <p class="asc_pera1">Executive</p>
                                                                     <p class="asc_pera2">Filling Fast</p>
                                                                 </span>
-                                                                <a href="{{ route('seatBooking.index') }}">11:30 AM</a>
+                                                                <a href="seat_booking.html">11:30 AM</a>
                                                             </li>
                                                             <li> <span>
                                                                     <h4>Rs.160.00</h4>
                                                                     <p class="asc_pera1">Executive</p>
                                                                     <p class="asc_pera2">Filling Fast</p>
                                                                 </span>
-                                                                <a href="{{ route('seatBooking.index') }}">02:45 PM</a>
+                                                                <a href="seat_booking.html">02:45 PM</a>
                                                             </li>
                                                             <li> <span>
                                                                     <h4>Rs.160.00</h4>

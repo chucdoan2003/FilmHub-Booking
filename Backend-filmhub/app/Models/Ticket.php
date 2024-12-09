@@ -15,10 +15,40 @@ class Ticket extends Model
         'showtime_id',
         'total_price',
         'ticket_time',
+        'status',
+        'food_id', 'drink_id', 'combo_id',
     ];
     public $timestamps = false;
     public function showtime()
     {
         return $this->belongsTo(Showtime::class, 'showtime_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+
+    public function food()
+    {
+        return $this->belongsTo(Food::class, 'food_id');
+    }
+
+
+    public function drink()
+    {
+        return $this->belongsTo(Drink::class, 'drink_id');
+    }
+
+
+    public function combo()
+    {
+        return $this->belongsTo(Combo::class, 'combo_id');
+    }
+
+    public function ticketsSeats()
+{
+    return $this->hasMany(TicketSeat::class, 'ticket_id');
+}
 }

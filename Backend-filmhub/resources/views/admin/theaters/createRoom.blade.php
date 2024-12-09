@@ -28,10 +28,6 @@
     </div>
 
 
-    <div class="mb-3">
-        <label for="capacity" class="form-label">Sức chứa</label>
-        <input type="number" class="form-control" id="capacity" name="capacity" required min="1">
-    </div>
 
     <div class="mb-3">
         <label for="theater-select" class="form-label">Chọn Rạp</label>
@@ -42,6 +38,7 @@
             @endforeach
         </select>
     </div>
+
 
 
     <button type="submit" class="btn btn-primary">Lưu</button>

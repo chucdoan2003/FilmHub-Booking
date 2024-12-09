@@ -27,10 +27,10 @@
     <a href="{{route('admin.theaters.create')}}" class="mb-3">
         <button class="btn btn-success">Tạo mới</button>
     </a>
-    <form action="{{ route('vnpay_payment') }}" method="POST">
+    {{-- <form action="{{ route('vnpay_payment') }}" method="POST">
         @csrf
         <button type="submit" name="redirect" class="btn btn-success">Thanh toan VNPAY </button>
-    </form>
+    </form> --}}
     <!-- DataTales Example -->
     <div class="card shadow mb-4 mt-3">
         <div class="card-header py-3">
@@ -45,6 +45,8 @@
                         <th>ID</th>
                         <th>Tên</th>
                         <th>Vị trí</th>
+                        <th>Số phòng</th>
+                        <th>Số ca chiếu</th>
                         <th>Hành động</th>
                     </tr>
                     </thead>
@@ -53,6 +55,8 @@
                             <th>ID</th>
                             <th>Tên</th>
                             <th>Vị trí</th>
+                            <th>Số phòng</th>
+                            <th>Số ca chiếu</th>
                             <th>Hành động</th>
                         </tr>
                     </tfoot>
@@ -62,6 +66,8 @@
                                 <td>{{$theater->theater_id}}</td>
                                 <td>{{$theater->name}}</td>
                                 <td>{{$theater->location}}</td>
+                                <td>{{$theater->rooms_count}}</td>
+                                <td>{{ $theater->shifts_count }}</td>
                                 {{-- <td>
                                     {!! $theater->is_active ? '<span class="badge bg-success text-white">Hoạt động</span>'
                                     : '<span class="badge bg-danger text-white">Không hoạt động</span>'!!}
@@ -72,7 +78,7 @@
                                     <form action="{{route('admin.theaters.destroy', $theater->theater_id)}}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" onclick="return confirm('Bạn có muốn xóa không?')" class="btn btn-danger">Xóa</button>
+                                        <button type="submit" class="btn btn-danger">Xóa</button>
                                     </form>
                                 </td>
                             </tr>

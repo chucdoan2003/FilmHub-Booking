@@ -68,28 +68,8 @@
                         <div class="collapse show" id="collapseStatus">
                             <!-- end card body -->
                             <div class="card-body">
-                                <!-- chọn phòng -->
-                                <label for="choices-category-input" class="form-label">Chọn phòng</label>
-                                <select class="form-control" aria-label="Default select example"
-                                        id="choices-category-input" name="room_id" >
-                                    @foreach($rooms as $room_id => $room_name)
-                                        <option value="{{$seat->room_id}}" {{ $seat->room_id == $room_id ? 'selected' : '' }}>{{$room_name}}</option>
-                                    @endforeach
-                                </select>
-                                @error('room_id')
-                                    <span style="padding: 10px 0; color: red;">{{$message}}</span>
-                                @enderror
-                                <!-- chọn hàng ghế -->
-                                <label for="choices-category-input" class="form-label">Chọn hàng ghế</label>
-                                <select class="form-control" aria-label="Default select example"
-                                        id="choices-category-input" name="row_id" >
-                                    @foreach($rows as $row_id => $row_name)
-                                        <option value="{{$seat->row_id}}" {{ $seat->row_id == $row_id ? 'selected' : '' }}>{{$row_name}}</option>
-                                    @endforeach
-                                </select>
-                                @error('row_id')
-                                    <span style="padding: 10px 0; color: red;">{{$message}}</span>
-                                @enderror
+
+
                                 <label for="choices-publish-status-input" class="form-label mt-3">Trạng thái</label>
                                 <select class="form-control form-select-lg mb-3" id="choices-publish-status-input"
                                         aria-label="Default select example" name="status">
@@ -99,7 +79,7 @@
                                     @else
                                         <option value="booked">Booked</option>
                                         <option value="available">Available</option>
-                                    @endif    
+                                    @endif
                                 </select>
                                 @error('status')
                                     <span style="padding: 10px 0; color: red;">{{$message}}</span>

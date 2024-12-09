@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -12,17 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payments', function (Blueprint $table) {
-            $table->id('payment_id');
+        Schema::create('tickets_seats', function (Blueprint $table) {
             $table->unsignedBigInteger('ticket_id');
-            $table->decimal('amount', 10, 2);
-            $table->enum('payment_method', ['credit_card', 'paypal', 'cash']);
-            $table->enum('payment_status', ['pending', 'completed', 'failed'])->default('pending');
-            $table->timestamp('payment_time')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->unsignedBigInteger('seat_id');
+            $table->unsignedBigInteger('showtime_id');
 
             // Indexes
+            $table->primary(['ticket_id', 'seat_id']);
             $table->foreign('ticket_id')->references('ticket_id')->on('tickets')->onDelete('cascade');
+            $table->foreign('seat_id')->references('seat_id')->on('seats')->onDelete('cascade');
+            $table->foreign('showtime_id')->references('showtime_id')->on('showtimes')->onDelete('cascade');
+
         });
+
     }
 
     /**
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payments');
+        //
     }
 };

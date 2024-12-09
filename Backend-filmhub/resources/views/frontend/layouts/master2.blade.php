@@ -16,7 +16,7 @@ Author: Webstrot
 
 <head>
     <meta charset="utf-8" />
-    <title>Movie Pro Responsive HTML Template</title>
+    <title>FilmHub</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta name="description" content="Movie Pro" />
     <meta name="keywords" content="Movie Pro" />
@@ -39,8 +39,6 @@ Author: Webstrot
     <link rel="stylesheet" type="text/css" href="{{ asset('website/js/plugin/rs_slider/settings.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('website/css/style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('website/css/responsive.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('website/css/seat.css') }}" />
-
     <link rel="stylesheet" id="theme-color" type="text/css" href="#" />
     <!-- favicon links -->
     <link rel="shortcut icon" type="image/png" href="{{ asset('website/images/header/favicon.ico') }}" />
@@ -48,15 +46,15 @@ Author: Webstrot
 
 <body>
 
-    @include('frontend.layouts.header');
+    @include('frontend.layouts.header')
 
 
     @yield('content')
 
-    @include('frontend.layouts.content.patner');
+    {{-- @include('frontend.layouts.content.patner') --}}
 
-    @include('frontend.layouts.login.login');
-    @include('frontend.layouts.footer');
+    {{-- @include('frontend.layouts.login.login') --}}
+    @include('frontend.layouts.footer')
 
 
 

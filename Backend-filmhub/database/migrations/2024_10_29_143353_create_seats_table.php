@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('seats', function (Blueprint $table) {
             $table->id('seat_id');
             $table->unsignedBigInteger('room_id');
+            $table->string('seat_number', 10);
+            $table->enum('status', ['normal', 'vip'])->default('normal');
+            $table->timestamps();
             $table->unsignedBigInteger('row_id');
             $table->unsignedBigInteger('type_id');
-            $table->string('seat_number', 10);
-            $table->enum('status', ['available', 'booked'])->default('available');
-            $table->timestamps();
 
             // Indexes
             $table->foreign('room_id')->references('room_id')->on('rooms')->onDelete('cascade');

@@ -30,7 +30,7 @@ class RoomController extends Controller
     {
         $theaters = Theater::query()->pluck('name', 'theater_id')->all();
         return view(self::PATH_VIEW.__FUNCTION__, compact('theaters'));
-        
+
     }
 
     /**
@@ -41,12 +41,12 @@ class RoomController extends Controller
         $request->validate([
             'room_name' => ['required'],
             'theater_id' => ['required'],
-           
+
         ]);
 
         $data = $request->all();
         $room = Room::query()->create($data); // Tạo phòng mới
-        return redirect()->route('admin.rooms.index')->with('success', 'Thêm mới thành công và tạo ghế cho phòng.');
+        return redirect()->route('admin.rooms.index')->with('success', 'Thêm mới thành công');
     }
 
     /**
@@ -71,7 +71,7 @@ class RoomController extends Controller
      */
     public function update(UpdateRoomRequest $request, Room $room)
     {
-        
+
         $request->validate([
             'room_name'=>['required'],
             'theater_id'=>['required'],

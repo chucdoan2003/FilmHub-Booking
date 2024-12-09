@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Seat extends Model
 {
     use HasFactory;
+
+
     protected $primaryKey = 'seat_id';
     protected $fillable = [
         'room_id',
@@ -25,5 +27,4 @@ class Seat extends Model
     public function types() {
         return $this->belongsTo(Type::class, 'type_id');
     }
-   
 }

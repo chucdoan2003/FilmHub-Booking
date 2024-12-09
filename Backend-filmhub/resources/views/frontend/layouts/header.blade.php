@@ -4,7 +4,7 @@
     </div>
 </div>
 <!-- color picker start -->
-<div id="style-switcher">
+{{-- <div id="style-switcher">
     <div>
         <h3>Choose Color</h3>
         <ul class="colors">
@@ -29,7 +29,7 @@
         </ul>
     </div>
     <div class="bottom"> <a href="#" class="settings"><i class="fa fa-gear"></i></a> </div>
-</div>
+</div> --}}
 <!-- color picker end -->
 <!-- prs navigation Start -->
 <div class="prs_navigation_main_wrapper">
@@ -41,7 +41,7 @@
         </div>
         <div class="prs_navi_left_main_wrapper">
             <div class="prs_logo_main_wrapper">
-                <a href="index.html">
+                <a href="{{ route('movies.index') }}">
                     <img src="{{ asset('website/images/header/logo.png') }}" alt="logo" />
                 </a>
             </div>
@@ -55,16 +55,11 @@
                         </div>
                         <div class="clearfix"></div>
                         <ul class="dl-menu">
-                            <li class="parent"><a href="#">Home</a>
-                                <ul class="lg-submenu">
-                                    <li><a href="index.html">Index-I</a></li>
-                                    <li><a href="index2.html">Index-II</a></li>
-                                    <li><a href="index3.html">Index-III</a></li>
-                                    <li><a href="index4.html">Index-IV</a></li>
-                                </ul>
+                            <li class="parent"><a href="{{ route('movies.index') }}">Home</a>
+
                             </li>
-                            <li class="parent megamenu"><a href="#">movie</a>
-                                <ul class="lg-submenu">
+                            <li class="parent megamenu"><a href="{{ route('category.index') }}">movie</a>
+                                {{-- <ul class="lg-submenu">
                                     <li><a>Popular Hindi Movies</a>
                                         <ul class="lg-submenu">
                                             <li class="ar_left"><i class="fa fa-film"></i><a href="#">Bajiro
@@ -204,7 +199,7 @@
                                             </div>
                                         </div>
                                     </li>
-                                </ul>
+                                </ul> --}}
                             </li>
                             <li class="parent"><a href="#">tv show</a>
                                 <ul class="lg-submenu">
@@ -217,71 +212,8 @@
                                     <li><a href="#">Set Max</a></li>
                                 </ul>
                             </li>
-                            <li class="parent megamenu"><a href="#">video</a>
-                                <ul class="lg-submenu prs_navi_video_wrapper">
-                                    <li>
-                                        <div class="prs_video_navi_img_main_wrapper">
-                                            <img src="{{ asset('website/images/content/vp1.jpg') }}" alt="video_img">
-                                            <div class="prs_video_navi_overlay_wrapper"> <a
-                                                    class="test-popup-link button" rel='external'
-                                                    href='https://www.youtube.com/embed/ryzOXAO0Ss0' title='title'><i
-                                                        class="flaticon-play-button"></i></a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="prs_video_navi_img_main_wrapper">
-                                            <img src="{{ asset('website/images/content/vp2.jpg') }}" alt="video_img">
-                                            <div class="prs_video_navi_overlay_wrapper"> <a
-                                                    class="test-popup-link button" rel='external'
-                                                    href='https://www.youtube.com/embed/ryzOXAO0Ss0' title='title'><i
-                                                        class="flaticon-play-button"></i></a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="prs_video_navi_img_main_wrapper">
-                                            <img src="{{ asset('website/images/content/vp3.jpg') }}" alt="video_img">
-                                            <div class="prs_video_navi_overlay_wrapper"> <a
-                                                    class="test-popup-link button" rel='external'
-                                                    href='https://www.youtube.com/embed/ryzOXAO0Ss0' title='title'><i
-                                                        class="flaticon-play-button"></i></a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="prs_video_navi_img_main_wrapper">
-                                            <img src="{{ asset('website/images/content/vp4.jpg') }}" alt="video_img">
-                                            <div class="prs_video_navi_overlay_wrapper"> <a
-                                                    class="test-popup-link button" rel='external'
-                                                    href='https://www.youtube.com/embed/ryzOXAO0Ss0' title='title'><i
-                                                        class="flaticon-play-button"></i></a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="prs_video_navi_img_main_wrapper">
-                                            <img src="{{ asset('website/images/content/vp5.jpg') }}" alt="video_img">
-                                            <div class="prs_video_navi_overlay_wrapper"> <a
-                                                    class="test-popup-link button" rel='external'
-                                                    href='https://www.youtube.com/embed/ryzOXAO0Ss0' title='title'><i
-                                                        class="flaticon-play-button"></i></a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="hidden-sm">
-                                        <div class="prs_video_navi_img_main_wrapper">
-                                            <img src="{{ asset('website/images/content/vp6.jpg') }}" alt="video_img">
-                                            <div class="prs_video_navi_overlay_wrapper"> <a
-                                                    class="test-popup-link button" rel='external'
-                                                    href='https://www.youtube.com/embed/ryzOXAO0Ss0' title='title'><i
-                                                        class="flaticon-play-button"></i></a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="parent"><a href="#">pages</a>
+
+                            {{-- <li class="parent"><a href="#">pages</a>
                                 <ul class="lg-submenu">
                                     <li class="parent"><a href="#">Blog</a>
                                         <ul class="lg-submenu">
@@ -320,8 +252,8 @@
                                     <li><a href="seat_booking.html">Seat-Booking</a>
                                     </li>
                                 </ul>
-                            </li>
-                            <li class="parent"><a href="contact.html">contact</a>
+                            </li> --}}
+                            <li class="parent"><a href="{{ route('contact.index') }}">contact</a>
                             </li>
                         </ul>
                     </div>
@@ -338,24 +270,35 @@
             <div class="prs_top_login_btn_wrapper">
                 <div class="prs_animate_btn1">
                     <ul>
-                        <li><a href="#" class="button button--tamaya" data-text="sign up" data-toggle="modal"
-                                data-target="#myModal"><span>sign up</span></a>
-                        </li>
+                        @if (Auth::check())
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <li>
+                                    <button class="button button--tamaya" type="submit" data-text="Logout">
+                                        <span>Log out</span>
+                                    </button>
+                                </li>
+                            </form>
+                        @else
+                            <li><a href="{{ route('getLogin') }}" class="button button--tamaya"
+                                    data-text="Sign in"><span>Sign in</span></a>
+                            </li>
+                        @endif
+
                     </ul>
                 </div>
             </div>
             <div class="product-heading">
                 <div class="con">
-                    <select>
-                        <option>All Categories</option>
-                        <option>Movie</option>
-                        <option>Video</option>
-                        <option>Music</option>
-                        <option>TV-Show</option>
-                    </select>
-                    <input type="text" placeholder="Search Movie , Video , Music">
-                    <button type="submit"><i class="flaticon-tool"></i>
-                    </button>
+
+                    <form action="{{ route('movies.search') }}" method="GET">
+
+
+
+                        <input type="text" name="search" placeholder="Search Movie, Video, Music" value="">
+
+                        <button type="submit"><i class="flaticon-tool"></i></button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -364,7 +307,7 @@
             <div class="mobile-nav-box">
                 <div class="mobile-logo">
                     <a href="index.html" class="mobile-main-logo">
-                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="46.996px"
                             height="40px" viewBox="0 0 46.996 40" enable-background="new 0 0 46.996 40"
                             xml:space="preserve">
@@ -387,38 +330,18 @@
         C37.652,36.448,45.953,40,45.953,40l1.043-8.658C41.41,30.454,38.125,32.244,35.314,34.585z" />
                                 </g>
                             </g>
-                        </svg><span>Movie Pro</span>
+                        </svg><span>User Information</span>
                     </a>
                     <a href="#" class="manu-close"><i class="fa fa-times"></i></a>
                 </div>
                 <ul class="mobile-list-nav">
-                    <li><a href="about.html">OVERVIEW</a>
+                    <li><a href="{{route('userOverview')}}">OVERVIEW</a>
                     </li>
-                    <li><a href="movie_single.html">MOVIE</a>
+<li><a href="{{route("ticketHistory")}}">TICHKETS BOOKED</a>
                     </li>
-                    <li><a href="event_single.html">EVENT</a>
-                    </li>
-                    <li><a href="gallery.html">GALLERY</a>
-                    </li>
-                    <li><a href="blog_single.html">BLOG</a>
-                    </li>
-                    <li><a href="contact.html">CONTACT</a>
-                    </li>
+
                 </ul>
-                <div class="product-heading prs_slidebar_searchbar_wrapper">
-                    <div class="con">
-                        <select>
-                            <option>All Categories</option>
-                            <option>Movie</option>
-                            <option>Video</option>
-                            <option>Music</option>
-                            <option>TV-Show</option>
-                        </select>
-                        <input type="text" placeholder="Search Movie , Video , Music">
-                        <button type="submit"><i class="flaticon-tool"></i>
-                        </button>
-                    </div>
-                </div>
+
                 <div class="achivement-blog">
                     <ul class="flat-list">
                         <li>
@@ -441,15 +364,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="prs_top_login_btn_wrapper prs_slidebar_searchbar_btn_wrapper">
-                    <div class="prs_animate_btn1">
-                        <ul>
-                            <li><a href="#" class="button button--tamaya" data-text="sign up"
-                                    data-toggle="modal" data-target="#myModal"><span>sign up</span></a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+
             </div>
         </div>
     </div>

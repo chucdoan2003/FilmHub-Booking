@@ -1,16 +1,16 @@
 @extends('frontend.layouts.master2')
 
 @section('content')
-<style>
-.st_calender_row_cont {
-    border-bottom: none !important;
-    box-shadow: none !important;
-}
+    <style>
+        .st_calender_row_cont {
+            border-bottom: none !important;
+            box-shadow: none !important;
+        }
 
-.st_calender_contant_main_wrapper {
-    margin-bottom: 15px;
-}
-</style>
+        .st_calender_contant_main_wrapper {
+            margin-bottom: 15px;
+        }
+    </style>
     <div class="prs_title_main_sec_wrapper">
         <div class="prs_title_img_overlay"></div>
         <div class="container">
@@ -87,11 +87,28 @@
                     @foreach ($showtimesGroupedByDate as $date => $showtimesOnDate)
                         @php
                             $formattedDate = \Carbon\Carbon::parse($date)->format('Ymd');
+
+                            $currentDate = \Carbon\Carbon::today()->format('Ymd');
+                            if (\Carbon\Carbon::parse($date)->isBefore($currentDate)) {
+                                continue;
+                            }
+
+                            $daysInVietnamese = [
+                                'Sun' => 'CN',
+                                'Mon' => 'Thứ 2',
+                                'Tue' => 'Thứ 3',
+                                'Wed' => 'Thứ 4',
+                                'Thu' => 'Thứ 5',
+                                'Fri' => 'Thứ 6',
+                                'Sat' => 'Thứ 7',
+                            ];
+                            $dayOfWeek = \Carbon\Carbon::parse($date)->format('D');
+                            $dayInVietnamese = $daysInVietnamese[$dayOfWeek];
                         @endphp
                         <li class="{{ $date == $selectedDate ? 'active' : '' }}">
                             <a href="{{ route('booking.index', ['id' => $movieId, 'selected_date' => $date]) }}">
-                                <span>{{ \Carbon\Carbon::parse($date)->format('D') }}</span><br>
-                                {{ \Carbon\Carbon::parse($date)->format('d') }}
+                                <span>{{ $dayInVietnamese }}</span><br>
+                                {{ \Carbon\Carbon::parse($date)->format('d/m') }}
                             </a>
                         </li>
                     @endforeach
@@ -120,8 +137,45 @@
                                     @endphp
 
                                     @foreach ($groupedShowtimes as $showDate => $showtimes)
+                                        @php
+
+                                            $showDateInVietnamTime = \Carbon\Carbon::parse($showDate)->timezone(
+                                                'Asia/Ho_Chi_Minh',
+                                            );
+
+                                            $daysInVietnamese = [
+                                                'Sunday' => 'Chủ Nhật',
+                                                'Monday' => 'Thứ Hai',
+                                                'Tuesday' => 'Thứ Ba',
+                                                'Wednesday' => 'Thứ Tư',
+                                                'Thursday' => 'Thứ Năm',
+                                                'Friday' => 'Thứ Sáu',
+                                                'Saturday' => 'Thứ Bảy',
+                                            ];
+
+                                            $monthsInVietnamese = [
+                                                'January' => '1',
+                                                'February' => '2',
+                                                'March' => '3',
+                                                'April' => '4',
+                                                'May' => '5',
+                                                'June' => '6',
+                                                'July' => '7',
+                                                'August' => '8',
+                                                'September' => '9',
+                                                'October' => '10',
+                                                'November' => '11',
+                                                'December' => '12',
+                                            ];
+
+                                            $dayOfWeek = $showDateInVietnamTime->format('l');
+                                            $monthName = $showDateInVietnamTime->format('F');
+
+                                            $dayInVietnamese = $daysInVietnamese[$dayOfWeek];
+                                            $monthInVietnamese = $monthsInVietnamese[$monthName];
+                                        @endphp
                                         <div class="st_calender_contant_main_wrapper float_left showtime-item ">
-                                            <h3>{{ date('l, F d, Y', strtotime($showDate)) }}</h3><br>
+                                            <h3> {{ $dayInVietnamese }} -  Ngày {{ $showDateInVietnamTime->format('d') }} / {{ $monthInVietnamese }} / {{ $showDateInVietnamTime->format('Y') }}</h3><br>
 
                                             @php
                                                 // Group showtimes by theater
@@ -131,9 +185,7 @@
                                             @foreach ($groupedByTheater as $theaterName => $showtimesInTheater)
                                                 <div class="st_calender_row_cont float_left">
                                                     <div class="st_calender_asc">
-                                                        <div class="st_calen_asc_heart">
-                                                            <a href="#"><i class="fa fa-heart"></i></a>
-                                                        </div>
+
                                                         <div class="st_calen_asc_heart_cont">
                                                             <h3>{{ $theaterName }} - Phòng
                                                                 {{ $showtimesInTheater->first()->room_name }}</h3>
@@ -148,7 +200,8 @@
                                                                         <h4>Giá thường: {{ $showtime->normal_price }}</h4>
                                                                         <h4>Giá vip: {{ $showtime->vip_price }}</h4>
                                                                     </span>
-                                                                    <a href="{{route('seatBooking.index', $showtime->showtime_id)}}">{{ date('h:i A', strtotime($showtime->start_time)) }}</a>
+                                                                    <a
+                                                                        href="{{ route('getSeatBooking', $showtime->showtime_id) }}">{{ date('h:i A', strtotime($showtime->start_time)) }}</a>
 
                                                                 </li>
                                                             @endforeach
@@ -168,48 +221,28 @@
                 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                     <div class="prs_mcc_left_side_wrapper">
                         <div class="prs_mcc_left_searchbar_wrapper">
-                            <input type="text" placeholder="Search Movie">
-                            <button><i class="flaticon-tool"></i>
-                            </button>
+                            <form action="{{ route('movies.search') }}" method="GET">
+                                <input type="text" name="search" placeholder="Search Movie" />
+                                <button type="submit"><i class="flaticon-tool"></i></button>
+                            </form>
                         </div>
                         <div class="prs_mcc_bro_title_wrapper">
-                            <h2>browse title</h2>
+                            <h2>Danh mục</h2>
                             <ul>
-                                <li><i class="fa fa-caret-right"></i> &nbsp;&nbsp;&nbsp;<a href="#">All
-                                        <span>23,124</span></a>
-                                </li>
-                                <li><i class="fa fa-caret-right"></i> &nbsp;&nbsp;&nbsp;<a href="#">Action
-                                        <span>512</span></a>
-                                </li>
-                                <li><i class="fa fa-caret-right"></i> &nbsp;&nbsp;&nbsp;<a href="#">Romantic
-                                        <span>548</span></a>
-                                </li>
-                                <li><i class="fa fa-caret-right"></i> &nbsp;&nbsp;&nbsp;<a href="#">Love
-                                        <span>557</span></a>
-                                </li>
-                                <li><i class="fa fa-caret-right"></i> &nbsp;&nbsp;&nbsp;<a href="#">Musical
-                                        <span>554</span></a>
-                                </li>
-                                <li><i class="fa fa-caret-right"></i> &nbsp;&nbsp;&nbsp;<a href="#">Drama
-                                        <span>567</span></a>
-                                </li>
-                                <li><i class="fa fa-caret-right"></i> &nbsp;&nbsp;&nbsp;<a href="#">Thriller
-                                        <span>689</span></a>
-                                </li>
-                                <li><i class="fa fa-caret-right"></i> &nbsp;&nbsp;&nbsp;<a href="#">Horror
-                                        <span>478</span></a>
-                                </li>
+                                <ul>
+                                    @foreach ($genres as $genre)
+                                        <li>
+                                            <i class="fa fa-caret-right"></i> &nbsp;&nbsp;&nbsp;
+                                            <a href="{{ route('category.show', $genre->genre_id) }}">
+                                                {{ $genre->name }}
+                                                <span>{{ $genre->movies->count() }}</span>
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
                             </ul>
                         </div>
-                        <div class="prs_mcc_event_title_wrapper">
-                            <h2>Top Events</h2>
-                            <img src="{{ asset('website/images/content/movie_category/event_img.jpg') }}" alt="event_img">
-                            <h3><a href="#">Music Event in india</a></h3>
-                            <p>Pune <span><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i><i
-                                        class="fa fa-star-o"></i><i class="fa fa-star-o"></i></span>
-                            </p>
-                            <h4>June 07 <span>08:00-12:00 pm</span></h4>
-                        </div>
+
                     </div>
                 </div>
             </div>

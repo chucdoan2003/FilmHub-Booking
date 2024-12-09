@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Thêm mới rạp chiếu
+    Chỉnh sửa rạp chiếu
 @endsection
 
 @section('content')

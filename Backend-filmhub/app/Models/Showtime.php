@@ -33,9 +33,10 @@ class Showtime extends Model
     }
 
     public function shifts()
-{
-    return $this->belongsTo(Shift::class, 'shift_id');
-}
+    {
+        return $this->belongsTo(Shift::class, 'shift_id');
+    }
+
 
     public function tickets()
     {
@@ -43,5 +44,16 @@ class Showtime extends Model
     }
 
 
+    public function movie()
+    {
+        return $this->belongsTo(Movie::class, 'movie_id');
+    }
+
+    public function theater()
+    {
+        return $this->belongsTo(Theater::class, 'theater_id');
+    }
 
 }
+
+

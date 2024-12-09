@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html lang="zxx">
+
+
+
 <head>
     <meta charset="utf-8" />
-    <title>Movie Pro Responsive HTML Template</title>
+    <title>FilmHub</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta name="description" content="Movie Pro" />
     <meta name="keywords" content="Movie Pro" />
     <meta name="author" content="" />
     <meta name="MobileOptimized" content="320" />
     <!--Template style -->
+    <link rel="shortcut icon" type="image/png" href="{{ asset('website/images/header/favicon.ico') }}" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" type="text/css" href="{{ asset('website/css/animate.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('website/css/bootstrap.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('website/css/font-awesome.css') }}" />
@@ -27,38 +36,36 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('website/css/responsive.css') }}" />
     <link rel="stylesheet" id="theme-color" type="text/css" href="#" />
     <!-- favicon links -->
-    <link rel="shortcut icon" type="image/png" href="{{ asset('website/images/header/favicon.ico') }}" />
+
 </head>
 
 <body>
-    <!-- Header -->
+
     @include('frontend.layouts.header')
-    <!-- End of Header -->
-
-    <!-- Slider -->
     @include('frontend.layouts.slider.slider')
-    <!-- End of Slider -->
 
-    @yield('movies')
+
+    @yield('content')
     {{-- @include('frontend.layouts.product.product1') --}}
 
 
     @include('frontend.layouts.slider.slider2')
-    @include('frontend.layouts.product.product2')
+    {{-- @include('frontend.layouts.product.product2') --}}
 
 
-    @include('frontend.layouts.content.blog')
+    {{-- @include('frontend.layouts.content.blog')
     @include('frontend.layouts.content.feature')
     @include('frontend.layouts.content.vidpho')
     @include('frontend.layouts.content.patner')
 
-    @include('frontend.layouts.login.login')
+    @include('frontend.layouts.login.login')  --}}
     @include('frontend.layouts.footer')
 
 
 
     <!-- st login wrapper End -->
     <!--main js file start-->
+    <script src="{{ asset('website/js/font-fontawesome-ae333ffef2.js') }}"></script>
     <script src="{{ asset('website/js/jquery_min.js') }}"></script>
     <script src="{{ asset('website/js/modernizr.js') }}"></script>
     <script src="{{ asset('website/js/bootstrap.js') }}"></script>

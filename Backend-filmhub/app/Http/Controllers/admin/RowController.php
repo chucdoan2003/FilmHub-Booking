@@ -16,9 +16,10 @@ class RowController extends Controller
     const PATH_VIEW = "admin.rows.";
     public function index()
     {
-        $data = Row::query()->get();
-        $rooms = Room::query()->pluck('room_name', 'room_id')->all();
-        return view(self::PATH_VIEW.__FUNCTION__, compact('data', 'rooms'));
+        $data = Row::leftJoin('rooms', 'rows.room_id', '=', 'rooms.room_id')
+        ->select('rows.*', 'rooms.room_name')
+        ->get();
+        return view(self::PATH_VIEW.__FUNCTION__, compact('data'));
     }
 
     /**
@@ -28,7 +29,7 @@ class RowController extends Controller
     {
         $rooms = Room::query()->pluck('room_name', 'room_id')->all();
         return view(self::PATH_VIEW.__FUNCTION__, compact('rooms'));
-        
+
     }
 
     /**
