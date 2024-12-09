@@ -54,7 +54,7 @@
                                                 @endif
                                             </div>
                                             <div class="st_bcc_tecket_bottom_inner_right"> <i class="fas fa-chair"></i>
-                                                <h3>2 TICKETS <br>
+                                                <h3> SEATS <br>
                                                     <span>
                                                         @foreach ($item->seats as $item2)
                                                             {{ $item2->seat_number }}

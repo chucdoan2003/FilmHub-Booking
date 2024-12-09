@@ -48,6 +48,7 @@ class AuthController extends Controller
         $isLogin = true;
             $user = Auth::user();
             session(['user_id' => $user->user_id]);
+            session(['theater_id' => $user->theater_id]);
 
         // Kiểm tra `status` của người dùng
         if ($user->status === 'admin' || $user->status === 'manager') {

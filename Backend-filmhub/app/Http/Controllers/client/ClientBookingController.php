@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 use App\Models\SelectedSeat;
 use App\Models\Combo;
+use App\Models\Voucher;
 class ClientBookingController extends Controller
 {
     public function index($id, Request $request)
@@ -64,7 +65,17 @@ class ClientBookingController extends Controller
 
     public function getSeatBooking($showtime_id)
     {
+        $userId = session('user_id');
 
+        $pendingTicket = \DB::table('tickets')
+        ->where('user_id', $userId)
+        ->where('status', 'pending')
+        ->first();
+
+    // Nếu có vé chưa thanh toán, trả về thông báo yêu cầu thanh toán vé cũ trước
+    if ($pendingTicket) {
+        return redirect()->route('movies.index')->with('error', 'Bạn cần hoàn thành thanh toán vé chưa hoàn thành trước khi đặt vé mới.');
+    }
 
         $showtime = Showtime::with([
             'movies',
@@ -207,6 +218,12 @@ class ClientBookingController extends Controller
         $combos = Combo::all();
         $foods = DB::table('foods')->get();
         $drinks = DB::table('drinks')->get();
+        $vouchers = Voucher::all();
+
+        $usedVoucher = DB::table('vourcher_user')
+        ->where('user_id', $user_id)
+        ->pluck('vourcher_id')
+        ->first();
 
 
         // dd($totalPrice);
@@ -220,7 +237,9 @@ class ClientBookingController extends Controller
             'genres',
             'foods',
             'drinks',
-            'combos'
+            'combos',
+            'vouchers',
+            'usedVoucher'
         ));
     }
 

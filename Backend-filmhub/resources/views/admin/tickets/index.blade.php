@@ -99,11 +99,11 @@
                     <tbody>
                         @foreach ($tickets as $index => $ticket)
                             <tr>
-                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $ticket->ticket_id }}</td>
                                 <td>{{ $ticket->user->name }}</td>
                                 <td>{{ $ticket->showtime->movie->title }}</td>
                                 <td>Phòng {{ $ticket->showtime->rooms->room_name }}</td>
-                                <td>Ca {{ $ticket->showtime->shifts->shift_name }}</td>
+                                <td>Ca {{ $ticket->showtime->shifts->shift_name }} : {{ $ticket->showtime->shifts->start_time }} to {{ $ticket->showtime->shifts->end_time }}</td>
                                 <td>{{ $ticket->showtime->rooms->theater->name }}</td>
                                 <td>{{ $ticket->ticketsSeats->count() }} Ghế</td>
                                 <td>{{ $ticket->combo ? $ticket->combo->name : 'N/A' }}</td>
@@ -111,12 +111,12 @@
                                 <td>{{ $ticket->status }}</td>
                                 <td>
                                     <a href="{{ route('admin.tickets.show', $ticket) }}" class="btn btn-info">View</a>
-                                    <form action="{{ route('admin.tickets.destroy', $ticket) }}" method="POST"
+                                    {{-- <form action="{{ route('admin.tickets.destroy', $ticket) }}" method="POST"
                                         style="display:inline;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger">Delete</button>
-                                    </form>
+                                    </form> --}}
                                 </td>
                             </tr>
                         @endforeach

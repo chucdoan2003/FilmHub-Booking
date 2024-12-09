@@ -1,16 +1,50 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Mail\PaymentSuccessMail;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Showtime;
 use App\Models\Genre;
 use App\Models\SelectedSeat;
+use Illuminate\Support\Facades\Mail;
 class PaymentController extends Controller
 {
     public function vnpay_payment(Request $request)
     {
+
+        //voucher
+        $discountCode = $request->input('discount_code');
+        $userId = $request->input('user_id');
+        $totalPrice = $request->input('total'); // Giá trước khi giảm
+
+        // Kiểm tra mã giảm giá
+        try {
+            $vourcher = \DB::table('vourchers')->where('vourcher_code', $discountCode)->first();
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['msg' => 'Lỗi khi truy vấn mã giảm giá: ' . $e->getMessage()]);
+        }
+        if ($vourcher) {
+        // Tính toán số tiền giảm
+        $discountAmount = ($totalPrice * $vourcher->discount_percentage) / 100;
+
+        // Giảm tối đa
+        if ($discountAmount > $vourcher->max_discount_amount) {
+            $discountAmount = $vourcher->max_discount_amount;
+        }
+
+        // Áp dụng giảm giá
+        $totalPrice -= $discountAmount;
+
+        // Lưu mã giảm giá đã sử dụng
+        \DB::table('vourcher_user')->insert([
+            'user_id' => $userId,
+            'vourcher_id' => $vourcher->id,
+            'created_at' => now(),
+        ]);
+        }
+
 
         $data = $request->all();
 
@@ -295,6 +329,14 @@ class PaymentController extends Controller
             }
             // Lưu lại thay đổi
             $user->save();
+
+            // Gửi email xác nhận thanh toán thành công
+            try {
+                Mail::to($user->email)->send(new PaymentSuccessMail($ticket));
+            } catch (\Exception $e) {
+                // Nếu lỗi khi gửi email, ghi log và tiếp tục xử lý
+                \Log::error('Không thể gửi email xác nhận: ' . $e->getMessage());
+            }
 
             return redirect()->route('confirmBooking')->with('status', 'Thanh toán thành công và đã cộng điểm!')->with($data);
         } else {

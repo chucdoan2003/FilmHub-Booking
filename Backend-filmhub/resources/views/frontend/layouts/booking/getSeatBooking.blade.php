@@ -91,8 +91,25 @@
                                 Ngày chiếu: {{ \Carbon\Carbon::parse($showtime->datetime)->format('d/m/Y ') }},
                                 Ca chiếu: {{ $showtime->shifts->shift_name }} : {{ $shiftStartTime->format('H:i') }} -
                                 {{ $shiftEndTime->format('H:i') }}
-
                             </h4>
+                            <div class="seat-legend">
+                                <div class="seat-item">
+                                    <div class="seat-icon seat-regular"></div>
+                                    <span>Ghế thường</span>
+                                </div>
+                                <div class="seat-item">
+                                    <div class="seat-icon seat-vip"></div>
+                                    <span>Ghế VIP</span>
+                                </div>
+                                <div class="seat-item">
+                                    <div class="seat-icon seat-disabled"></div>
+                                    <span>Ghế đã đặt</span>
+                                </div>
+                                <div class="seat-item">
+                                    <div class="seat-icon seat-selected"></div>
+                                    <span>Ghế được chọn</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
@@ -131,31 +148,36 @@
                             <div class="st_seat_lay_row float_left">
                                 <ul>
                                     <li class="st_seat_heading_row">{{ $row->row_name }}</li>
-                                    @foreach ($row->seats as $seat)
-                                        @php
-                                            $isBooked = in_array($seat->seat_id, $bookedSeats); // Kiểm tra xem ghế đã được đặt chưa
-                                            $seatPrice =
-                                                $seat->types->type_name == 'Ghế thường'
-                                                    ? $showtime->normal_price
-                                                    : $showtime->vip_price;
-                                        @endphp
-                                       <li style="background-color: {{ $isBooked ? 'red' : 'none' }} !important;">
+                                    @foreach ($row->seats as $index => $seat)
+                                    @php
+                                        $isBooked = in_array($seat->seat_id, $bookedSeats); // Kiểm tra xem ghế đã được đặt chưa
+                                        $isVip = $seat->types->type_name === 'VIP'; // Kiểm tra loại ghế
+                                        $seatPrice = $isVip ? $showtime->vip_price : $showtime->normal_price; // Giá ghế dựa trên loại
+                                    @endphp
+
+                                    <li class="{{ $isVip ? 'vip' : 'normal-seat' }}"
+                                        style="background-color: {{ $isBooked ? 'red' : 'transparent' }} !important;">
                                         @if ($isBooked)
-                                            <!-- Hiển thị thông báo "Ghế đã được đặt" nếu ghế đã chọn -->
                                             <span style="color: white;">Ghế đã được đặt</span>
                                         @else
-                                            <!-- Nếu chưa chọn, hiển thị giá ghế -->
-                                            <span>{{ number_format($seatPrice, 0, ',', '.') }} VNĐ</span>
+                                            <span>{{ $seatPrice }} VNĐ</span>
                                         @endif
 
-                                        <input type="checkbox" id="c{{ $seat->seat_id }}" name="selected_seats[]" value="{{ $seat->seat_id }}"
-                                        class="seat-checkbox" data-price="{{ $seatPrice }}" @if ($isBooked) disabled @endif>
+                                        <input type="checkbox" id="c{{ $seat->seat_id }}" name="selected_seats[]"
+                                            value="{{ $seat->seat_id }}" class="seat-checkbox"
+                                            data-price="{{ $seatPrice }}"
+                                            @if ($isBooked) disabled @endif>
+
                                         <label for="c{{ $seat->seat_id }}" class="seat-label"
-                                            data-seat-number="{{ $seat->seat_number }}"
-                                            style="background-color: {{ $isBooked ? 'red' : 'none' }} !important;">
+                                            data-seat-number="{{ $seat->seat_number }}">
                                         </label>
                                     </li>
-                                    @endforeach
+
+                                    {{-- Thêm khoảng cách sau mỗi 5 ghế --}}
+                                    @if (($index + 1) % 5 === 0)
+                                        <li class="seat-gap"></li>
+                                    @endif
+                                @endforeach
                                 </ul>
                             </div>
                         @endforeach

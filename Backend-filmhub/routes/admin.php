@@ -135,3 +135,13 @@ Route::prefix("admin")->group(function(){
 
 Route::get('/admin/tickets/{ticket}/qr', [TicketController::class, 'showQr'])->name('admin.tickets.qr');
 Route::get('admin/tickets/{ticket}/print', [TicketController::class, 'printTicket'])->name('admin.tickets.print');
+
+Route::prefix('admin/statistics')->group(function () {
+    Route::get('/film', [StatisticController::class, 'statisticFilm'])->name('admin.statistics.statisticFilm');
+    Route::get('/filmHub', [StatisticController::class, 'statisticFilmHub'])->name('admin.statistics.statisticFilmHub');
+    Route::get('/theater/{theater_id}', [StatisticController::class, 'statisticTheater'])->name('admin.statistics.statisticTheater');
+    Route::get('/statistics/filmTheater/{theater_id}/{movie_id}', [StatisticController::class, 'statisticFilmTheater'])->name('admin.statistics.statisticFilmTheater');
+    Route::get('/statistics/film-hub/data', [StatisticController::class, 'statisticFilmHubData'])->name('admin.statistics.statisticFilmHubData');
+    Route::get('/statistics/theater/data', [StatisticController::class, 'statisticTheaterData'])->name('admin.statistics.statisticTheaterData');
+
+});

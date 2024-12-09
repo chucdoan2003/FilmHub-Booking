@@ -43,6 +43,7 @@
 
                         <a class="collapse-item" href="{{ route('theaters.indexRoom') }}">Danh sách phòng</a>
 
+
                     </div>
                 </div>
             </li>
@@ -154,7 +155,8 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">List function</h6>
-                        <a class="collapse-item" href="{{ route('admin.statistics.index') }}">Thống kê theo phim</a>
+                        <a class="collapse-item" href="{{ route('admin.statistics.statisticFilmHub') }}">Thống kê hệ thống</a>
+                        <a class="collapse-item" href="{{ route('admin.statistics.statisticFilm') }}">Thống kê phim</a>
                     </div>
                 </div>
             </li>
@@ -242,7 +244,7 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">List function</h6>
-                        <a class="collapse-item" href="{{ route('showtimes.index') }}">Danh sách lịch chiếu</a>
+                        <a class="collapse-item" href="{{ route('showtimes.index') }}">Quản lý lịch chiếu </a>
                         {{-- <a class="collapse-item" href="{{ route('bookings.index') }}">Test đặt vé</a> --}}
 
 
@@ -263,7 +265,7 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">List function</h6>
-                        <a class="collapse-item" href="{{ route('admin.statistics.index') }}">Thống kê theo phim</a>
+                        <a class="collapse-item" href="{{ route('admin.statistics.statisticFilmHub') }}">Thống kê hệ thống</a>
                     </div>
                 </div>
             </li>

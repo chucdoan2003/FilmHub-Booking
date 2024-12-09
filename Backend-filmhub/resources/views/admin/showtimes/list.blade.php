@@ -47,7 +47,7 @@
                                 <th>Thearter</th>
                                 <th>Movie</th>
                                 <th>Room</th>
-                                <th>Shift</th>
+
                                 <th>Price</th>
                                 <th>Vip Price</th>
                                 <th>Start time</th>
@@ -63,7 +63,7 @@
                                     <td>{{ $item->thearter_name }}</td>
                                     <td>{{ $item->movie_name }}</td>
                                     <td>{{ $item->room_name }}</td>
-                                    <td>{{ $item->shift_name }}</td>
+
                                     <td>{{ $item->normal_price }}</td>
                                     <td>{{ $item->vip_price }}</td>
                                     <td>{{ $item->start_time }}</td>
@@ -87,7 +87,7 @@
 
                         </tbody>
                     </table>
-                    <div class="pagination">
+                    {{-- <div class="pagination">
                         @if ($showtimes->onFirstPage())
                             <span class="disabled mx-2 areaPage" >« Previous</span>
                         @else
@@ -107,7 +107,7 @@
                         @else
                             <span class="disabled" class="mx-2 areaPage">Next »</span>
                         @endif
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
