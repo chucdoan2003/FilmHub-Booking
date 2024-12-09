@@ -50,13 +50,13 @@
                         <td>{{ $showtime->movie->movie_id }}</td>
                         <td>{{ $showtime->movie->description }}</td> <!-- Mô tả phim -->
 
-                        <td>{{ $showtime->room->room_name }}</td>
+                        <td>{{ $showtime->rooms->room_name }}</td>
                         <td>{{ $showtime->datetime}}</td>
                         <!-- Thêm thông tin ca chiếu -->
                         <td>
 
-                                {{ $showtime->shift->shift_name }} - {{ $showtime->shift->start_time }} -
-                                {{ $showtime->shift->end_time }}
+                                {{ $showtime->shifts->shift_name }} - {{ $showtime->shifts->start_time }} -
+                                {{ $showtime->shifts->end_time }}
 
                         </td>
 

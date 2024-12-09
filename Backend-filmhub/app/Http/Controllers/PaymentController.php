@@ -1,11 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Mail\PaymentSuccessMail;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Showtime;
 use App\Models\Genre;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+
 class PaymentController extends Controller
 {
     public function vnpay_payment(Request $request)
@@ -78,15 +83,10 @@ class PaymentController extends Controller
                 ]);
             }
         }
-
         session(['ticket_id' => $ticket->ticket_id]);
-
-
-
-
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
         $vnp_Returnurl = route('vnpay.return');
-        $vnp_TmnCode = "HUV2CWXV";//Mã website tại VNPAY
+        $vnp_TmnCode = "HUV2CWXV"; //Mã website tại VNPAY
         $vnp_HashSecret = "8HOY25NHQSM6K2134OEFF1Z69GOJOSBG"; //Chuỗi bí mật
 
         $vnp_TxnRef = date('YmdHis') . '-' . uniqid(); //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
@@ -116,8 +116,6 @@ class PaymentController extends Controller
             "vnp_OrderType" => $vnp_OrderType,
             "vnp_ReturnUrl" => $vnp_Returnurl,
             "vnp_TxnRef" => $vnp_TxnRef,
-
-
         );
 
         // dd( $inputData);
@@ -150,9 +148,6 @@ class PaymentController extends Controller
             $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
             $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
         }
-
-
-
         $userId = 1; // Thay đổi thành ID của người dùng thực tế
         $showtimeId = $request->input('showtime_id'); // Lấy showtime_id từ request
         $totalAmount = $request->input('total'); // Tổng số tiền
@@ -169,71 +164,8 @@ class PaymentController extends Controller
             // Nếu không có URL, bạn có thể xử lý lỗi ở đây
             return redirect()->route('bookings.index')->with('error', 'Có lỗi xảy ra khi thanh toán.');
         }
-
-        // Lưu ticket vào cơ sở dữ liệu
-
-        // if ($request->has('redirect')) {
-        //     // Chuyển hướng tới VNPAY
-        //     return redirect()->away($vnp_Url);
-        // } else {
-        //     // Lưu thông báo vào session khi thanh toán thành công
-        //     session()->flash('message', 'Thanh toán thành công!');
-        //     return redirect()->route(route: 'bookings.index')->with('success', 'Thành toán thành công');
-        // }
-        //     // vui lòng tham khảo thêm tại code demo
-
-
     }
 
-
-
-    // public function vnpay_payment_return(Request $request)
-    // {
-    //     $data = $request->all();
-
-    //     // Lấy ticket_id và user_id từ session
-    //     $ticketId = session('ticket_id');
-    //     $userId = session('user_id');  // Truy xuất user_id từ session
-
-    //     $paymentStatus = $data['vnp_ResponseCode']; // Mã phản hồi từ VNPAY
-
-    //     // Kiểm tra trạng thái thanh toán từ VNPAY
-
-
-    //     // Kiểm tra vé thanh toán trong cơ sở dữ liệu
-    //     $ticket = Ticket::where('ticket_id', $ticketId)->first();
-
-    //     if ($paymentStatus != '00') {
-    //         return redirect()->route('bookings.index')->with('status', 'Thanh toán thất bại');
-    //     }
-
-    //     if ($ticket) {
-    //         // Cập nhật trạng thái vé thành 'completed'
-    //         $ticket->status = 'completed';
-    //         $ticket->save();
-
-    //         // Kiểm tra và thêm điểm cho người dùng
-    //         $user = User::find($userId);
-
-    //         if ($user) {
-    //             // Cộng điểm vào member_point (ví dụ, 100.000 VND = 100 điểm)
-    //             $pointsToAdd = $ticket->total_price / 1000; // 1 điểm = 1.000 VND
-    //             $user->member_point += $pointsToAdd;
-
-    //             if ($user->status !== 'member') {
-    //                 $user->status = 'member';
-    //             }
-    //             // Lưu lại thay đổi
-    //             $user->save();
-
-    //             return redirect()->route('bookings.index')->with('status', 'Thanh toán thành công và đã cộng điểm!');
-    //         } else {
-    //             return redirect()->route('bookings.index')->with('error', 'Không tìm thấy người dùng.');
-    //         }
-    //     } else {
-    //         return redirect()->route('bookings.index')->with('error', 'Không tìm thấy vé thanh toán.');
-    //     }
-    // }
 
 
     public function vnpay_payment_return(Request $request)
@@ -242,7 +174,7 @@ class PaymentController extends Controller
 
         // Lấy ticket_id và user_id từ session
         $ticketId = session('ticket_id');
-        $userId = session('user_id');  // Truy xuất user_id từ session
+        $userId = session('user_id'); // Truy xuất user_id từ session
 
         $paymentStatus = $data['vnp_ResponseCode']; // Mã phản hồi từ VNPAY
 
@@ -279,50 +211,57 @@ class PaymentController extends Controller
             if ($user->status !== 'member') {
                 $user->status = 'member';
             }
+
             // Lưu lại thay đổi
             $user->save();
 
-            return redirect()->route('confirmBooking')->with('status', 'Thanh toán thành công và đã cộng điểm!')->with($data);
+            // Gửi email xác nhận thanh toán thành công
+            try {
+                Mail::to($user->email)->send(new PaymentSuccessMail($ticket));
+            } catch (\Exception $e) {
+                // Nếu lỗi khi gửi email, ghi log và tiếp tục xử lý
+                \Log::error('Không thể gửi email xác nhận: ' . $e->getMessage());
+            }
+
+            return redirect()->route('confirmBooking')->with('status', 'Thanh toán thành công, đã cộng điểm và email xác nhận đã được gửi!');
         } else {
             return redirect()->route('bookings.index')->with('error', 'Không tìm thấy người dùng.');
         }
     }
     public function confirmBooking(Request $request)
-{
-    // Lấy thông tin từ session
-    $ticketId = $request->session()->get('ticket_id');
-    $userId = session('user_id');
-    $genres = Genre::withCount('movies')->get();
-    // Kiểm tra dữ liệu
-    if (!$ticketId || !$userId) {
-        return redirect()->route('movies.index')->with('error', 'Không tìm thấy thông tin xác nhận.');
+    {
+        // Lấy thông tin từ session
+        $ticketId = $request->session()->get('ticket_id');
+        $userId = session('user_id');
+        $genres = Genre::withCount('movies')->get();
+        // Kiểm tra dữ liệu
+        if (!$ticketId || !$userId) {
+            return redirect()->route('movies.index')->with('error', 'Không tìm thấy thông tin xác nhận.');
+        }
+
+        // Lấy thông tin vé
+        $ticket = Ticket::with('ticketsSeats.seat')->where('ticket_id', $ticketId)->first();
+
+        if (!$ticket) {
+            return redirect()->route('movies.index')->with('error', 'Không tìm thấy vé.');
+        }
+
+        // Lấy thông tin suất chiếu và người dùng
+        $showtime = Showtime::with('movie')->find($ticket->showtime_id);
+        $user = User::find($userId);
+
+        if (!$showtime || !$user) {
+            return redirect()->route('movies.index')->with('error', 'Dữ liệu không đầy đủ để xác nhận.');
+        }
+
+        // Trả về view xác nhận với dữ liệu cần thiết
+        return view('frontend.layouts.booking.confirmBooking', [
+            'ticket' => $ticket,
+            'showtime' => $showtime,
+            'user' => $user,
+            'movie' => $showtime->movie,
+            'theater' => $showtime->theater,
+            'genres' => $genres
+        ]);
     }
-
-    // Lấy thông tin vé
-    $ticket = Ticket::with('ticketsSeats.seat')->where('ticket_id', $ticketId)->first();
-
-    if (!$ticket) {
-        return redirect()->route('movies.index')->with('error', 'Không tìm thấy vé.');
-    }
-
-    // Lấy thông tin suất chiếu và người dùng
-    $showtime = Showtime::with('movie')->find($ticket->showtime_id);
-    $user = User::find($userId);
-
-    if (!$showtime || !$user) {
-        return redirect()->route('movies.index')->with('error', 'Dữ liệu không đầy đủ để xác nhận.');
-    }
-
-    // Trả về view xác nhận với dữ liệu cần thiết
-    return view('frontend.layouts.booking.confirmBooking', [
-        'ticket' => $ticket,
-        'showtime' => $showtime,
-        'user' => $user,
-        'movie' => $showtime->movie,
-        'theater' => $showtime->theater,
-         'genres' => $genres
-    ]);
-}
-
-
 }

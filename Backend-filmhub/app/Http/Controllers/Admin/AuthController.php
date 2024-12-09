@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Genre;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -33,54 +34,61 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $validator = $request->validate(
-            [
-                "email" => "required|email",
-                "password" => "required"
-            ]
-        );
+        $validator = $request->validate([
+            "email" => "required|email",
+            "password" => "required"
+        ]);
         $credentials = [
             "email" => $request->email,
             "password" => $request->password
         ];
-        $isLogin = false;
-
         if (Auth::attempt($credentials)) {
-            // Đăng nhập thành công và Laravel tự động tạo session
-            $isLogin = true;
-
+            // Lấy thông tin người dùng sau khi đăng nhập thành công
             $user = Auth::user();
-
-            session(['user_id' => $user->user_id]);
-
-            $user = Auth::user();
-            return redirect()->route('movies.index')->with('success', 'Đăng nhập thành công!');
+            if ($user->status === 'admin' || $user->status === 'manager') {
+                // Chuyển hướng đến dashboard admin
+                return redirect()->route('admin.dashboard')->with('success', 'Đăng nhập thành công với quyền quản trị!');
+            } else {
+                // Chuyển hướng đến giao diện frontend
+                return redirect()->route('movies.index')->with('success', 'Đăng nhập thành công!');
+            }
         } else {
-            $isLogin = false;
-            return view("frontend.auth.login", compact('isLogin', 'genres'));
+            // Trả về giao diện đăng nhập với lỗi
+            return back()->withErrors(['login' => 'Email hoặc mật khẩu không đúng.'])->withInput();
         }
     }
     public function register(Request $request)
     {
         // Thêm người dùng vào cơ sở dữ liệu
         // try {
-        $validator = $request->validate(
-            [
-                "email" => "required|email",
-                "password" => [
-                    "required",
-                    "string",
-                    "min:8",  // Tối thiểu 8 ký tự
-                    "max:20", // Tối đa 20 ký tự
-                    "regex:/[a-z]/", // Ít nhất một ký tự thường
-                    "regex:/[A-Z]/", // Ít nhất một ký tự in hoa
-                    "regex:/[0-9]/", // Ít nhất một chữ số
-                    "regex:/[@$!%*?&]/", // Ít nhất một ký tự đặc biệt],
-
-                ],
-                "password_confirmation" => "required|same:password"
-            ]
-        );
+        $validator = Validator::make($request->all(), [
+            "email" => "required|email",
+            "password" => [
+                "required",
+                "string",
+                "min:8",  // Tối thiểu 8 ký tự
+                "max:20", // Tối đa 20 ký tự
+                "regex:/[a-z]/", // Ít nhất một ký tự thường
+                "regex:/[A-Z]/", // Ít nhất một ký tự in hoa
+                "regex:/[0-9]/", // Ít nhất một chữ số
+            ],
+            "password_confirmation" => "required|same:password"
+        ], [
+            // Email errors
+            "email.required" => "Email là bắt buộc.",
+            "email.email" => "Email không hợp lệ.",
+            // Password errors
+            "password.required" => "Mật khẩu là bắt buộc.",
+            "password.string" => "Mật khẩu phải là một chuỗi ký tự.",
+            "password.min" => "Mật khẩu phải có ít nhất :min ký tự.",
+            "password.max" => "Mật khẩu không được vượt quá :max ký tự.",
+            // Password confirmation errors
+            "password_confirmation.required" => "Vui lòng xác nhận mật khẩu.",
+            "password_confirmation.same" => "Mật khẩu xác nhận không khớp.",
+        ]);
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
 
 
         $user = User::query()->create($request->all());
