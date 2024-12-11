@@ -1,4 +1,4 @@
-@extends('frontend.layouts.master')
+@extends('frontend.layouts.master4')
 @section('content')
 <style>
     .btn-register{
@@ -37,7 +37,7 @@
                 <div>
                     <h2 style="font-size: 20px">Change password successfully, please <a href="{{route("getLogin")}}" style="color: #fff"><button type="button" class="btn-login">Login</button></a> </h2>
                 </div>
-                
+
             @else
 
                 <div class="st_pop_form_heading_wrapper float_left">

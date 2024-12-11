@@ -1,5 +1,17 @@
 @if (Auth::check())
 
+    @php
+        $user = Auth::user(); // Lấy thông tin người dùng hiện tại
+        $theaterName = null;
+
+        // Kiểm tra nếu user có theater_id
+        if (!is_null($user->theater_id)) {
+            $theater = \DB::table('theaters')
+                ->where('theater_id', $user->theater_id)
+                ->first();
+            $theaterName = $theater ? $theater->name : null;
+        }
+    @endphp
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
         <!-- Sidebar - Brand -->
 
@@ -7,7 +19,9 @@
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
-            <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+            <div class="sidebar-brand-text mx-2">
+                {{ "Rạp ". $theaterName ?? 'SB Admin' }}
+            </div>
         </a>
 
         <!-- Divider -->
@@ -155,18 +169,45 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">List function</h6>
-                        <a class="collapse-item" href="{{ route('admin.statistics.statisticFilmHub') }}">Thống kê hệ thống</a>
-                        <a class="collapse-item" href="{{ route('admin.statistics.statisticFilm') }}">Thống kê phim</a>
+                        <a class="collapse-item" href="{{ route('admin.statistics.statisticFilmHub') }}">Thống kê hệ
+                            thống</a>
+                        <a class="collapse-item" href="{{ route('admin.statistics.statisticFilm') }}">Thống kê
+                            phim</a>
+                    </div>
+                </div>
+            </li>
+
+            {{-- category --}}
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse-ct"
+                    aria-expanded="true" aria-controls="collapse-ct">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Danh mục bài viết</span>
+                </a>
+                <div id="collapse-ct" class="collapse {{request()->routeIs('admin.category.*') ? 'show' : ''}}" aria-labelledby="heading1" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{{ route('admin.category.index') }}">Danh sách</a>
+                        <a class="collapse-item" href="{{ route('admin.category.create') }}">Tạo mới</a>
+                    </div>
+                </div>
+            </li>
+            {{-- Post --}}
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse-post"
+                    aria-expanded="true" aria-controls="collapse-post">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Tin tức</span>
+                </a>
+                <div id="collapse-post" class="collapse {{request()->routeIs('admin.post.*') ? 'show' : ''}}" aria-labelledby="heading1" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{{ route('admin.post.index') }}">Danh sách</a>
+                        <a class="collapse-item" href="{{ route('admin.post.create') }}">Tạo mới</a>
                     </div>
                 </div>
             </li>
 
 
-
-
-
-
-
+        {{-- SIDEBAR MANAGER --}}
         @elseif(Auth::user()->status == 'manager')
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
@@ -265,7 +306,8 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">List function</h6>
-                        <a class="collapse-item" href="{{ route('admin.statistics.statisticFilmHub') }}">Thống kê hệ thống</a>
+                        <a class="collapse-item" href="{{ route('admin.statistics.statisticFilmHub') }}">Thống kê hệ
+                            thống</a>
                     </div>
                 </div>
             </li>

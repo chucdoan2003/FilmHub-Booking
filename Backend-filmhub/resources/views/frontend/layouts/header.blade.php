@@ -201,17 +201,13 @@
                                     </li>
                                 </ul> --}}
                             </li>
-                            <li class="parent"><a href="#">tv show</a>
-                                <ul class="lg-submenu">
-                                    <li><a href="#">Star Plus</a></li>
-                                    <li><a href="#">Star Jalsha</a></li>
-                                    <li><a href="#">Star Gold</a></li>
-                                    <li><a href="#">Sony TV</a></li>
-                                    <li><a href="#">Sab TV</a></li>
-                                    <li><a href="#">Sony Pal</a></li>
-                                    <li><a href="#">Set Max</a></li>
-                                </ul>
-                            </li>
+                            {{-- @if ($categoryPost->count() > 0)
+                            @foreach ($categoryPost as $item)
+                                <li class="parent">
+                                    <a href="{{ route('categoryPost', $item->id) }}">{{ $item->name }}</a>
+                                </li>
+                            @endforeach
+                        @endif --}}
 
                             {{-- <li class="parent"><a href="#">pages</a>
                                 <ul class="lg-submenu">

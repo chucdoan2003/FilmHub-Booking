@@ -67,15 +67,26 @@ class ClientBookingController extends Controller
     {
         $userId = session('user_id');
 
-        $pendingTicket = \DB::table('tickets')
-        ->where('user_id', $userId)
-        ->where('status', 'pending')
-        ->first();
 
-    // Nếu có vé chưa thanh toán, trả về thông báo yêu cầu thanh toán vé cũ trước
-    if ($pendingTicket) {
-        return redirect()->route('movies.index')->with('error', 'Bạn cần hoàn thành thanh toán vé chưa hoàn thành trước khi đặt vé mới.');
-    }
+        // Kiểm tra xem người dùng có bị cấm đặt vé không (3 lần cảnh báo)
+        $warningCount = \DB::table('user_warning')
+            ->where('user_id', $userId)
+            ->count();
+
+        if ($warningCount >= 3) {
+            return redirect()->route('movies.index')->with('error', 'Bạn đã treo vé 3 lần nên tài khoản hiện đã bị cấm đặt vé. Vui lòng liên hệ để được giúp đỡ.');
+        }
+
+
+        $pendingTicket = \DB::table('tickets')
+            ->where('user_id', $userId)
+            ->where('status', 'pending')
+            ->first();
+
+        // Nếu có vé chưa thanh toán, trả về thông báo yêu cầu thanh toán vé cũ trước
+        if ($pendingTicket) {
+            return redirect()->route('movies.index')->with('error', 'Bạn cần hoàn thành thanh toán vé chưa hoàn thành trước khi đặt vé mới.');
+        }
 
         $showtime = Showtime::with([
             'movies',
@@ -175,7 +186,7 @@ class ClientBookingController extends Controller
                         'user_id' => $user_id,
                         'showtime_id' => $showtime_id,
                         'seat_id' => $seatId,
-                        'totalPrice' =>  $totalPrice
+                        'totalPrice' => $totalPrice
                     ]);
                 } catch (\Exception $e) {
                     return redirect()->back()->withErrors(['error' => 'Lỗi khi lưu ghế.']);
@@ -188,6 +199,22 @@ class ClientBookingController extends Controller
             ->where('showtime_id', $showtimeId)
             ->with(['seat', 'seat.rows', 'seat.types'])
             ->get();
+
+            $totalAmount = $selectedSeats2->sum(function ($selectedSeat) use ($showtime) {
+                // Kiểm tra loại ghế và lấy giá tương ứng
+                $seatType = $selectedSeat->seat->types; // Lấy thông tin loại ghế (thường hay VIP)
+
+                if ($seatType->type_id == 1) {
+                    // Nếu là ghế thường, dùng giá normal_price từ showtime
+                    return $showtime->normal_price;
+                }  if ($seatType->type_id == 2) {
+                    // Nếu là ghế VIP, dùng giá vip_price từ showtime
+                    return $showtime->vip_price;
+                }
+            });
+
+
+        // dd( $totalAmount);
 
         // Trích xuất danh sách seat_id
         $seatIds = $selectedSeats2->pluck('seat_id')->toArray();
@@ -221,9 +248,9 @@ class ClientBookingController extends Controller
         $vouchers = Voucher::all();
 
         $usedVoucher = DB::table('vourcher_user')
-        ->where('user_id', $user_id)
-        ->pluck('vourcher_id')
-        ->first();
+            ->where('user_id', $user_id)
+            ->pluck('vourcher_id')
+            ->first();
 
 
         // dd($totalPrice);
@@ -235,6 +262,7 @@ class ClientBookingController extends Controller
             'user_id',
             'seatNumbers',
             'genres',
+            'totalAmount',
             'foods',
             'drinks',
             'combos',
