@@ -17,9 +17,9 @@ class CheckExpiredSelectedSeats
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $timeout = 5; // Thời gian timeout là 5 phút
+        $timeout = 5;
 
-        // Lấy các ghế đã hết thời gian chờ
+
         $expiredSeats = DB::table('selected_seats')
             ->where('created_at', '<', Carbon::now()->subMinutes($timeout))
             ->get();

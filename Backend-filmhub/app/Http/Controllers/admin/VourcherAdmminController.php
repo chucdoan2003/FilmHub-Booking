@@ -19,12 +19,14 @@ class VourcherAdmminController extends Controller
         $request->validate([
             'vourcher_code'=>'required',
             'vourcher_name'=>'required',
+            'required_points' =>'required',
             'discount_percentage'=>'required|numeric',
             'max_discount_amount'=>'required|numeric'
         ]);
         DB::table('vourchers')->insert([
             'vourcher_code'=>$request->vourcher_code,
             'vourcher_name'=>$request->vourcher_name,
+            'required_points'=>$request->required_points,
             'discount_percentage'=>$request->discount_percentage,
             'max_discount_amount'=>$request->max_discount_amount
 
@@ -39,12 +41,14 @@ class VourcherAdmminController extends Controller
         $request->validate([
             'vourcher_code'=>'required',
             'vourcher_name'=>'required',
+            'required_points' =>'required',
             'discount_percentage'=>'required|numeric',
             'max_discount_amount'=>'required|numeric'
         ]);
         DB::table('vourchers')->where('id',$id)->update([
             'vourcher_code'=>$request->vourcher_code,
-            'vourcher_name'=>$request->vourcher_price,
+            'vourcher_name'=>$request->vourcher_name,
+            'required_points'=>$request->required_points,
             'discount_percentage'=>$request->discount_percentage,
             'max_discount_amount'=>$request->max_discount_amount
         ]);

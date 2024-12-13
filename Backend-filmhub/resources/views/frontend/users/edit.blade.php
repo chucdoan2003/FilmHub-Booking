@@ -15,7 +15,7 @@
                        </div>
                        <div>
                         <p for="">Email</p>
-                            <input type="text" value="{{Auth::user()->email}}" name="email"style="width: 100%; border-radius: 5px; padding: 4px 12px; border:1px solid rgb(40, 215, 40)">
+                            <input type="text" value="{{Auth::user()->email}}" name="email"style="width: 100%; border-radius: 5px; padding: 4px 12px; border:1px solid rgb(40, 215, 40)" disabled>
                        </div>
                        <div>
                         <p for="">Image avatar</p>

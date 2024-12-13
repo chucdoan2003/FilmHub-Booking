@@ -5,8 +5,8 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 use function Laravel\Prompts\alert;
 
@@ -23,6 +23,7 @@ class ShowtimesController extends Controller
         ->join('rooms', 'showtimes.room_id', '=', 'rooms.room_id')   // Join với bảng rooms
         ->join('shifts', 'showtimes.shift_id', '=', 'shifts.shift_id') // Join với bảng shifts
         ->join('theaters', 'showtimes.theater_id', '=', 'theaters.theater_id')
+        ->where('theaters.theater_id', Auth::user()->theater_id)
 
         ->select('showtimes.*', 'movies.title as movie_name','rooms.room_name as room_name', 'shifts.shift_name as shift_name','theaters.name as thearter_name', 'shifts.start_time', 'shifts.end_time')
         ->get();
@@ -87,7 +88,7 @@ class ShowtimesController extends Controller
         $movie_id= $request->movie;
         $room_id = $request->room;
         $datetime =$request->datetime;
-        $theater = $request->theater;
+        $theater = Auth::user()->theater_id;
         $normal_price = $request->normal_price;
         $vip_price = $request->vip_price;
         $movies = DB::table('movies')->get();
@@ -96,6 +97,20 @@ class ShowtimesController extends Controller
         $theaters = DB::table("theaters")->get();
         $start_time = $request->start_time;
         $end_time = $request->end_time;
+
+        // dd($start_time);
+
+
+
+        $errors=[];
+        $inputDate = Carbon::createFromFormat('Y-m-d', $datetime , 'Asia/Ho_Chi_Minh');
+        $currentDate = Carbon::now();
+
+        if($inputDate->isPast() || $inputDate->isToday())
+        {
+            $errors['date_not_future'] = 'Ngày được chọn phải là một ngày của tương lai';
+        }
+
 
         $movie = DB::table('movies')->where('movie_id',$movie_id)->first();
         $showtimes=  DB::table('showtimes')
@@ -121,7 +136,7 @@ class ShowtimesController extends Controller
             $differenceInMunutes = $start_time->diffInSeconds($end_time);
             $diff = $differenceInMunutes/60;
         }else{
-            $errors['start_end_time'] = 'Start time and end time must be set';
+            $errors['start_end_time'] = 'Thời gian bắt đầu, kết thúc của ca chiếu không được để trống';
             return view('admin.showtimes.addshift', compact(
                 'movies', 'rooms', 'shifts', 'datetime',
                 'room_id', 'movie_id', 'theaters', 'theater',
@@ -132,25 +147,26 @@ class ShowtimesController extends Controller
 
 
 
-        $errors=[];
 
-        if($normal_price > $vip_price){
-            $errors['price_not_except'] = 'Normal price must be less than vip price';
+        if($normal_price >= $vip_price){
+            $errors['price_not_except'] = 'Giá vip phải lớn hơn giá thường';
         }
         if ($movie->duration > $diff) {
-            $errors['isNotEnoughtTime']= 'Shift must be greater than minute movie duration';
+            $errors['isNotEnoughtTime']= 'Khoảng thời gian của ca chiếu phải lớn hơn thời lượng chiếu của phim';
         }
         if (strtotime($start_time) > strtotime($end_time)) {
-            $errors['startime_endtime']= 'Start time must be less than end time';
+            $errors['startime_endtime']= 'Thời gian bắt đầu phải trước thời gian kết thúc';
         }
         if(!isset($normal_price)){
-            $errors['normal_price_null'] = 'Normal price must be set';
+            $errors['normal_price_null'] = 'Giá thường không được để trống';
         }
         if(!isset($vip_price)){
-            $errors['vip_price_null'] = 'Vip price must be set';
+            $errors['vip_price_null'] = 'Giá vip không được để trống';
         }
 
         if (!empty($errors)) {
+            $start_time = Carbon::parse($start_time)->format('H:i');
+            $end_time = Carbon::parse($end_time)->format('H:i');
             return view('admin.showtimes.addshift', compact(
                 'movies', 'rooms', 'shifts', 'datetime',
                 'room_id', 'movie_id', 'theaters', 'theater',
@@ -208,11 +224,10 @@ class ShowtimesController extends Controller
         $end_time = $shift->end_time;
         $normal_price = $showtime->normal_price;
         $vip_price = $showtime->vip_price;
-        $theater = $showtime->theater_id;
         $errors= [];
         return view('admin.showtimes.edit2', compact(
            'movies','movie_id',  'rooms', 'shifts', 'datetime',
-            'room_id', 'id', 'theaters', 'theater',
+            'room_id', 'id', 'theaters',
             'normal_price', 'vip_price','start_time', 'end_time',
             'errors', 'showtime_id'
         ));
@@ -225,7 +240,7 @@ class ShowtimesController extends Controller
         $movie_id= $request->movie;
         $room_id = $request->room;
         $datetime =$request->datetime;
-        $theater = $request->theater;
+        $theater = Auth::user()->theater_id;
         $normal_price = $request->normal_price;
         $vip_price = $request->vip_price;
         $movies = DB::table('movies')->get();
@@ -235,6 +250,17 @@ class ShowtimesController extends Controller
         $start_time = $request->start_time;
         $end_time = $request->end_time;
         $shift = DB::table('shifts')->where('shift_id', $showtime->shift_id)->first();
+
+        $errors=[];
+
+
+        $inputDate = Carbon::createFromFormat('Y-m-d', $datetime , 'Asia/Ho_Chi_Minh');
+        $currentDate = Carbon::now();
+
+        if($inputDate->isPast() || $inputDate->isToday())
+        {
+            $errors['date_not_future'] = 'Ngày được chọn phải là một ngày của tương lai';
+        }
 
 
         $movie = DB::table('movies')->where('movie_id',$movie_id)->first();
@@ -258,15 +284,15 @@ class ShowtimesController extends Controller
                 }
             }
 
-            $start_time = Carbon::createFromFormat('H:i',substr(trim($request->start_time),0, 5) );
-            $end_time = Carbon::createFromFormat('H:i',substr(trim($request->end_time),0, 5) );
-            $differenceInMunutes = $start_time->diffInSeconds($end_time);
+            $start_time2 = Carbon::createFromFormat('H:i',substr(trim($request->start_time),0, 5) );
+            $end_time2 = Carbon::createFromFormat('H:i',substr(trim($request->end_time),0, 5) );
+            $differenceInMunutes = $start_time2->diffInSeconds($end_time2);
             $diff = $differenceInMunutes/60;
         }else{
-            $errors['start_end_time'] = 'Start time and end time must be set';
+            $errors['start_end_time'] = 'Thời gian bắt đầu và kết thúc của ca chiếu không được để trống';
             return view('admin.showtimes.addshift', compact(
                 'movies', 'rooms', 'shifts', 'datetime',
-                'room_id', 'movie_id', 'theaters', 'theater',
+                'room_id', 'movie_id', 'theaters', 'theater', 'start_time', 'end_time',
                 'errors', 'showtimes',
                 'normal_price', 'vip_price'
             ));
@@ -274,25 +300,26 @@ class ShowtimesController extends Controller
 
 
 
-        $errors=[];
 
-        if($normal_price > $vip_price){
-            $errors['price_not_except'] = 'Normal price must be less than vip price';
+        if($normal_price >= $vip_price){
+            $errors['price_not_except'] = 'Giá vip phải lớn hơn giá thường';
         }
         if ($movie->duration > $diff) {
-            $errors['isNotEnoughtTime']= 'Shift must be greater than minute movie duration';
+            $errors['isNotEnoughtTime']= 'Thời gian của ca chiếu phải lớn hơn thời lượng phim';
         }
         if (strtotime($start_time) > strtotime($end_time)) {
-            $errors['startime_endtime']= 'Start time must be less than end time';
+            $errors['startime_endtime']= 'Thời gian bắt đầu phải trước thời gian kết thúc';
         }
         if(!isset($normal_price)){
-            $errors['normal_price_null'] = 'Normal price must be set';
+            $errors['normal_price_null'] = 'Giá thường không được để trống';
         }
         if(!isset($vip_price)){
-            $errors['vip_price_null'] = 'Vip price must be set';
+            $errors['vip_price_null'] = 'Giá vip không được để trống';
         }
 
         if (!empty($errors)) {
+            $start_time = Carbon::parse($start_time)->format('H:i');
+            $end_time = Carbon::parse($end_time)->format('H:i');
             return view('admin.showtimes.addshift', compact(
                 'movies', 'rooms', 'shifts', 'datetime',
                 'room_id', 'movie_id', 'theaters', 'theater',

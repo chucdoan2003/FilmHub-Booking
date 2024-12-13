@@ -201,13 +201,18 @@
                                     </li>
                                 </ul> --}}
                             </li>
-                            {{-- @if ($categoryPost->count() > 0)
+                            <li class="parent"> <a href="">Bài viết</a>
+                            @if ($categoryPost->count() > 0)
+                            <ul class="lg-submenu">
                             @foreach ($categoryPost as $item)
-                                <li class="parent">
-                                    <a href="{{ route('categoryPost', $item->id) }}">{{ $item->name }}</a>
-                                </li>
+
+                                        <li>   <a href="{{ route('categoryPost', $item->id) }}">{{ $item->name }}</a></li>
+
                             @endforeach
-                        @endif --}}
+
+                        </ul>
+                        @endif
+                    </li>
 
                             {{-- <li class="parent"><a href="#">pages</a>
                                 <ul class="lg-submenu">

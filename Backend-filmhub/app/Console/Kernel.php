@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         // $schedule->command('check:pending-orders')->everyMinute();
+        $schedule->command('vouchers:update-status')->daily();
     }
 
     /**

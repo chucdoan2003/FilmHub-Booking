@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\StoreUserRequest;
 use App\Mail\ForgotPasswordMail;
+use App\Mail\RegisterMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -48,7 +49,6 @@ class AuthController extends Controller
         $isLogin = true;
             $user = Auth::user();
             session(['user_id' => $user->user_id]);
-            session(['theater_id' => $user->theater_id]);
 
         // Kiểm tra `status` của người dùng
         if ($user->status === 'admin' || $user->status === 'manager') {
@@ -67,6 +67,7 @@ class AuthController extends Controller
     {
         // Thêm người dùng vào cơ sở dữ liệu
         // try {
+
             $validator = Validator::make($request->all(), [
                 "email" => "required|email",
                 "password" => [
@@ -101,9 +102,13 @@ class AuthController extends Controller
                 return back()->withErrors($validator)->withInput();
             }
 
+            $user = [];
+            $user['email'] = $request->email;
+            $user['password'] = $request->password;
+            $email = $request->email;
 
-        $user = User::query()->create($request->all());
-        return view('frontend.auth.register', compact('user'));
+        Mail::to($request->email)->send(new RegisterMail($user));
+        return view('frontend.auth.register', compact('email'));
         // } catch (\Throwable $th) {
         //     Log::error(__CLASS__ . "@". __FUNCTION__,[
         //         "line"=>$th->getLine(),
@@ -114,6 +119,13 @@ class AuthController extends Controller
         //             "RC"=>-1
         //         ], Response::HTTP_INTERNAL_SERVER_ERROR);
         // }
+    }
+    public function registerConfirm($email, $password){
+        $user = User::create([
+            'email' =>$email,
+            'password' => Hash::make($password)
+        ]);
+        return view('frontend.auth.register', compact('user'));
     }
     public function logout()
     {
