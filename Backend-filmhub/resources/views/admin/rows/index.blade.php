@@ -31,6 +31,7 @@
                         <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Tên phòng</th>
                             <th>Tên hàng ghế</th>
                             <th>Hành động</th>
                         </tr>
@@ -39,6 +40,7 @@
                             @foreach($data as $item)
                                 <tr>
                                     <td>{{$item->row_id}}</td>
+                                    <td>{{$item->rooms->room_name}}</td>
                                     <td>{{$item->row_name}}</td>
                                     <td >
                                         <a href="{{route('admin.rows.edit', $item)}}" class="btn btn-info">Sửa</a>

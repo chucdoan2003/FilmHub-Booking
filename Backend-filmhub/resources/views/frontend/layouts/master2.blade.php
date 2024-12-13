@@ -46,16 +46,15 @@ Author: Webstrot
 
 <body>
 
-    @include('fontend.layouts.header');
-    @include('fontend.layouts.slider.slider');
+    @include('frontend.layouts.header')
 
 
     @yield('content')
 
-    @include('fontend.layouts.content.patner');
+    @include('frontend.layouts.content.patner')
 
-    @include('fontend.layouts.login.login');
-    @include('fontend.layouts.footer');
+    @include('frontend.layouts.login.login')
+    @include('frontend.layouts.footer')
 
 
 

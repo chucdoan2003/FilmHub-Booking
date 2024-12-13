@@ -30,14 +30,15 @@ class SeatController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {
-        $rooms = Room::query()->pluck('room_name', 'room_id')->all();
-        $rows = Row::query()->pluck('row_name', 'row_id')->all();
-        $types = Type::query()->pluck('type_name', 'type_id')->all();
+{
+    $rows = Row::with('room.theater')->get();
 
-        return view(self::PATH_VIEW.__FUNCTION__, compact('rooms', 'rows', 'types'));
-        
-    }
+    // Các dữ liệu khác
+    $types = Type::query()->pluck('type_name', 'type_id')->all();
+    $rooms = Room::query()->pluck('room_name', 'room_id')->all();
+
+    return view(self::PATH_VIEW.__FUNCTION__, compact('rooms', 'rows', 'types'));
+}
 
     /**
      * Store a newly created resource in storage.

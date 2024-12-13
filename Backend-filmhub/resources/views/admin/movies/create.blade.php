@@ -99,6 +99,17 @@
             @enderror
         </div>
         <div class="mb-3">
+            <label for="status" class="form-label">Status:</label>
+            <select name="status" class="form-control" id="status">
+                <option value="Sắp ra mắt" selected>Sắp ra mắt</option>
+                <option value="Đang chiếu">Đang chiếu</option>
+                <option value="Ngừng chiếu">Ngừng chiếu</option>
+            </select>
+            @error('director')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="mb-3">
             <label for="director" class="form-label">Director:</label>
             <input type="text" class="form-control" id="director" name="director">
             @error('director')

@@ -29,8 +29,14 @@
         </div>
 
         <div class="mb-3">
-            <label for="capacity" class="form-label">Sức chứa</label>
-            <input type="number" class="form-control" id="capacity" name="capacity" value="{{ $room->capacity }}" required>
+            <label for="theater_id" class="form-label">Rạp</label>
+            <select class="form-control" id="theater_id" name="theater_id" required>
+                @foreach($theaters as $theater_id => $theater_name)
+                    <option value="{{ $theater_id }}" {{ $room->theater_id == $theater_id ? 'selected' : '' }}>
+                        {{ $theater_name }}
+                    </option>
+                @endforeach
+            </select>
         </div>
 
         <button type="submit" class="btn btn-primary">Cập nhật</button>

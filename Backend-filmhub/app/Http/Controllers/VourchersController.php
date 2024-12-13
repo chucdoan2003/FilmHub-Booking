@@ -2,69 +2,77 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\vourcher;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\Voucher;
+use App\Models\VourcherEvent;
+use App\Models\VourcherRedeem;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class VourchersController extends Controller
 {
-    public function index(){
-        // Fetch all vouchers from your database
-        $vouchers = vourcher::all();
+    public function index()
+    {
+        // // Lấy danh sách voucher có thể đổi
+        // $vouchers = VourcherRedeem::with('user')->get(); // Hoặc lọc theo điều kiện nào đó
+        $user_id = Auth::id(); // Lấy ID người dùng hiện tại
 
-        // Return the vouchers as a JSON response
-        return response()->json([
-            "message" => "Lấy danh sách vourcher thành công",
-            "data" => $vouchers
-        ]);
+        // Lấy danh sách voucher chỉ của người dùng này
+        $vouchers = VourcherRedeem::where('user_id', $user_id)->with('user')->get(); // Tải thông tin người dùng liên quan
+        
+        $usedVouchers = DB::table('vourcher_user')
+            ->where('user_id', $user_id)
+            ->pluck('vourcher_id') // Lấy danh sách mã giảm giá đã sử dụng
+            ->toArray();
+
+            $vourcherEvents = VourcherEvent::all();
+
+        return view('frontend.redeemvourcher.index', compact('vouchers', 'usedVouchers', 'vourcherEvents'));
     }
-    public function getma($mavourcher){
-        $vourcher = DB::table('vourchers')->where('vourcher_code', $mavourcher)->first();
-        return response()->json([
-            'message'=>"lấy vourcher thành công",
-            "data"=>$vourcher
-        ]);
+    public function showForm() {
+         if (!Auth::check()) {
+        return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để tiếp tục.');
     }
-    public function appma($price, $vourcher_price){
-        $price_real= $price - ($price*$vourcher_price);
-        return response()->json([
-            "message"=>"app mã thành công",
-            "data"=>$price_real
-        ]);
-
-
+        $vouchers = Voucher::all(); // Lấy danh sách mã giảm giá
+        return view('frontend.redeemvourcher.redeem', compact('vouchers'));
     }
+    public function redeem(Request $request)
+{
+    $request->validate([
+        'voucher_code' => 'required|string',
+    ]);
 
-    public function userVourchers($id){
-        $vouchers = DB::table('vourcher_user')
-        ->join('vourchers', 'vourcher_user.vourcher_id', '=', 'vourchers.id')
-        ->where('vourcher_user.user_id', $id)
-        ->get();
-        return response()->json([
-            "message"=>"lấy danh sách vourcher thành công",
-            "data"=>$vouchers
-        ]);
-    }
-    public function addVourcherUser($vourcher_id, $user_id){
-        $checkUserVoucher = DB::table('vourcher_user')
-        ->where('vourcher_user.user_id',$user_id)
-        ->where('vourcher_user.vourcher_id',$vourcher_id)
-        ->get();
-        if(!$checkUserVoucher){
-            DB::table('vourcher_user')->insert([
-                'vourcher_id' => $vourcher_id,
-                'user_id' => $user_id
-            ]);
-            return response()->json([
-                "message"=>"thêm vourcher vào user thành công",
-            ]);
-        }else{
-            return response()->json([
-                "message"=>"user đã có vourcher này",
-            ]);
-        }
+    // Tìm voucher
+    $voucher = Voucher::where('vourcher_code', $request->voucher_code)->first();
 
-
+    if (!$voucher) {
+        return redirect()->route('redeem.form')->withErrors(['voucher_code' => 'Voucher không tồn tại']);
     }
 
+    // Lấy người dùng hiện tại
+    $userId = auth()->id(); 
+    $user = User::find($userId);
+
+    // Kiểm tra điểm của người dùng
+    if ($user->member_point < $voucher->required_points) {
+        return redirect()->route('redeem.form')->withErrors(['voucher_code' => 'Bạn không đủ điểm để đổi voucher này']);
+    }
+
+    // Cập nhật điểm của người dùng
+    $user->member_point -= $voucher->required_points;
+    $user->save();
+
+    // Lưu thông tin vào bảng vourchers_redeem
+    VourcherRedeem::create([
+        'user_id' => $userId,
+        'voucher_id' => $voucher->id,
+        'vourcher_code'=> $voucher->vourcher_code,
+        'vourcher_name'=> $voucher->vourcher_name,
+        'discount_percentage'=> $voucher->discount_percentage,
+        'max_discount_amount'=> $voucher->max_discount_amount,
+    ]);
+
+    return redirect()->route('redeem.form')->with('success', 'Đổi voucher thành công');
+}
 }

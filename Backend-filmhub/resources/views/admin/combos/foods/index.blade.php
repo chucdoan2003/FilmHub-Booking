@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 @section('content')
-    <h1>Combo</h1>
+    <h1>Foods</h1>
     <a href="{{ route('admin.foods.create') }}" class="btn btn-success">Create New Food</a>
 
     @if (session('success'))

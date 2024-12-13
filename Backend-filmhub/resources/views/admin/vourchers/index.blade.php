@@ -44,8 +44,11 @@
                         <thead>
                             <tr>
                                 <th>Id</th>
-                                <th>Vourcher_code</th>
-                                <th>Vourcher_price</th>
+                                <th>Code Vourcher</th>
+                                <th>Mô tả</th>
+                                <th>Point</th>
+                                <th>%</th>
+                                <th>Tối đa</th>
                                 
                                 <th>Action</th>
                             </tr>
@@ -55,7 +58,10 @@
                             <tr>
                                 <td>{{$item->id}}</td>
                                 <td>{{$item->vourcher_code}}</td>
-                                <td>{{$item->vourcher_price}}</td>
+                                <td>{{$item->vourcher_name}}</td>
+                                <td>{{$item->required_points}}</td>
+                                <td>{{$item->discount_percentage}}%</td>
+                                <td>{{$item->max_discount_amount}}</td>
                                 <td>
                                     <a href="{{ route('vourchers.edit', $item->id) }}"><button class="btn-warning my-2">Edit</button></a>
                                     <form id="deleteForm" action="{{ route('vourchers.destroy', $item->id) }}" method="POST" >

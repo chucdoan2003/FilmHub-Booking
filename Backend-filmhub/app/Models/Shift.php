@@ -9,23 +9,13 @@ class Shift extends Model
 {
     use HasFactory;
 
-    protected $table = 'shifts'; // Tên bảng
-    protected $primaryKey = 'shift_id'; // Khóa chính
-    public $incrementing = false; // Nếu shift_id không tự động tăng
-    protected $fillable = [
-        'shift_name',
-        'start_time',
-        'end_time',
-    ];
+    protected $fillable = ['shift_name', 'start_time', 'end_time'];
+
+    protected $table = 'shifts';
+    protected $primaryKey = 'shift_id';
     public function theater()
     {
         return $this->belongsTo(Theater::class, 'theater_id');
     }
 }
-
-
-
-    
-
-
 

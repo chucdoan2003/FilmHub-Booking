@@ -25,7 +25,7 @@ class ComboController extends Controller
         return view('admin.combos.create', compact('foods', 'drinks'));
     }
 
-    // Lưu combo mới
+    // Xử lý lưu combo mới
     public function store(Request $request)
     {
         // Xác thực dữ liệu đầu vào
@@ -108,6 +108,7 @@ class ComboController extends Controller
 
         return redirect()->route('admin.combos.index')->with('success', 'Combo updated successfully.');
     }
+
     // Xử lý xóa combo
     public function destroy($id)
     {

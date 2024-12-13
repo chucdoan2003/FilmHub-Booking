@@ -1,18 +1,22 @@
 <?php
 
+use App\Http\Controllers\admin\RowController;
+use App\Http\Controllers\admin\SeatController;
+use App\Http\Controllers\admin\TypeController;
 
-use App\Http\Controllers\admin\AdminShiftController;
 use App\Http\Controllers\admin\ComboController;
 use App\Http\Controllers\admin\DrinkController;
 use App\Http\Controllers\admin\FoodController;
-use App\Http\Controllers\admin\RowController;
-use App\Http\Controllers\admin\SeatController;
-use App\Http\Controllers\Admin\ShowtimesController;
-use App\Http\Controllers\admin\StatisticController;
-use App\Http\Controllers\admin\TypeController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\VourcherAdmminController;
+use App\Http\Controllers\Admin\ProductController;
+
+use App\Http\Controllers\admin\ShowtimesController;
 use App\Http\Controllers\BookingController;
+
+use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\admin\VourcherAdmminController;
+
+use App\Http\Controllers\admin\AdminShiftController;
+use App\Http\Controllers\admin\StatisticController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,9 +30,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-
-Route::prefix('admin')->as('admin.')->group(function () {
+Route::prefix('admin')->as('admin.')->group(function() {
     Route::get('/', function () {
         return view('admin.dashboard');
     })->name('dashboard');
@@ -67,6 +69,14 @@ Route::prefix('admin/drinks')->group(function () {
     Route::delete('/{id}', [DrinkController::class, 'destroy'])->name('admin.drinks.destroy'); // Xóa một đồ uống theo id
 });
 
+use App\Http\Controllers\admin\MovieController;
+use App\Http\Controllers\admin\GenreController;
+use App\Http\Controllers\admin\VourcherEventController;
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('/movies', MovieController::class);
+    Route::resource('/genres', GenreController::class);
+});
 
 Route::prefix('admin/shifts')->group(function () {
     Route::get('/', [AdminShiftController::class, 'index'])->name('admin.shifts.index'); // Lấy danh sách tất cả shifts
@@ -83,24 +93,49 @@ Route::prefix('admin/shifts')->group(function () {
 });
 
 
-Route::prefix("admin")->group(function () {
-    // Route::resource("users", UserController::class);
-    Route::get('booking/list', [BookingController::class, 'index'])->name('bookings.index');
-    Route::get('bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');
-    Route::post('/book-tickets', [BookingController::class, 'purchaseTicket'])->name('purchase.ticket');
-});
+// Route::prefix("admin")->group(function(){
+//     // Route::resource("users", UserController::class);
+//     Route::get('booking/list', [BookingController::class, 'index'])->name('bookings.index');
+//     Route::get('bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');
+//     Route::post('/book-tickets', [BookingController::class, 'purchaseTicket'])->name('purchase.ticket');
 
-Route::prefix("admin")->group(function () {
+
+// });
+
+
+
+Route::prefix("admin")->group(function(){
     Route::resource("users", UserController::class);
     Route::get('showtime/list', [ShowtimesController::class, "list"])->name('showtimes.index');
-    Route::get('showtime/create', [ShowtimesController::class, "create"])->name('showtimes.create'); // hiển thị giao diện thêm ngày
+    Route::get('showtime/create', [ShowtimesController::class, "create"])->name('showtimes.create');// hiển thị giao diện thêm ngày
     Route::post('showtime/create2', [ShowtimesController::class, "create2"])->name('showtimes.store1'); // hiển thị movie và room trong theo ngày valid room nếu full ca
-    Route::post('showtime/store', [ShowtimesController::class, "store"])->name('showtimes.store2'); // hiển thị ca chiếu theo phòng, valid ca chiếu chọn r thì không chọn được nx
-    Route::post('showtime/add', [ShowtimesController::class, "addshowtime"])->name('showtimes.addshowtime'); // thêm xuất chiếu
+    Route::post('showtime/store', [ShowtimesController::class, "store"])->name('showtimes.store2');// hiển thị ca chiếu theo phòng, valid ca chiếu chọn r thì không chọn được nx
+    Route::post('showtime/add', [ShowtimesController::class, "addshowtime"])->name('showtimes.addshowtime');// thêm xuất chiếu
     Route::get('showtime/edit/{id}', [ShowtimesController::class, "edit"])->name('showtimes.edit');
     Route::put('showtime/update/{id}', [ShowtimesController::class, "update"])->name('showtimes.update');
     Route::delete('showtime/destroy/{id}', [ShowtimesController::class, "destroy"])->name('showtimes.destroy');
     Route::post('showtime/getApi', [ShowtimesController::class, "getAPI"])->name('showtimes.getAPI');
+    Route::get('/get-rooms-by-theater', [ShowtimesController::class, 'getRoomsByTheater'])->name('getRoomsByTheater');
 
     Route::resource('vourchers', VourcherAdmminController::class);
+});
+
+
+Route::prefix("admin")->group(function(){
+    // Route::resource("users", UserController::class);
+    Route::get('booking/list', [BookingController::class, 'index'])->name('bookings.index');
+    Route::get('bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');
+    Route::post('/book-tickets', [BookingController::class, 'purchaseTicket'])->name('purchase.ticket');
+
+
+});
+
+// vourcher_event 
+Route::prefix('admin/vourcher-events')->group(function () {
+    Route::get('/', [VourcherEventController::class, 'index'])->name('vourcher-events.index'); // Lấy danh sách tất cả vourcher events
+    Route::get('/create', [VourcherEventController::class, 'create'])->name('vourcher-events.create'); // Tạo một vourcher event mới
+    Route::post('/', [VourcherEventController::class, 'store'])->name('vourcher-events.store'); // Lưu vourcher event mới
+    Route::get('/{vourcher_event}/edit', [VourcherEventController::class, 'edit'])->name('vourcher-events.edit'); // Chỉnh sửa một vourcher event
+    Route::put('/{vourcher_event}', [VourcherEventController::class, 'update'])->name('vourcher-events.update'); // Cập nhật một vourcher event
+    Route::delete('/{vourcher_event}', [VourcherEventController::class, 'destroy'])->name('vourcher-events.destroy'); // Xóa một vourcher event
 });

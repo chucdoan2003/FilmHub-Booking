@@ -42,7 +42,7 @@
     }
 </style>
    <div class="col-xl-12 col-lg-7">
-        <form action="{{ route('showtimes.update', $showtime->showtime_id) }}" method="POST" id="myForm">
+        <form action="{{ route('showtimes.update', $showtime->id) }}" method="POST" id="myForm">
             @csrf
             @method("PUT")
             <div class="card shadow mb-4">
@@ -51,15 +51,20 @@
                             class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                             <h6 class="m-0 font-weight-bold text-primary">Datetime</h6>
                         </div>
-
+                    
                         <!-- Card Body -->
-
+                        
                         <div class="card-body">
-                            <input type="datetime-local" name="start_time" id="start_time" value="{{ $showtime->start_time }}" >
-                        </div>
+                            <input type="date" name="datetime" id="datetime" value="{{ $showtime->datetime }}" >
+                            
+                                
+                                
+                                
+                                
 
-                        <div class="card-body">
-                            <input type="datetime-local" name="end_time" id="end_time" value="{{ $showtime->end_time }}" >
+                    
+
+                            
                         </div>
 
                 </div>
@@ -70,16 +75,16 @@
                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">Movie</h6>
                     </div>
-
+                
                     <!-- Card Body -->
-
+                    
                     <div class="card-body">
                         <select name="movie" id="">
                             @foreach ($movies as $item)
-                                <option value="{{ $item->movie_id }}"
-                                    @if ($item->movie_id == $showtime->movie_id)
+                                <option value="{{ $item->id }}"
+                                    @if ($item->id == $showtime->movie_id)
                                     @selected(true)
-                                @endif>{{ $item->title}}</option>
+                                @endif>{{ $item->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -92,22 +97,22 @@
                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">Room</h6>
                     </div>
-
+                
                     <!-- Card Body -->
-
+                    
                     <div class="card-body">
-                        <select name="room" id=""  >
+                        <select name="room" id="room_id"  >
                             @foreach ($rooms as $item)
-                                <option value="{{ $item->room_id }}"
-                                    @if(in_array($item->room_id, $room_over) && $item->room_id != $showtime->room_id )
+                                <option value="{{ $item->id }}"
+                                    @if(in_array($item->id, $room_over) && $item->id != $showtime->room_id )
                                     @disabled(true)
                                     @endif
-                                    @if ($item->room_id == $showtime->room_id)
+                                    @if ($item->id == $showtime->room_id)
                                     @selected(true)
                                     @endif
-                                    >{{ $item->room_name }}</option>
+                                    >{{ $item->name }}</option>
                             @endforeach
-                        </select>
+                        </select>    
                     </div>
 
                 </div>
@@ -118,28 +123,28 @@
                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">Shift</h6>
                     </div>
-
+                
                     <!-- Card Body -->
-
+                    
                     <div class="card-body">
-                        <select name="shift" id="" >
+                        <select name="shift" id="shift_id" >
                             @foreach ($shifts as $item)
-                                <option value="{{ $item->shift_id }}"
-                                    @if (in_array($item->shift_id, $shiftInroomBook) && $item->shift_id != $showtime->shift_id )
+                                <option value="{{ $item->id }}"
+                                    @if (in_array($item->id, $shiftInroomBook) && $item->id != $showtime->shift_id )
                                     @disabled(true)
-
-
+                                    
+                                    
                                     @endif
-                                    @if ($item->shift_id == $showtime->shift_id)
+                                    @if ($item->id == $showtime->shift_id)
                                     @selected(true)
                                     @endif
-                                    >{{ $item->shift_name }}</option>
+                                    >{{ $item->name }}</option>
                             @endforeach
-                        </select>
+                        </select>    
                     </div>
 
                 </div>
-
+                
             <button class="btn btn-primary btn-user btn-block">
                         Submit
             </button>
@@ -157,4 +162,55 @@
     select4.disabled = false;  // Kích hoạt lại trước khi submit
   });
 </script>
+
+<script>
+    $(document).ready(function () {
+        // Xử lý sự kiện submit form
+        $(document).on('change', function(){
+            let datetime= $('#datetime').val()
+            let room_id = $('#room_id').val()
+            console.log("Datetime đã chọn:", datetime); 
+            console.log("Phòng đã chọn:", room_id); 
+            $.ajax({
+                url: "{{ route('showtimes.getAPI') }}",  // Route Laravel
+                type: 'POST',
+                data: {
+                    datetime: datetime,
+                    room_id: room_id
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // CSRF Token
+                },
+                
+                success: function (response) {
+                    let room = "";
+                    for (let i = 0; i < response.rooms.length; i++) {
+                        room+=`
+                        <option value="${response.rooms[i].id}"${response.rooms[i].id ==response.room_selected ? "selected":"" } ${response.rooms[i].isDisable ? "disabled": ""}>${response.rooms[i].name}</option>
+                        `
+                    }
+                    let shift = ""
+                    for (let i = 0; i < response.shifts.length; i++) {
+                        shift+=`
+                        <option value="${response.shifts[i].id}" ${response.shifts[i].isDisable ? "disabled": ""}>${response.shifts[i].name}</option>
+                        `
+                    }
+                    console.log(shift)
+                    
+                    
+                    $('#room_id').html(room);
+                    $('#shift_id').html(shift);
+
+                    // $('#myForm')[0].reset();  // Reset form sau khi thêm thành công
+                    console.log(response)
+                },
+                error: function (xhr) {
+                    alert('Có lỗi xảy ra. Vui lòng thử lại.');
+                }
+            });
+        })
+        
+    });
+</script>
+
 @endsection
