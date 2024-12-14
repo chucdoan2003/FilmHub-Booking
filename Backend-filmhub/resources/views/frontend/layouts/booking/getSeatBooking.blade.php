@@ -162,27 +162,87 @@
             const seatCheckboxes = document.querySelectorAll(".seat-checkbox");
             const selectedSeatsInput = document.getElementById("selected-seats");
             const totalPriceInput = document.getElementById("total-price");
+            const maxSeats = 6; // Số lượng ghế tối đa mà người dùng có thể chọn
 
-            seatCheckboxes.forEach(checkbox => {
+            seatCheckboxes.forEach((checkbox) => {
                 checkbox.addEventListener("change", function() {
-                    let totalPrice = 0; // Reset totalPrice mỗi lần thay đổi checkbox
-                    const selectedSeats = [];
+                    let totalPrice = 0; // Tổng tiền
+                    const selectedSeats = []; // Danh sách ghế được chọn
+                    const selectedSeatsByRow = {}; // Lưu danh sách ghế theo từng hàng
 
-                    // Lặp qua tất cả các checkbox ghế
-                    seatCheckboxes.forEach(cb => {
+                    // Lặp qua các checkbox để kiểm tra trạng thái
+                    seatCheckboxes.forEach((cb) => {
                         if (cb.checked) {
-                            selectedSeats.push(cb.value); // Lưu các ghế đã chọn
+                            selectedSeats.push(cb.value);
 
+                            const rowName = cb.closest("ul").querySelector(
+                                ".st_seat_heading_row"
+                            ).textContent.trim();
+                            const seatId = parseInt(cb.value);
+
+                            // Lưu ghế theo hàng
+                            if (!selectedSeatsByRow[rowName]) {
+                                selectedSeatsByRow[rowName] = [];
+                            }
+                            selectedSeatsByRow[rowName].push(seatId);
+
+                            // Tính tổng tiền
                             const price = parseFloat(cb.getAttribute("data-price"));
                             if (!isNaN(price)) {
-                                totalPrice += price; // Cộng giá ghế vào tổng tiền
+                                totalPrice += price;
                             }
                         }
                     });
 
-                    selectedSeatsInput.value = selectedSeats.join(
-                        ","); // Gửi các ghế đã chọn dưới dạng chuỗi
-                    totalPriceInput.value = totalPrice.toFixed(0); // Đảm bảo tổng tiền là số nguyên
+                    // Kiểm tra số lượng ghế tối đa
+                    if (selectedSeats.length > maxSeats) {
+                        alert(`Bạn chỉ được chọn tối đa ${maxSeats} ghế.`);
+                        checkbox.checked = false; // Hủy chọn ghế hiện tại
+                        return;
+                    }
+
+                    // Kiểm tra quy tắc ghế không được so le trong từng hàng
+                    for (const row in selectedSeatsByRow) {
+                        const seats = selectedSeatsByRow[row];
+                        seats.sort((a, b) => a - b); // Sắp xếp ghế theo thứ tự trong hàng
+
+                        // Kiểm tra khoảng cách giữa các ghế
+                        for (let i = 0; i < seats.length - 1; i++) {
+                            if (seats[i + 1] - seats[i] === 2) {
+                                const isolatedSeat = seats[i] + 1; // Ghế cô lẻ
+                                const isolatedCheckbox = document.querySelector(
+                                    `.seat-checkbox[value="${isolatedSeat}"]`
+                                );
+
+                                // Nếu ghế bị bỏ chọn làm trống ở giữa
+                                if (!checkbox.checked && isolatedCheckbox) {
+                                    const uncheckedSeatId = parseInt(checkbox.value);
+
+                                    // Ghế hiện tại nằm giữa hai ghế đã chọn
+                                    if (uncheckedSeatId === isolatedSeat) {
+                                        alert(
+                                            "Bạn không thể bỏ ghế ở giữa làm trống khoảng cách giữa các ghế đã chọn!"
+                                        );
+                                        checkbox.checked = true; // Khôi phục trạng thái được chọn
+                                        return;
+                                    }
+                                }
+
+                                // Nếu ghế cô lẻ chưa được chọn, không cho phép
+                                if (isolatedCheckbox && !isolatedCheckbox.checked) {
+                                    alert(
+                                        "Bạn không được để ghế trống ở giữa. Vui lòng chọn lại."
+                                    );
+                                    checkbox.checked = false; // Hủy chọn ghế hiện tại
+                                    return;
+                                }
+                            }
+                        }
+                    }
+
+                    // Cập nhật danh sách ghế và tổng tiền vào input hidden
+                    selectedSeatsInput.value = selectedSeats.join(",");
+                    totalPriceInput.value = totalPrice.toFixed(0); // Tổng tiền làm tròn
                 });
             });
         });
