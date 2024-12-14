@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Row;
 use App\Http\Requests\StoreRowRequest;
 use App\Http\Requests\UpdateRowRequest;
+use App\Models\Room;
 
 class RowController extends Controller
 {
@@ -15,7 +16,9 @@ class RowController extends Controller
     const PATH_VIEW = "admin.rows.";
     public function index()
     {
-        $data = Row::query()->get();
+        $data = Row::leftJoin('rooms', 'rows.room_id', '=', 'rooms.room_id')
+        ->select('rows.*', 'rooms.room_name')
+        ->get();
         return view(self::PATH_VIEW.__FUNCTION__, compact('data'));
     }
 
@@ -24,8 +27,9 @@ class RowController extends Controller
      */
     public function create()
     {
-        return view(self::PATH_VIEW.__FUNCTION__);
-        
+        $rooms = Room::query()->pluck('room_name', 'room_id')->all();
+        return view(self::PATH_VIEW.__FUNCTION__, compact('rooms'));
+
     }
 
     /**
@@ -34,9 +38,11 @@ class RowController extends Controller
     public function store(StoreRowRequest $request)
     {
         $request->validate([
-            'row_name'=>['required']
+            'row_name'=>['required'],
+            'room_id'=>['required'],
         ]);
         $data = $request->all();
+        // dd($request->all());
         Row::query()->create($data);
         return redirect()->route('admin.rows.index')->with('success', 'Thêm mới thành công');
     }
@@ -54,7 +60,8 @@ class RowController extends Controller
      */
     public function edit(Row $row)
     {
-        return view(self::PATH_VIEW.__FUNCTION__, compact('row'));
+        $rooms = Room::query()->pluck('room_name', 'room_id')->all();
+        return view(self::PATH_VIEW.__FUNCTION__, compact('row', 'rooms'));
     }
 
     /**
@@ -63,7 +70,8 @@ class RowController extends Controller
     public function update(UpdateRowRequest $request, Row $row)
     {
         $request->validate([
-            'row_name'=>['required']
+            'row_name'=>['required'],
+            'room_id'=>['required'],
         ]);
         $data = $request->all();
         $row->update($data);

@@ -15,17 +15,13 @@ return new class extends Migration
             $table->unsignedBigInteger('ticket_id');
             $table->unsignedBigInteger('seat_id');
             $table->unsignedBigInteger('showtime_id');
-            $table->unsignedBigInteger('food_id')->nullable();
-            $table->unsignedBigInteger('drink_id')->nullable();
-            $table->unsignedBigInteger('combo_id')->nullable();
+
             // Indexes
             $table->primary(['ticket_id', 'seat_id']);
             $table->foreign('ticket_id')->references('ticket_id')->on('tickets')->onDelete('cascade');
             $table->foreign('seat_id')->references('seat_id')->on('seats')->onDelete('cascade');
             $table->foreign('showtime_id')->references('showtime_id')->on('showtimes')->onDelete('cascade');
-            $table->foreign('food_id')->references('id')->on('foods')->onDelete('set null');
-            $table->foreign('drink_id')->references('id')->on('drinks')->onDelete('set null');
-            $table->foreign('combo_id')->references('id')->on('combos')->onDelete('set null');
+
         });
 
     }

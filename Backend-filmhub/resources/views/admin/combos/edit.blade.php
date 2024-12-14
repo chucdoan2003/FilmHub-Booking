@@ -29,13 +29,13 @@
                 // Tính tổng giá cho các món ăn đã chọn
                 $('#foods option:selected').each(function() {
                     totalPrice += parseFloat($(this).data('price')) ||
-                    0; // Lấy giá từ thuộc tính data-price
+                        0; // Lấy giá từ thuộc tính data-price
                 });
 
                 // Tính tổng giá cho các đồ uống đã chọn
                 $('#drinks option:selected').each(function() {
                     totalPrice += parseFloat($(this).data('price')) ||
-                    0; // Lấy giá từ thuộc tính data-price
+                        0; // Lấy giá từ thuộc tính data-price
                 });
 
                 // Cập nhật giá vào trường tổng giá
@@ -85,7 +85,7 @@
         <input type="text" name="name" value="{{ old('name', $combo->name) }}" class="form-control" required>
 
         <label for="total-price">Total Price:</label>
-        <input type="text" name="total-price" id="total-price" class="form-control" value="{{ $combo->price }}" readonly>
+        <input type="text" name="total-price" id="total-price" class="form-control" value="{{ $combo->price }}" required>
 
         <div class="mt-4">
             <label for="foods" class="form-label">Foods:</label>

@@ -26,4 +26,8 @@ class Combo extends Model
         $drinkPrice = $this->drinks()->sum('price');
         return $foodPrice + $drinkPrice;
     }
+    public function comboFoodDrink()
+    {
+        return $this->hasMany(ComboFoodDrink::class);
+    }
 }

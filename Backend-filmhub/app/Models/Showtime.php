@@ -22,27 +22,38 @@ class Showtime extends Model
     ];
 
 
+    public function movies()
+    {
+        return $this->belongsTo(Movie::class, 'movie_id');
+    }
+
+    public function rooms()
+    {
+        return $this->belongsTo(Room::class, 'room_id');
+    }
+
+    public function shifts()
+    {
+        return $this->belongsTo(Shift::class, 'shift_id');
+    }
+
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'showtime_id');
+    }
+
+
     public function movie()
     {
         return $this->belongsTo(Movie::class, 'movie_id');
     }
 
-    public function room()
+    public function theater()
     {
-        return $this->belongsTo(Room::class, 'room_id');
+        return $this->belongsTo(Theater::class, 'theater_id');
     }
 
-    public function shift()
-{
-    return $this->belongsTo(Shift::class, 'shift_id');
 }
 
-    public function tickets()
-    {
-        return $this->hasMany(Ticket::class);
-    }
 
-
-
-
-}

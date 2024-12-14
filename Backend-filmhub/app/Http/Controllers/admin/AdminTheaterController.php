@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Theater;
@@ -192,41 +192,14 @@ class AdminTheaterController extends Controller
     $request->validate([
         'room_name' => 'required|string|max:255',
         'theater_id' => 'required|exists:theaters,theater_id',
-
-        'normal_seats' => 'required|integer|min:0',
-        'vip_seats' => 'required|integer|min:0',
     ]);
 
     // Tạo phòng
-    $room = Room::create([
+     Room::create([
         'room_name' => $request->room_name,
         'theater_id' => $request->theater_id,
-
     ]);
 
-    $seatNumber = 1;
-
-    // Thêm ghế thường
-    for ($i = 1; $i <= $request->normal_seats; $i++) {
-        Seat::create([
-            'room_id' => $room->room_id,
-            'seat_number' => 'N-' . $seatNumber,
-            'status' => 'normal',
-
-        ]);
-        $seatNumber++;
-    }
-
-    // Thêm ghế VIP
-    for ($i = 1; $i <= $request->vip_seats; $i++) {
-        Seat::create([
-            'room_id' => $room->room_id,
-            'seat_number' => 'V-' . $seatNumber,
-            'status' => 'vip',
-
-        ]);
-        $seatNumber++;
-    }
 
     return redirect()->route('theaters.createRoom')->with('success', 'Thêm phòng và ghế thành công');
 }
@@ -240,20 +213,21 @@ class AdminTheaterController extends Controller
     public function editRoom($id)
     {
         $room = Room::findOrFail($id);
-        return view('admin.theaters.editRoom', compact('room'));
+        $theaters = Theater::pluck('name', 'theater_id')->toArray();
+        return view('admin.theaters.editRoom', compact('room', 'theaters'));
     }
 
     public function updateRoom(Request $request, $id)
     {
         $request->validate([
             'room_name' => 'required|string|max:255',
-            'capacity' => 'required|integer|min:1',
+            'theater_id' => 'required|exists:theaters,theater_id',
         ]);
 
         $room = Room::findOrFail($id);
         $room->update([
             'room_name' => $request->room_name,
-            'capacity' => $request->capacity,
+            'theater_id' => $request->theater_id, // Cập nhật rạp
         ]);
 
         return redirect()->route('theaters.indexRoom')->with('success', 'Cập nhật phòng thành công!');

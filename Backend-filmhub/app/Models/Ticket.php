@@ -24,6 +24,12 @@ class Ticket extends Model
         return $this->belongsTo(Showtime::class, 'showtime_id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+
     public function food()
     {
         return $this->belongsTo(Food::class, 'food_id');
@@ -40,4 +46,9 @@ class Ticket extends Model
     {
         return $this->belongsTo(Combo::class, 'combo_id');
     }
+
+    public function ticketsSeats()
+{
+    return $this->hasMany(TicketSeat::class, 'ticket_id');
+}
 }

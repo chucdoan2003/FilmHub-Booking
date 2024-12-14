@@ -21,6 +21,11 @@ return new class extends Migration
             $table->timestamps();
             $table->string('status');
             $table->integer('member_point')->default(0);
+            $table->unsignedBigInteger('theater_id')->nullable()->after('member_point');
+
+
+
+            $table->foreign('theater_id')->references('theater_id')->on('theaters')->onDelete('cascade');
         });
     }
 

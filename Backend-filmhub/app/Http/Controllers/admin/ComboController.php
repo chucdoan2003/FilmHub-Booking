@@ -31,31 +31,18 @@ class ComboController extends Controller
         // Xác thực dữ liệu đầu vào
         $request->validate([
             'name' => 'required|string|max:255',
+            'total-price' => 'required|numeric|min:0',
             'foods' => 'required|array', // Món ăn là bắt buộc
             'drinks' => 'nullable|array', // Đồ uống không bắt buộc
         ]);
 
-        // Tính tổng giá cho combo ngay tại đây
-        $totalPrice = 0;
-
-        // Tính tổng giá cho các món ăn
-        foreach ($request->foods as $foodId) {
-            $food = Food::find($foodId);
-            $totalPrice += $food->price; // Giả sử $food->price chứa giá trị
-        }
-
-        // Tính tổng giá cho các đồ uống nếu có
-        if (!empty($request->drinks)) {
-            foreach ($request->drinks as $drinkId) {
-                $drink = Drink::find($drinkId);
-                $totalPrice += $drink->price; // Giả sử $drink->price chứa giá trị
-            }
-        }
+        // Lấy giá từ input
+        $totalPrice = $request->input('total-price');
 
         // Tạo combo mới và lưu giá trị price
         $combo = Combo::create([
             'name' => $request->name,
-            'price' => $totalPrice, // Lưu giá trị price
+            'price' => $totalPrice, // Lưu giá trị price từ input
         ]);
 
         // Gắn món ăn
@@ -90,6 +77,7 @@ class ComboController extends Controller
         // Xác thực dữ liệu đầu vào
         $request->validate([
             'name' => 'required|string|max:255',
+            'total-price' => 'required|numeric|min:0', // Thêm xác thực cho total-price
             'foods' => 'required|array', // Món ăn là bắt buộc
             'drinks' => 'nullable|array', // Đồ uống không bắt buộc
         ]);
@@ -100,25 +88,8 @@ class ComboController extends Controller
         // Cập nhật tên combo
         $combo->name = $request->name;
 
-        // Tính tổng giá cho combo
-        $totalPrice = 0;
-
-        // Tính tổng giá cho các món ăn
-        foreach ($request->foods as $foodId) {
-            $food = Food::find($foodId);
-            $totalPrice += $food->price; // Giả sử $food->price chứa giá trị
-        }
-
-        // Tính tổng giá cho các đồ uống nếu có
-        if (!empty($request->drinks)) {
-            foreach ($request->drinks as $drinkId) {
-                $drink = Drink::find($drinkId);
-                $totalPrice += $drink->price; // Giả sử $drink->price chứa giá trị
-            }
-        }
-
-        // Cập nhật giá combo
-        $combo->price = $totalPrice;
+        // Lấy giá từ input
+        $combo->price = $request->input('total-price'); // Cập nhật giá từ input
 
         // Cập nhật món ăn
         $combo->foods()->sync($request->foods); // Đồng bộ món ăn mới

@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('admin')->as('admin.')->group(function() {
+Route::middleware(['admin'])->prefix('admin')->as('admin.')->group(function () {
     Route::get('/', function () {
         return view('admin.dashboard');
     })->name('dashboard');
@@ -38,6 +38,7 @@ Route::prefix('admin')->as('admin.')->group(function() {
     Route::resource('rows', RowController::class);
     Route::resource('types', TypeController::class);
     Route::get('rooms/{room_id}/seats', [SeatController::class, 'filterSeatByRoom'])->name('filterSeatByRoom');
+    Route::post('createSeat/', [SeatController::class, 'createSeat'])->name('createSeat');
 });
 
 
@@ -69,6 +70,18 @@ Route::prefix('admin/drinks')->group(function () {
     Route::delete('/{id}', [DrinkController::class, 'destroy'])->name('admin.drinks.destroy'); // Xóa một đồ uống theo id
 });
 
+use App\Http\Controllers\admin\MovieController;
+use App\Http\Controllers\admin\GenreController;
+use App\Http\Controllers\admin\TicketController;
+use App\Http\Controllers\admin\CommentController;
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('/movies', MovieController::class);
+    Route::resource('/genres', GenreController::class);
+    Route::resource('/tickets', TicketController::class);
+    Route::get('/comments', [CommentController::class, 'showComments'])->name('comments.index');
+    Route::delete('/comments/{id}', [CommentController::class, 'deleteComment'])->name('comments.delete');
+});
 
 Route::prefix('admin/shifts')->group(function () {
     Route::get('/', [AdminShiftController::class, 'index'])->name('admin.shifts.index'); // Lấy danh sách tất cả shifts
@@ -85,14 +98,16 @@ Route::prefix('admin/shifts')->group(function () {
 });
 
 
-Route::prefix("admin")->group(function(){
-    // Route::resource("users", UserController::class);
-    Route::get('booking/list', [BookingController::class, 'index'])->name('bookings.index');
-    Route::get('bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');
-    Route::post('/book-tickets', [BookingController::class, 'purchaseTicket'])->name('purchase.ticket');
+// Route::prefix("admin")->group(function(){
+//     // Route::resource("users", UserController::class);
+//     Route::get('booking/list', [BookingController::class, 'index'])->name('bookings.index');
+//     Route::get('bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');
+//     Route::post('/book-tickets', [BookingController::class, 'purchaseTicket'])->name('purchase.ticket');
 
 
-});
+// });
+
+
 
 Route::prefix("admin")->group(function(){
     Route::resource("users", UserController::class);
@@ -105,7 +120,34 @@ Route::prefix("admin")->group(function(){
     Route::put('showtime/update/{id}', [ShowtimesController::class, "update"])->name('showtimes.update');
     Route::delete('showtime/destroy/{id}', [ShowtimesController::class, "destroy"])->name('showtimes.destroy');
     Route::post('showtime/getApi', [ShowtimesController::class, "getAPI"])->name('showtimes.getAPI');
+    Route::get('/get-rooms-by-theater', [ShowtimesController::class, 'getRoomsByTheater'])->name('getRoomsByTheater');
 
     Route::resource('vourchers', VourcherAdmminController::class);
 });
 
+
+Route::prefix("admin")->group(function(){
+    // Route::resource("users", UserController::class);
+    Route::get('booking/list', [BookingController::class, 'index'])->name('bookings.index');
+    Route::get('bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');
+    Route::post('/book-tickets', [BookingController::class, 'purchaseTicket'])->name('purchase.ticket');
+});
+
+Route::get('/admin/tickets/{ticket}/qr', [TicketController::class, 'showQr'])->name('admin.tickets.qr');
+Route::get('admin/tickets/{ticket}/print', [TicketController::class, 'printTicket'])->name('admin.tickets.print');
+
+Route::prefix('admin/statistics')->group(function () {
+    Route::get('/film', [StatisticController::class, 'statisticFilm'])->name('admin.statistics.statisticFilm');
+    Route::get('/filmHub', [StatisticController::class, 'statisticFilmHub'])->name('admin.statistics.statisticFilmHub');
+    Route::get('/theater/{theater_id}', [StatisticController::class, 'statisticTheater'])->name('admin.statistics.statisticTheater');
+    Route::get('/statistics/filmTheater/{theater_id}/{movie_id}', [StatisticController::class, 'statisticFilmTheater'])->name('admin.statistics.statisticFilmTheater');
+    Route::get('/statistics/film-hub/data', [StatisticController::class, 'statisticFilmHubData'])->name('admin.statistics.statisticFilmHubData');
+    Route::get('/statistics/theater/data', [StatisticController::class, 'statisticTheaterData'])->name('admin.statistics.statisticTheaterData');
+
+});
+use App\Http\Controllers\admin\PostController;
+use App\Http\Controllers\admin\CategoryController;
+Route::prefix("admin")->as('admin.')->group(function () {
+    Route::resource('category', CategoryController::class);
+    Route::resource('post', PostController::class);
+});

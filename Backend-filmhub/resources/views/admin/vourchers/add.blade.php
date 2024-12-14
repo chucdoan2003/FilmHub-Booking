@@ -38,10 +38,26 @@
                                     @endif
                             </div>
                             <div class="col-sm-6">
+                                <input type="text" class="form-control form-control-user form-radius" id="exampleLastName"
+                                    placeholder="Vourcher Name" name="vourcher_name">
+                                    @if ($errors->has('vourcher_name'))
+                                        <div class="text-danger mt-1">{{ $errors->first('vourcher_name') }}</div>
+                                    @endif
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                <input type="number" class="form-control form-control-user form-radius" id="exampleFirstName"
+                                    placeholder="Discount percentage" name="discount_percentage">
+                                    @if ($errors->has('discount_percentage'))
+                                        <div class="text-danger mt-1">{{ $errors->first('discount_percentage') }}</div>
+                                    @endif
+                            </div>
+                            <div class="col-sm-6">
                                 <input type="number" class="form-control form-control-user form-radius" id="exampleLastName"
-                                    placeholder="Vourcher price" name="vourcher_price" min="0" max="100">
-                                    @if ($errors->has('vourcher_price'))
-                                        <div class="text-danger mt-1">{{ $errors->first('vourcher_price') }}</div>
+                                    placeholder="Max discount amount" name="max_discount_amount">
+                                    @if ($errors->has('max_discount_amount'))
+                                        <div class="text-danger mt-1">{{ $errors->first('max_discount_amount') }}</div>
                                     @endif
                             </div>
                         </div>

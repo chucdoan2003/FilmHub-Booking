@@ -22,13 +22,17 @@ class User extends Authenticatable
     protected $table="users";
     protected $primaryKey = 'user_id';
 
+    public $incrementing = false;
+
     protected $fillable = [
         'name',
         'email',
         'password',
         'phone_number',
         'role',
-        'member_point'
+        'member_point',
+        'theater_id',
+        'status'
     ];
 
     /**
@@ -59,5 +63,15 @@ class User extends Authenticatable
     public function tickets()
     {
         return $this->hasMany(Ticket::class, 'user_id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'user_id');
+    }
+
+    public function theater()
+    {
+        return $this->belongsTo(Theater::class, 'theater_id', 'theater_id');
     }
 }

@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Danh sách phim
+    List Movies
 @endsection
 
 @section('style-libs')
@@ -19,6 +19,18 @@
 @endsection
 
 @section('content')
+    <style>
+        .description {
+            white-space: nowrap;
+            /* Không cho xuống dòng */
+            overflow: hidden;
+            /* Ẩn phần nội dung vượt quá kích thước */
+            text-overflow: ellipsis;
+            /* Hiển thị dấu "..." */
+            max-width: 200px;
+            /* Đặt độ rộng tối đa (tuỳ chỉnh theo giao diện) */
+        }
+    </style>
     @if (session('message'))
         <h4>{{ session('message') }}</h4>
     @endif
@@ -34,15 +46,11 @@
                         <tr>
                             <th>ID</th>
                             <th>Title</th>
-                            <th>Description </th>
                             <th>Duration</th>
-                            <th>Release date</th>
                             <th>Genre</th>
                             <th>Rating</th>
                             <th>Poster</th>
-                            <th>Director</th>
-                            <th>Performer</th>
-                            <th>Trailer</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -50,15 +58,11 @@
                         <tr>
                             <th>ID</th>
                             <th>Title</th>
-                            <th>Description </th>
                             <th>Duration</th>
-                            <th>Release date</th>
                             <th>Genre</th>
                             <th>Rating</th>
                             <th>Poster</th>
-                            <th>Director</th>
-                            <th>Performer</th>
-                            <th>Trailer</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -67,9 +71,7 @@
                             <tr>
                                 <td>{{ $movie->movie_id }}</td>
                                 <td>{{ $movie->title }}</td>
-                                <td>{{ $movie->description }}</td>
                                 <td>{{ $movie->duration }} Phút</td>
-                                <td>{{ $movie->release_date }}</td>
                                 <td>
                                     @foreach ($movie->genres as $genre)
                                         {{ $genre->name }}@if (!$loop->last)
@@ -77,22 +79,25 @@
                                         @endif
                                     @endforeach
                                 </td>
-                                <td>{{ $movie->rating }}</td>
+                                <td>
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <i
+                                            class="fa fa-star {{ $movie->rating >= $i ? 'text-warning' : 'text-muted' }}"></i>
+                                    @endfor
+                                </td>
                                 <td><img src="{{ Storage::url($movie->poster_url) }}" style="width: 100px; height: 100px;"
                                         alt=""></td>
-                                <td>{{ $movie->director }}</td>
-                                <td>{{ $movie->performer }}</td>
-                                <td>{{ $movie->trailer }}</td>
+                                <td>{{ $movie->status }}</td>
                                 <td class="">
                                     <a href="{{ route('admin.movies.show', $movie->movie_id) }}"
-                                        class="btn btn-info mb-3">Xem</a>
+                                        class="btn btn-primary mb-3">Detail</a>
                                     <a href="{{ route('admin.movies.edit', $movie->movie_id) }}"
-                                        class="btn btn-success mb-3">Sửa</a>
+                                        class="btn btn-success mb-3">Edit</a>
                                     <form action="{{ route('admin.movies.destroy', $movie->movie_id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger"
-                                            onclick="return confirm('Bạn có muốn xóa phim này không')">Xóa</button>
+                                            onclick="return confirm('Bạn có muốn xóa phim này không')">Delete</button>
                                     </form>
                                 </td>
                             </tr>

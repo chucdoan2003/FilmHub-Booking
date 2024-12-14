@@ -27,6 +27,8 @@ class ApiCheckBookedSeat extends Controller
                 return $showtime;
             });
 
+
+
             return response()->json([
                 'success' => true,
                 'message' => 'Lấy dữ liệu thành công',
