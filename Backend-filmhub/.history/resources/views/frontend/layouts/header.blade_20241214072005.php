@@ -42,7 +42,7 @@
         <div class="prs_navi_left_main_wrapper">
             <div class="prs_logo_main_wrapper">
                 <a href="{{ route('movies.index') }}">
-                    <img src="{{ asset('website/images/header/logo.png') }}" alt="logo" style="margin-left:10px !important; margin-top:5px;" />
+                    <img src="{{ asset('website/images/header/logo.png') }}" alt="logo" />
                 </a>
             </div>
             <div class="prs_menu_main_wrapper">
@@ -202,17 +202,17 @@
                                 </ul> --}}
                             </li>
                             <li class="parent"> <a href="">Post</a>
-                                @if ($categoryPost->count() > 0)
-                                    <ul class="lg-submenu">
-                                        @foreach ($categoryPost as $item)
-                                            <li> <a
-                                                    href="{{ route('categoryPost', $item->id) }}">{{ $item->name }}</a>
-                                            </li>
-                                        @endforeach
+                            @if ($categoryPost->count() > 0)
+                            <ul class="lg-submenu">
+                            @foreach ($categoryPost as $item)
 
-                                    </ul>
-                                @endif
-                            </li>
+                                        <li>   <a href="{{ route('categoryPost', $item->id) }}">{{ $item->name }}</a></li>
+
+                            @endforeach
+
+                        </ul>
+                        @endif
+                    </li>
 
                             {{-- <li class="parent"><a href="#">pages</a>
                                 <ul class="lg-submenu">
@@ -256,9 +256,6 @@
                             </li> --}}
                             <li class="parent"><a href="{{ route('contact.index') }}">contact</a>
                             </li>
-                            @if (Auth::check())
-                            <li class="parent"><a href="{{ route('vouchers.index') }}">Redeem</a>
-                            @endif
                         </ul>
                     </div>
                     <!-- /dl-menuwrapper -->
@@ -311,9 +308,10 @@
             <div class="mobile-nav-box">
                 <div class="mobile-logo">
                     <a href="index.html" class="mobile-main-logo">
-                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-                            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="46.996px" height="40px"
-                            viewBox="0 0 46.996 40" enable-background="new 0 0 46.996 40" xml:space="preserve">
+                            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="46.996px"
+                            height="40px" viewBox="0 0 46.996 40" enable-background="new 0 0 46.996 40"
+                            xml:space="preserve">
                             <g>
                                 <g>
                                     <path d="M39.919,19.833C39.919,8.88,30.984,0,19.959,0C8.937,0,0,8.88,0,19.833
@@ -338,9 +336,9 @@
                     <a href="#" class="manu-close"><i class="fa fa-times"></i></a>
                 </div>
                 <ul class="mobile-list-nav">
-                    <li><a href="{{ route('userOverview') }}">OVERVIEW</a>
+                    <li><a href="{{route('userOverview')}}">OVERVIEW</a>
                     </li>
-                    <li><a href="{{ route('ticketHistory') }}">TICHKETS BOOKED</a>
+<li><a href="{{route("ticketHistory")}}">TICHKETS BOOKED</a>
                     </li>
 
                 </ul>

@@ -1,37 +1,12 @@
 @extends('admin.layouts.master')
 
 @section('title')
-
+    Ticket Detail
 @endsection
 
 @section('style-libs')
     <!-- Custom styles for this page -->
     <link href="{{ asset('theme/admin/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
-    <style>
-        .ticket-details-container {
-            margin-top: 30px;
-            background: #f8f9fc;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .ticket-details-table th {
-            background: #4e73df;
-            color: white;
-            text-align: left;
-        }
-
-        .ticket-details-table tbody tr:nth-child(even) {
-            background: #f2f2f2;
-        }
-
-        .ticket-details-title {
-            color: #4e73df;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-    </style>
 @endsection
 
 @section('script-libs')
@@ -44,9 +19,9 @@
 @endsection
 
 @section('content')
-    <div class="container ticket-details-container">
-        <h1 class="ticket-details-title">Ticket Details</h1>
-        <table class="table ticket-details-table table-bordered">
+    <div class="container">
+        <h1>Ticket Details</h1>
+        <table class="table">
             <thead>
                 <tr>
                     <th>Attribute</th>
@@ -84,10 +59,28 @@
                         @endforeach
                     </td>
                 </tr>
-                <tr>
-                    <td>Combo</td>
-                    <td>{{ $ticket->combo ? $ticket->combo->name : 'N/A' }}</td>
-</tr>
+                @if ($ticket->combo)
+                    <tr>
+                        <td>Combo</td>
+                        <td>{{ $ticket->combo->name }}</td>
+                    </tr>
+                @endif
+
+                @if ($ticket->food)
+                    <tr>
+                        <td>Food</td>
+                        <td>{{ $ticket->food->name }}</td>
+                    </tr>
+                @endif
+
+                @if ($ticket->drink)
+                    <tr>
+                        <td>Drink</td>
+                        <td>{{ $ticket->drink->name }}</td>
+                    </tr>
+                @endif
+
+
                 <tr>
                     <td>Total Price</td>
                     <td>{{ $ticket->total_price }}</td>
@@ -100,5 +93,4 @@
         </table>
         <a href="{{ route('admin.tickets.print', $ticket->ticket_id) }}" class="btn btn-primary">In Vé</a>
     </div>
-
 @endsection

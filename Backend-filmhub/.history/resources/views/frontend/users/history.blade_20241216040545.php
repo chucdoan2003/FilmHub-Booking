@@ -47,22 +47,24 @@
                                                         Start: {{ $item->shift_start }} to
                                                         {{ $item->shift_end }} </h6>
 
-                                                        @if ($item->food_id)
-                                                        <h6>Đồ ăn: {{ $item->food_name }}</h6>
-                                                    @endif
+                                                    @foreach ($tickets as $ticket)
+                                                        @if ($ticket->food_id)
+                                                            <h6>Đồ ăn: {{ $ticket->food_name }}</h6>
+                                                        @endif
 
-                                                    <!-- Hiển thị thông tin Drink -->
-                                                    @if ($item->drink_id)
-                                                        <h6>Thức uống: {{ $item->drink_name }}</h6>
-                                                    @endif
+                                                        <!-- Hiển thị thông tin Drink -->
+                                                        @if ($ticket->drink_id)
+                                                            <h6>Thức uống: {{ $ticket->drink_name }}</h6>
+                                                        @endif
 
-                                                    <!-- Hiển thị thông tin Combo -->
-                                                    @if ($item->combo_id)
-                                                        <h6>Combo: {{ $item->combo_name }}</h6>
-                                                    @endif
+                                                        <!-- Hiển thị thông tin Combo -->
+                                                        @if ($ticket->combo_id)
+                                                            <h6>Combo: {{ $ticket->combo_name }}</h6>
+                                                        @endif
+                                                    @endforeach
                                                 </div>
                                                 @if ($item->status = 'completed')
-                                                    <div class="st_purchase_img" style="margin-bottom: 10px !important;">
+                                                    <div class="st_purchase_img" style="margin-bottom: 100px !important;">
                                                         <img src="{{ asset('website/images/content/pur2.png') }}"
                                                             alt="img">
                                                         {{-- sửa link ảnh  avt film --}}
@@ -90,7 +92,7 @@
                                         </div>
 
                                         <div class="st_bcc_tecket_bottom_left_price_wrapper"
-                                            >
+                                            style="margin-top:30px !important">
                                             <h4>Total Amount</h4>
                                             <h5>{{ number_format($item->total_price, 0, ',', '.') }} VND</h5>
                                         </div>

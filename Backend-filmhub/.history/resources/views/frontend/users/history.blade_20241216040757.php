@@ -90,7 +90,7 @@
                                         </div>
 
                                         <div class="st_bcc_tecket_bottom_left_price_wrapper"
-                                            >
+                                            style="margin-top:30px !important">
                                             <h4>Total Amount</h4>
                                             <h5>{{ number_format($item->total_price, 0, ',', '.') }} VND</h5>
                                         </div>

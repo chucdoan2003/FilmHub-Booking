@@ -123,13 +123,13 @@ class ClientBookingController extends Controller
         $showtimeStart = $showtimeStartDate->setTimeFromTimeString($showtimeStartTime->toTimeString());
 
         // Kiểm tra nếu ca chiếu đã qua
-        if ($showtimeStart->isPast()) {
-            return redirect()->route('movies.index')->with('error', 'Ca chiếu đã qua, vui lòng chọn ca chiếu khác.');
-        }
+        // if ($showtimeStart->isPast()) {
+        //     return redirect()->route('movies.index')->with('error', 'Ca chiếu đã qua, vui lòng chọn ca chiếu khác.');
+        // }
 
-        if ($currentDateTime->diffInMinutes($showtimeStart, false) <= 8) {
-            return redirect()->route('movies.index')->with('error', 'Sắp đến giờ chiếu nên sẽ đóng đặt vé trực tuyến, vui lòng mua vé trực tiếp tại quầy hoặc chọn ca chiếu khác.');
-        }
+        // if ($currentDateTime->diffInMinutes($showtimeStart, false) <= 8) {
+        //     return redirect()->route('movies.index')->with('error', 'Sắp đến giờ chiếu nên sẽ đóng đặt vé trực tuyến, vui lòng mua vé trực tiếp tại quầy hoặc chọn ca chiếu khác.');
+        // }
 
         $user_id = session('user_id');
 
@@ -204,19 +204,18 @@ class ClientBookingController extends Controller
         // }
 
         if (!empty($selectedSeats)) {
-            // Lấy danh sách ghế đã chọn trước đó
-            $existingSelectedSeats = SelectedSeat::where('showtime_id', $showtime_id)
-                ->where('user_id', $user_id)
-                ->pluck('seat_id')
-                ->toArray();
-
-            // Xóa ghế đã chọn trước đó
-            SelectedSeat::where('showtime_id', $showtime_id)
-                ->where('user_id', $user_id)
-                ->delete();
-
-            // Thêm ghế mới
             foreach ($selectedSeats as $seatId) {
+                $existingSeat = SelectedSeat::where('showtime_id', $showtime_id)
+                    ->where('user_id', $user_id)
+                    ->where('seat_id', $seatId)
+                    ->first();
+
+                // Nếu ghế đã được chọn cho showtime này, trả về thông báo lỗi
+                if ($existingSeat) {
+                    return redirect()->route('detailBooking', $showtimeId)->with('error', 'Ghế này đã được chọn , vui lòng chọn ghế khác');
+                }
+
+                // Thêm ghế vào cơ sở dữ liệu nếu chưa chọn
                 try {
                     SelectedSeat::create([
                         'user_id' => $user_id,
@@ -225,16 +224,7 @@ class ClientBookingController extends Controller
                         'totalPrice' => $totalPrice
                     ]);
                 } catch (\Exception $e) {
-                    // Nếu có lỗi khi thêm ghế, khôi phục ghế cũ
-                    foreach ($existingSelectedSeats as $oldSeatId) {
-                        SelectedSeat::create([
-                            'user_id' => $user_id,
-                            'showtime_id' => $showtime_id,
-                            'seat_id' => $oldSeatId,
-                            'totalPrice' => $totalPrice
-                        ]);
-                    }
-                    return redirect()->back()->withErrors(['error' => 'Lỗi khi lưu ghế mới.']);
+                    return redirect()->back()->withErrors(['error' => 'Lỗi khi lưu ghế.']);
                 }
             }
         }

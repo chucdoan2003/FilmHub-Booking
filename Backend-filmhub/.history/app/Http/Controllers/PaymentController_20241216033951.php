@@ -349,7 +349,6 @@ class PaymentController extends Controller
                 'amount' => $ticket->total_price, // Tổng tiền thanh toán
                 'payment_method' => 'VNPAY', // Phương thức thanh toán
                 'payment_time' => now(), // Thời gian thanh toán
-                'ticket_id' => $ticketId,
             ]);
 
             return redirect()->route('confirmBooking')->with('status', 'Thanh toán thành công và đã cộng điểm!')->with($data);

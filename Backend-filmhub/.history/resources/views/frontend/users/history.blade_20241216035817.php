@@ -31,8 +31,7 @@
                                             <div class="st_bcc_tecket_bottom_inner_left">
                                                 <style>
                                                     .st_bcc_tecket_bottom_left_wrapper:after {
-                                                        content: none;
-                                                        /* Loại bỏ đường kẻ dưới */
+                                                        content: none; /* Loại bỏ đường kẻ dưới */
                                                     }
                                                 </style>
                                                 <div class="st_bcc_teckt_bot_inner_img">
@@ -43,26 +42,12 @@
                                                     <h4>{{ $item->title }}</h4>
                                                     <h5>{{ $item->theater }}</h5>
 
-                                                    <h6> Thời gian : {{ $item->datetime }} <br>
-                                                        Start: {{ $item->shift_start }} to
-                                                        {{ $item->shift_end }} </h6>
-
-                                                        @if ($item->food_id)
-                                                        <h6>Đồ ăn: {{ $item->food_name }}</h6>
-                                                    @endif
-
-                                                    <!-- Hiển thị thông tin Drink -->
-                                                    @if ($item->drink_id)
-                                                        <h6>Thức uống: {{ $item->drink_name }}</h6>
-                                                    @endif
-
-                                                    <!-- Hiển thị thông tin Combo -->
-                                                    @if ($item->combo_id)
-                                                        <h6>Combo: {{ $item->combo_name }}</h6>
-                                                    @endif
+                                                    <h6> Thời gian : {{$item->datetime}} <br>
+                                                         Start: {{ $item->shift_start }} to
+                                                        {{ $item->shift_end }}   </h6>
                                                 </div>
                                                 @if ($item->status = 'completed')
-                                                    <div class="st_purchase_img" style="margin-bottom: 10px !important;">
+                                                    <div class="st_purchase_img" style="margin-bottom: 100px !important;">
                                                         <img src="{{ asset('website/images/content/pur2.png') }}"
                                                             alt="img">
                                                         {{-- sửa link ảnh  avt film --}}
@@ -86,11 +71,11 @@
                                                 {!! QrCode::size(100)->generate(route('admin.tickets.show', ['ticket' => $item->ticket_id])) !!}
                                             </div>
                                             <h4>Booking ID<br />{{ $item->ticket_id }}</h4>
-                                            <h4>{{ $item->ticket_time }}</h4>
+                                            <h4>{{ $item->ticket_time }}</h3>
                                         </div>
 
                                         <div class="st_bcc_tecket_bottom_left_price_wrapper"
-                                            >
+                                            style="margin-top:30px !important">
                                             <h4>Total Amount</h4>
                                             <h5>{{ number_format($item->total_price, 0, ',', '.') }} VND</h5>
                                         </div>

@@ -69,8 +69,6 @@
             alert('{{ session('error') }}');
         </script>
     @endif
-
-
     {{-- <h1>{{ session('user_id') }}</h1> --}}
     <!-- prs upcomung Slider Start -->
     <div class="prs_upcom_slider_main_wrapper">

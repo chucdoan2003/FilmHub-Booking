@@ -275,14 +275,6 @@ class PaymentController extends Controller
         $showtimeStartTime = Carbon::createFromFormat('H:i:s', $showtime->shifts->start_time);  // Giờ bắt đầu từ shifts
         $showtimeStart = $showtimeStartDate->setTimeFromTimeString($showtimeStartTime->toTimeString());  // Thời gian buổi chiếu
 
-        $currentDateTime = Carbon::now('Asia/Ho_Chi_Minh');  // Đảm bảo thời gian hiện tại là múi giờ Việt Nam
-
-        // Kiểm tra nếu thời gian hiện tại đã qua thời gian bắt đầu của ca chiếu
-        if ($currentDateTime->gt($showtimeStart)) {
-            return redirect()->route('movies.index')->with('error', 'Thanh toán thất bại do ca chiếu đã hết thời gian thanh toán , vui lòng chọn ca chiếu khác.');
-        }
-
-
         $paymentStatus = $data['vnp_ResponseCode']; // Mã phản hồi từ VNPAY
 
         // Kiểm tra trạng thái thanh toán từ VNPAY
@@ -349,7 +341,6 @@ class PaymentController extends Controller
                 'amount' => $ticket->total_price, // Tổng tiền thanh toán
                 'payment_method' => 'VNPAY', // Phương thức thanh toán
                 'payment_time' => now(), // Thời gian thanh toán
-                'ticket_id' => $ticketId,
             ]);
 
             return redirect()->route('confirmBooking')->with('status', 'Thanh toán thành công và đã cộng điểm!')->with($data);

@@ -98,7 +98,5 @@
                 </tr>
             </tbody>
         </table>
-        <a href="{{ route('admin.tickets.print', $ticket->ticket_id) }}" class="btn btn-primary">In Vé</a>
     </div>
-
 @endsection

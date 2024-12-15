@@ -29,7 +29,6 @@
                                 <td>{{ number_format($payment->amount, 0, ',', '.') }} VND</td>
                                 <td>{{ $payment->payment_method }}</td>
                                 <td>{{ $payment->payment_time }}</td>
-                                <td>{{ $payment->ticket_id}}</td>
 
 
                             </tr>

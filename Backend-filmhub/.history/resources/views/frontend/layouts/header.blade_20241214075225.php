@@ -42,7 +42,7 @@
         <div class="prs_navi_left_main_wrapper">
             <div class="prs_logo_main_wrapper">
                 <a href="{{ route('movies.index') }}">
-                    <img src="{{ asset('website/images/header/logo.png') }}" alt="logo" style="margin-left:10px !important; margin-top:5px;" />
+                    <img src="{{ asset('website/images/header/logo.png') }}" alt="logo" />
                 </a>
             </div>
             <div class="prs_menu_main_wrapper">
@@ -257,7 +257,7 @@
                             <li class="parent"><a href="{{ route('contact.index') }}">contact</a>
                             </li>
                             @if (Auth::check())
-                            <li class="parent"><a href="{{ route('vouchers.index') }}">Redeem</a>
+                            <li class="parent"><a href="{{ route('contact.index') }}">Redeem</a>
                             @endif
                         </ul>
                     </div>

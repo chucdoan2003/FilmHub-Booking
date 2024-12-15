@@ -27,9 +27,6 @@ class UserInforController extends Controller
             "movies.*",
             "showtimes.*",
             'users.name as user_name',
-            'foods.name as food_name',
-            'drinks.name as drink_name',
-            'combos.name as combo_name'
         )
         ->where('tickets.user_id', Auth::user()->user_id)
         ->where('tickets.status','completed')

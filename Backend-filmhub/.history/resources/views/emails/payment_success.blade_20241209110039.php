@@ -14,9 +14,6 @@
         <li><strong>Suất chiếu:</strong> {{ $ticket->showtime_id }}</li>
         <li><strong>Số tiền:</strong> {{ number_format($ticket->total_price, 0, ',', '.') }} VND</li>
         <li><strong>Thời gian thanh toán:</strong> {{ $ticket->ticket_time }}</li>
-        <div>
-            {!! QrCode::size(100)->generate(route('admin.tickets.show', ['ticket' => $item->ticket_id])) !!}
-        </div>
     </ul>
     <p>Chúc bạn xem phim vui vẻ!</p>
 </body>

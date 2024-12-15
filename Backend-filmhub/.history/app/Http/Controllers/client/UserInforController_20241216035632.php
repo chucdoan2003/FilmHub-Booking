@@ -19,17 +19,11 @@ class UserInforController extends Controller
         ->join('users', 'tickets.user_id', '=', 'users.user_id')
         ->join('showtimes', 'tickets.showtime_id', '=', 'showtimes.showtime_id')
         ->join('movies', 'showtimes.movie_id', '=', 'movies.movie_id')
-        ->leftJoin('foods', 'tickets.food_id', '=', 'foods.id')
-        ->leftJoin('drinks', 'tickets.drink_id', '=', 'drinks.id')
-        ->leftJoin('combos', 'tickets.combo_id', '=', 'combos.id')
         ->select(
             'tickets.*',
             "movies.*",
             "showtimes.*",
             'users.name as user_name',
-            'foods.name as food_name',
-            'drinks.name as drink_name',
-            'combos.name as combo_name'
         )
         ->where('tickets.user_id', Auth::user()->user_id)
         ->where('tickets.status','completed')
@@ -48,7 +42,6 @@ class UserInforController extends Controller
             $ticket->shift_name = $shift->shift_name;
             $ticket->shift_start = $shift->start_time;
             $ticket->shift_end = $shift->end_time;
-            $ticket->datetime = $showtime->datetime;
         }
 
         return view("frontend.users.history", compact('tickets'));
