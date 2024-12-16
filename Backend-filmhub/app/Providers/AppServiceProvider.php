@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\CategoryPost;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $categoryPost = CategoryPost::where('status', 1)->get();
+        view()->share('categoryPost', $categoryPost);
     }
 }
