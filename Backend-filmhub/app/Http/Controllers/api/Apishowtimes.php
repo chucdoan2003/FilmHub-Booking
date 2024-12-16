@@ -5,10 +5,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class Apishowtimes extends Controller{
+class ApiShowtimes extends Controller{
     public function showtime($id){
         $showtimes = DB::table('showtimes')
-        ->join('movies', 'showtimes.movie_id', '=', 'movies.id')
+        ->join('movies', 'showtimes.movie_id', '=', 'movies.id') 
         ->join('rooms', 'showtimes.room_id', '=', 'rooms.id')   // Join với bảng rooms
         ->join('shifts', 'showtimes.shift_id', '=', 'shifts.id') // Join với bảng shifts
         ->select('showtimes.*', 'movies.name as movie_name','rooms.name as room_name', 'shifts.name as shift_name', 'shifts.start_time', 'shifts.end_time')
@@ -24,6 +24,4 @@ class Apishowtimes extends Controller{
 
 
 
-
-
-
+?>

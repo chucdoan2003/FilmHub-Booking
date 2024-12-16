@@ -4,16 +4,19 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\StoreUserRequest;
+use App\Mail\ForgotPasswordMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
-
+   
     public function login(Request $request)
     {
 
@@ -25,7 +28,7 @@ class AuthController extends Controller
     if (Auth::attempt($credentials)) {
         // Đăng nhập thành công và Laravel tự động tạo session
         $user = Auth::user();
-
+        
         // Tạo thông báo hoặc dữ liệu response
         return response()->json(['message' => 'Login successful', 'user' => $user]);
     } else {
@@ -40,7 +43,7 @@ class AuthController extends Controller
 
         // Xóa tất cả session
         session()->flush();
-
+    
         return response()->json(['message' => 'Logout successful']);
     }
     public function profile(){
@@ -48,11 +51,11 @@ class AuthController extends Controller
         return response()->json(auth()->user());
     }
 
-
+  
     public function register(StoreUserRequest $request)
     {
         try {
-
+            
             $user = User::query()->create($request->all());
             if(!$user){
                 return response()->json([
@@ -76,6 +79,40 @@ class AuthController extends Controller
                     "message"=>"Add User is fails",
                     "RC"=>-1
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        }   
     }
+    public function fogotPassword(Request $request){
+        $email = $request->email;
+        $user = User::where('email', $email)->first();
+        if($user){
+            Mail::to($user->email)->send(new ForgotPasswordMail($email));
+            return response()->json([
+                "message"=>"Vui lòng kiểm tra email để thay đổi mật khẩu",
+            ], Response::HTTP_OK);
+            
+        }else{
+            return response()->json([
+                "message"=>"Email không tồn tại",
+            ], Response::HTTP_NOT_FOUND);
+        }
+        
+    }
+    public function getChangePassword($email){
+        return view('admin.users.changePassword', compact('email'));
+    }
+    public function changePassword(Request $request){
+        if($request->password == $request->password_confirmation){
+            $user= DB::table("users")
+            ->where('email',$request->email)
+            ->update(['password'=>Hash::make($request->password)]);
+            return response()->json([
+                'message' => 'Password changed successfully',
+            ]);
+        }
+        
+
+
+
+    
+}
 }
