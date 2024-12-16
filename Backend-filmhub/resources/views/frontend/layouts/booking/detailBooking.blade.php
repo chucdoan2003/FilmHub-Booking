@@ -60,16 +60,29 @@
                                         </div>
                                         <div class="st_cherity_img_cont float_left">
                                             <div class="box">
-                                                {{-- <label for="combo">Chọn Combo:</label> --}}
                                                 <select id="combo" name="combo_id" class="form-control"
                                                     onchange="updateTotalPrice()">
-                                                    <option value="">Chọn combo</option>
+                                                    <option value="" >Chọn combo</option>
                                                     @foreach ($combos as $combo)
                                                         <option value="{{ $combo->id }}"
-                                                            data-price="{{ $combo->price }}"
-                                                            data-food-id="{{ $combo->comboFoodDrink->first()->food->id ?? '' }}"
-                                                            data-drink-id="{{ $combo->comboFoodDrink->first()->drink->id ?? '' }}">
+                                                            data-price="{{ $combo->price }}">
                                                             {{ $combo->name }} - {{ number_format($combo->price) }} VNĐ
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                <select id="food" name="food_id" class="form-control" onchange="updateTotalPrice()">
+                                                    <option value="">Chọn món ăn</option>
+                                                    @foreach ($foods as $food)
+                                                        <option value="{{ $food->id }}" data-price="{{ $food->price }}">
+                                                            {{ $food->name }} - {{ number_format($food->price) }} VNĐ
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                <select id="drink" name="drink_id" class="form-control" onchange="updateTotalPrice()">
+                                                    <option value="">Chọn đồ uống</option>
+                                                    @foreach ($drinks as $drink)
+                                                        <option value="{{ $drink->id }}" data-price="{{ $drink->price }}">
+                                                            {{ $drink->name }} - {{ number_format($drink->price) }} VNĐ
                                                         </option>
                                                     @endforeach
                                                 </select>
@@ -79,7 +92,7 @@
                                                     <!-- Hiển thị voucher thông thường -->
                                                     <optgroup label="Mã giảm giá thông thường">
                                                         @foreach($vouchers as $voucher)
-                                                            @if ($voucher->id !== $usedVoucher)
+                                                            @if (!in_array($voucher->id, $usedVoucher))
                                                                 <option value="{{ $voucher->vourcher_code }}">
                                                                     {{ $voucher->vourcher_code }} ({{ $voucher->discount_percentage }}% giảm, tối đa {{ $voucher->max_discount_amount }} VNĐ)
                                                                 </option>
@@ -90,7 +103,7 @@
                                                     <!-- Hiển thị voucher sự kiện -->
                                                     <optgroup label="Mã giảm giá sự kiện">
                                                         @foreach($vourcherEvents as $event)
-                                                            @if ($event->id !== $usedVoucher)
+                                                            @if (!in_array($event->id, $usedVoucher))
                                                             <option value="{{ $event->vourcher_code }}">
                                                                 {{ $event->vourcher_code }} ({{ $event->discount_percentage }}% giảm, tối đa {{ $event->max_discount_amount }} VNĐ)
                                                             </option>
@@ -98,9 +111,6 @@
                                                         @endforeach
                                                     </optgroup>
                                                 </select>
-                                                <!-- Input ẩn để lưu food_id và drink_id -->
-                                                <input type="hidden" name="food_id" id="food_id" value="">
-                                                <input type="hidden" name="drink_id" id="drink_id" value="">
                                             </div>
                                         </div>
                                     </div>
@@ -138,12 +148,8 @@
                                                 <li>Không có ghế nào được chọn.</li>
                                             @endif
                                         </ul>
-                                        @if (isset($combo))
-                                            <p>Combo đã chọn: <span>{{ $combo->name }}</span></p>
-                                            <p>Giá combo: <span>{{ number_format($combo->price) }} VNĐ</span></p>
-                                        @else
-                                            <p>Không có combo nào được chọn.</p>
-                                        @endif
+                                        <p>Combo đã chọn: <span id="selected-combo-name">{{ isset($combo) ? $combo->name : 'Không có combo nào được chọn.' }}</span></p>
+                                        <p>Giá combo: <span id="selected-combo-price">{{ isset($combo) ? number_format($combo->price) : '0 VNĐ' }}</span></p>
                                         <p>Booking Fees <span>Rs. 60.00</span></p>
                                         <p>Integrated GST (IGST) @ 18% <span>Rs. 60.00</span></p>
                                     </div>
@@ -167,19 +173,45 @@
 @endsection
 <script>
     function updateTotalPrice() {
-        var totalPrice = {{ $totalPrice }}; // Giá hiện tại
-        var comboSelect = document.getElementById('combo');
-        var selectedOption = comboSelect.options[comboSelect.selectedIndex];
-        var comboPrice = selectedOption.dataset.price ? parseFloat(selectedOption.dataset.price) : 0; // Giá combo
+    var totalPrice = {{ $totalPrice }}; // Giá hiện tại
+    var comboSelect = document.getElementById('combo');
+    var foodSelect = document.getElementById('food');
+    var drinkSelect = document.getElementById('drink');
+    var selectedOptions = Array.from(comboSelect.selectedOptions);
+    var comboPrice = 0;
+    var selectedComboName = '';
 
-        totalPrice += comboPrice; // Cộng giá combo vào tổng
+     // Tính tổng giá combo
+     if (selectedOptions.length > 0) {
+        selectedOptions.forEach(option => {
+            comboPrice += parseFloat(option.dataset.price || 0); // Cộng giá từng combo
+            selectedComboName = option.text; // Lưu tên combo
+        });
+    } else {
+        selectedComboName = 'Không có combo nào được chọn.'; // Cập nhật thông báo khi không chọn combo
+    }
 
-        var discountCode = document.getElementById('discount_code').value;
+    totalPrice += comboPrice; // Cộng giá combo vào tổng
+
+     // Cộng giá món ăn
+     if (foodSelect.value) {
+        var selectedFood = foodSelect.options[foodSelect.selectedIndex];
+        totalPrice += parseFloat(selectedFood.dataset.price || 0);
+    }
+
+    // Cộng giá đồ uống
+    if (drinkSelect.value) {
+        var selectedDrink = drinkSelect.options[drinkSelect.selectedIndex];
+        totalPrice += parseFloat(selectedDrink.dataset.price || 0);
+    }
+
+
+    var discountCode = document.getElementById('discount_code').value;
 
     // Giả sử bạn có thông tin mã giảm giá từ server
     var discounts = {};
     @foreach($vouchers as $voucher)
-        @if ($voucher->id !== $usedVoucher) // Chỉ thêm mã giảm giá chưa được sử dụng
+        @if ($voucher->id !== $usedVoucher)
             discounts["{{ $voucher->vourcher_code }}"] = {
                 percentage: {{ $voucher->discount_percentage }},
                 max: {{ $voucher->max_discount_amount }}
@@ -194,8 +226,6 @@
         };
     @endforeach
 
-    // Kiểm tra đối tượng discounts
-    console.log(discounts);
     if (discountCode && discounts[discountCode]) {
         var discount = discounts[discountCode];
         var discountAmount = (totalPrice * discount.percentage) / 100;
@@ -212,32 +242,30 @@
 
         totalPrice -= discountAmount; // Áp dụng giảm giá
     }
+    
+    // Cập nhật thông tin combo đã chọn
+    document.getElementById('selected-combo-name').innerText = selectedComboName;
+    document.getElementById('selected-combo-price').innerText = number_format(comboPrice) + ' VNĐ';
 
+    // Cập nhật giá thành hiển thị
+    document.getElementById('totalPriceDisplay').innerText = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND'
+    }).format(totalPrice) + ' VNĐ';
 
-        // Cập nhật giá thành hiển thị
-        document.getElementById('totalPriceDisplay').innerText = new Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND'
-        }).format(totalPrice) + ' VNĐ';
+    // Cập nhật số tiền phải trả hiển thị
+    document.getElementById('totalAmountDisplay').innerText = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND'
+    }).format(totalPrice) + ' VNĐ';
 
-        // Cập nhật số tiền phải trả hiển thị
-        document.getElementById('totalAmountDisplay').innerText = new Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND'
-        }).format(totalPrice) + ' VNĐ';
+    // Cập nhật giá tổng vào input
+    document.querySelector('input[name="total"]').value = totalPrice;
 
-
-        // Cập nhật giá tổng vào input
-        document.querySelector('input[name="total"]').value = totalPrice;
-        // Lưu food_id và drink_id vào các input ẩn
-        var foodId = selectedOption.dataset.foodId;
-        var drinkId = selectedOption.dataset.drinkId;
-
-        document.querySelector('input[name="food_id"]').value = foodId;
-        document.querySelector('input[name="drink_id"]').value = drinkId;
-
-        // Cập nhật thông tin combo đã chọn
-        var comboName = selectedOption.text;
-        document.getElementById('selectedComboDisplay').innerText = comboName;
-    }
+    // Cập nhật thông tin combo đã chọn
+    updateSelectedCombos(selectedOptions);
+}
+function number_format(number) {
+    return new Intl.NumberFormat('vi-VN').format(number);
+}
 </script>

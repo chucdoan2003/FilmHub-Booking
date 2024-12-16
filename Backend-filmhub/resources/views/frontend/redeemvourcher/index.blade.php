@@ -15,7 +15,8 @@
             </thead>
             <tbody>
                 @foreach ($vouchers as $voucher)
-                <tr class="{{ in_array($voucher->id, $usedVouchers) ? 'used' : '' }}">
+                @if (!in_array($voucher->id, $usedVouchers))
+                <tr class="">
                     <td>{{ $voucher->id }}</td>
                     <td>{{ $voucher->user->email ?? 'N/A' }}</td> <!-- Hiển thị email -->
                     <td>{{ $voucher->vourcher_code }}</td>
@@ -23,6 +24,7 @@
                     <td>{{ $voucher->discount_percentage }}</td>
                     <td>{{ $voucher->max_discount_amount }}</td>
                 </tr>
+                @endif
                 @endforeach
             </tbody>
         </table>

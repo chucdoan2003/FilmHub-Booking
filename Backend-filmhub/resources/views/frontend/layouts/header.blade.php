@@ -318,6 +318,8 @@
                             </li>
                             <li class="parent"><a href="{{route('contact.index')}}">contact</a>
                             </li>
+                            <li class="parent"><a href="{{route('vouchers.index')}}">List Tickets</a>
+                            </li>
                         </ul>
                     </div>
                     <!-- /dl-menuwrapper -->

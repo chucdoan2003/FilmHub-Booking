@@ -4,6 +4,8 @@ namespace App\Http\Controllers\client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Combo;
+use App\Models\Drink;
+use App\Models\Food;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -13,6 +15,7 @@ use App\Models\Seat;
 use App\Models\Voucher;
 use App\Models\VourcherEvent;
 use App\Models\VourcherRedeem;
+use App\Models\VourcherUser;
 
 class ClientBookingController extends Controller
 {
@@ -106,20 +109,18 @@ class ClientBookingController extends Controller
 
         // Tải danh sách combos
         $combos = Combo::all();
+        $foods = Food::all();
+        $drinks = Drink::all();
         $currentDateTime = Carbon::now();
         $vouchers = VourcherRedeem::where('user_id', $user_id)->with('user')->get();
         $vourcherEvents = VourcherEvent::all(); // Lấy danh sách voucher event
 
            // Kiểm tra mã giảm giá đã sử dụng
-        $usedVoucher = DB::table('vourcher_user')
-        ->where('user_id', $user_id)
-        ->pluck('vourcher_id')
-        ->first(); // Lấy mã giảm giá đầu tiên mà người dùng đã sử dụng // Mặc định là null nếu không có mã
-        
+        $usedVoucher = VourcherUser::where('user_id', $user_id)->pluck('vourcher_id')->toArray();
         // Lấy danh sách voucher sự kiện còn hạn
-    $vourcherEvents = VourcherEvent::where('is_active', true)
-    ->where('end_time', '>', $currentDateTime)
-    ->get();
+        $vourcherEvents = VourcherEvent::where('is_active', true)
+        ->where('end_time', '>', $currentDateTime)
+        ->get();
 
 
         // Truyền dữ liệu đến view
@@ -130,6 +131,8 @@ class ClientBookingController extends Controller
             'user_id',
             'seatNumbers',
             'combos',
+            'foods',
+            'drinks',
             'vouchers',
             'vourcherEvents',
             'usedVoucher' // Truyền combos vào view

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Voucher;
 use App\Models\VourcherEvent;
 use App\Models\VourcherRedeem;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -20,13 +21,16 @@ class VourchersController extends Controller
 
         // Lấy danh sách voucher chỉ của người dùng này
         $vouchers = VourcherRedeem::where('user_id', $user_id)->with('user')->get(); // Tải thông tin người dùng liên quan
-        
+        $currentDateTime = Carbon::now();
         $usedVouchers = DB::table('vourcher_user')
             ->where('user_id', $user_id)
             ->pluck('vourcher_id') // Lấy danh sách mã giảm giá đã sử dụng
             ->toArray();
 
-            $vourcherEvents = VourcherEvent::all();
+
+        $vourcherEvents = VourcherEvent::where('is_active', true)
+            ->where('end_time', '>', $currentDateTime)
+            ->get();
 
         return view('frontend.redeemvourcher.index', compact('vouchers', 'usedVouchers', 'vourcherEvents'));
     }
