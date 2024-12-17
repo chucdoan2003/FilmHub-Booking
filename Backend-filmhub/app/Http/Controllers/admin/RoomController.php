@@ -3,90 +3,68 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Room;
-use App\Http\Requests\StoreRoomRequest;
-use App\Http\Requests\UpdateRoomRequest;
-use App\Models\Row;
-use App\Models\Theater;
-use App\Models\Type;
+use App\Models\Food;
+use Illuminate\Http\Request;
 
-class RoomController extends Controller
+class FoodController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    const PATH_VIEW = "admin.rooms.";
+    // Hiển thị danh sách món ăn
     public function index()
     {
-        $data = Room::query()->get();
-        $theaters = Theater::query()->pluck('name', 'theater_id')->all();
-        return view(self::PATH_VIEW.__FUNCTION__, compact('data', 'theaters'));
+        $foods = Food::all();
+        return view('admin.combos.foods.index', compact('foods'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // Hiển thị form tạo món ăn mới
     public function create()
     {
-        $theaters = Theater::query()->pluck('name', 'theater_id')->all();
-        return view(self::PATH_VIEW.__FUNCTION__, compact('theaters'));
-
+        return view('admin.combos.foods.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreRoomRequest $request)
+    // Lưu món ăn mới
+    public function store(Request $request)
     {
         $request->validate([
-            'room_name' => ['required'],
-            'theater_id' => ['required'],
-
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
         ]);
 
-        $data = $request->all();
-        $room = Room::query()->create($data); // Tạo phòng mới
-        return redirect()->route('admin.rooms.index')->with('success', 'Thêm mới thành công và tạo ghế cho phòng.');
+        Food::create($request->all());
+        return redirect()->route('admin.foods.index')->with('success', 'Food created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Room $room)
+    // Hiển thị chi tiết món ăn
+    public function show($id)
     {
-        //
+        $food = Food::findOrFail($id);
+        return view('admin.combos.foods.show', compact('food'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Room $room)
+    // Hiển thị form chỉnh sửa món ăn
+    public function edit($id)
     {
-        $theaters = Theater::query()->pluck('name', 'theater_id')->all();
-        return view(self::PATH_VIEW.__FUNCTION__, compact('theaters', 'room'));
+        $food = Food::findOrFail($id);
+        return view('admin.combos.foods.edit', compact('food'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateRoomRequest $request, Room $room)
+    // Cập nhật món ăn
+    public function update(Request $request, $id)
     {
-
         $request->validate([
-            'room_name'=>['required'],
-            'theater_id'=>['required'],
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
         ]);
-        $data = $request->all();
-        $room->update($data);
-        return redirect()->route('admin.rooms.index')->with('success', 'Cập nhật thành công');
+
+        $food = Food::findOrFail($id);
+        $food->update($request->all());
+        return redirect()->route('admin.foods.index')->with('success', 'Food updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Room $room)
+    // Xóa món ăn
+    public function destroy($id)
     {
-        $room->delete();
-        return back()->with('success', 'Xóa thành công');
+        $food = Food::findOrFail($id);
+        $food->delete();
+        return redirect()->route('admin.foods.index')->with('success', 'Food deleted successfully.');
     }
 }

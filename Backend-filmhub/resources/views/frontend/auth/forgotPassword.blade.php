@@ -13,13 +13,20 @@
     .btn-login:hover{
         background-color: #d14740;
     }
+    .st_pop_form_heading_wrapper {
+            margin-top: 32px;
+        }
+
+        .form-login{
+            padding: 0 15px
+        }
 </style>
 <form action="{{route('forgotPassword')}}" method="POST">
     @csrf
     @method("POST")
-    <div class="st_pop_form_wrapper" id="myModa2" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
+
+    <div class="container mt-5 d-flex justify-content-center" style="max-width: 300px">
+    <div class="row form-login">
                 @if (isset($user) && $user != false)
                     <div class="st_pop_form_heading_wrapper st_pop_form_heading_wrapper_fpass float_left">
                         <h3>Forgot Password</h3>

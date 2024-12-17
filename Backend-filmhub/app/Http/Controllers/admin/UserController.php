@@ -52,7 +52,7 @@ class UserController extends Controller
             ]
         );
         $user = User::query()->create($request->all());
-        return redirect()->route('users.index');
+        return redirect()->route('users.index')->with('success', 'Thêm người dùng thành công');
 
     }
 
@@ -107,7 +107,7 @@ class UserController extends Controller
         "status" => $request->theater_id ? 'manager' : $user->status,
     ]);
 
-    return redirect()->route('users.index');
+    return redirect()->route('users.index')->with('success', 'Cập nhật người dùng thành công');
 }
 
     /**
@@ -116,16 +116,15 @@ class UserController extends Controller
     public function destroy(string $id)
     {
          try {
-            $user = User::query()->where('id', $id)->delete();
-            return redirect()->route('users.index');
+            $user = User::query()->where('user_id', $id)->delete();
+            return redirect()->route('users.index')->with('success', 'Xóa người dùng thành công');
 
         } catch (\Throwable $th) {
             Log::error(__CLASS__ . "@". __FUNCTION__, [
                 "line"=> $th->getLine(),
                 "message"=>$th->getMessage()
             ]);
-            return view('errors.404');
-
+            // return view('errors.404');
         }
     }
 }

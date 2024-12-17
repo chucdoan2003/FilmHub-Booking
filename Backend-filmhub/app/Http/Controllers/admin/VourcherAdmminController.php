@@ -18,20 +18,14 @@ class VourcherAdmminController extends Controller
     public function store(Request $request){
         $request->validate([
             'vourcher_code'=>'required',
-            'vourcher_name'=>'required',
-            'required_points' =>'required',
-            'discount_percentage'=>'required|numeric',
-            'max_discount_amount'=>'required|numeric'
+            'vourcher_price'=>'required|numeric',
         ]);
         DB::table('vourchers')->insert([
             'vourcher_code'=>$request->vourcher_code,
-            'vourcher_name'=>$request->vourcher_name,
-            'required_points'=>$request->required_points,
-            'discount_percentage'=>$request->discount_percentage,
-            'max_discount_amount'=>$request->max_discount_amount
+            'vourcher_price'=>$request->vourcher_price,
 
         ]);
-        return redirect()->route('vourchers.index');
+        return redirect()->route('vourchers.index')->with('success', 'Vourcher created successfully.');
     }
     public function edit($id){
         $vourcher=DB::table('vourchers')->where('id',$id)->first();
@@ -40,22 +34,16 @@ class VourcherAdmminController extends Controller
     public function update(Request $request,$id){
         $request->validate([
             'vourcher_code'=>'required',
-            'vourcher_name'=>'required',
-            'required_points' =>'required',
-            'discount_percentage'=>'required|numeric',
-            'max_discount_amount'=>'required|numeric'
+            'vourcher_price'=>'required|numeric',
         ]);
         DB::table('vourchers')->where('id',$id)->update([
             'vourcher_code'=>$request->vourcher_code,
-            'vourcher_name'=>$request->vourcher_name,
-            'required_points'=>$request->required_points,
-            'discount_percentage'=>$request->discount_percentage,
-            'max_discount_amount'=>$request->max_discount_amount
+            'vourcher_price'=>$request->vourcher_price,
         ]);
-        return redirect()->route('vourchers.index');
+        return redirect()->route('vourchers.index')->with('success', 'Vourcher updated successfully.');
     }
     public function destroy($id){
         DB::table('vourchers')->where('id',$id)->delete();
-        return redirect()->route('vourchers.index');
+        return redirect()->route('vourchers.index')->with('success', 'Vourcher deleted successfully.');
     }
 }

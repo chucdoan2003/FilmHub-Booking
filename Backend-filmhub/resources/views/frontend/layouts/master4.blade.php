@@ -14,9 +14,7 @@
     <!--Template style -->
     <link rel="shortcut icon" type="image/png" href="{{ asset('website/images/header/favicon.ico') }}" />
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  
     <link rel="stylesheet" type="text/css" href="{{ asset('website/css/animate.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('website/css/bootstrap.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('website/css/font-awesome.css') }}" />

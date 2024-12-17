@@ -1,64 +1,67 @@
-@extends('frontend.layouts.master2')
+@extends('frontend.layouts.master4')
+
 @section('content')
-<style>
-    .btn-register{
-        background-color: #36e40a;
-        color: white;
-        padding: 8px 20px;
-        margin: 16px 0 0 0;
-        border: none;
-        cursor: pointer;
-        width: 100%;
-    }
-    .btn-register:hover{
-        background-color: #6ed140;
-    }
-    .btn-login{
-        background-color: #e21b10;
-        color: white;
-        padding: 8px 20px;
-        margin: 8px 0;
-        border: none;
-        cursor: pointer;
-        width: 100%;
-    }
-    .btn-login:hover{
-        background-color: #d14740;
-    }
-</style>
+    <style>
+        .btn-register {
+            background-color: #36e40a;
+            color: white;
+            padding: 8px 20px;
+            margin: 16px 0 0 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
 
-<form style="margin-top: 20px;" action="{{route("register")}}" method="POST">
-    @csrf
-    @method("POST")
-<div class=" st_pop_form_wrapper" >
-    <div class="modal-dialog">
-        <div class="modal-content">
+        .btn-register:hover {
+            background-color: #6ed140;
+        }
 
+        .btn-login {
+            background-color: #e21b10;
+            color: white;
+            padding: 8px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
 
+        .btn-login:hover {
+            background-color: #d14740;
+        }
 
-            @if (isset($user))
-            <div>
-                <h2 style="font-size: 20px">Đăng ký tài khoản thành công, vui lòng
-                    <a href="{{route("getLogin")}}" style="color: #fff">
-                    <button type="button" class="btn-login">
-                        Login
-                    </button>
-                    </a>
-                </h2>
-            </div>
+        .st_pop_form_heading_wrapper {
+            margin-top: 32px;
+        }
 
-            @else
-                @if (isset($email))
+        .form-register {
+            padding: 0 15px
+        }
+    </style>
+
+@if (session('error'))
+        <script>
+            alert("{{ session('error') }}");
+        </script>
+    @endif
+
+    <form action="{{ route('register') }}" method="POST">
+        @csrf
+        @method('POST')
+
+        <div class="container mt-5 d-flex justify-content-center" style="max-width: 500px">
+            <div class="row form-register">
+
+                @if (isset($user))
                     <div>
-                        <h2 style="font-size: 20px">Cảm ơn bạn đã đăng ký tài khoản tại filmhub booking, vui lòng check email "{{$email}}" xác nhận đăng ký tài khoản
-                            <a href="{{route("getLogin")}}" style="color: #fff">
-                            <button type="button" class="btn-login">
-                                Login
-                            </button>
+                        <h2 style="font-size: 20px">Register successfully, please
+                            <a href="{{ route('getLogin') }}" style="color: #fff">
+                                <button type="button" class="btn-login">
+                                    Login
+                                </button>
                             </a>
                         </h2>
                     </div>
-
                 @else
                     <div class="st_pop_form_heading_wrapper float_left">
                         <h3>Sign Up</h3>
@@ -78,35 +81,31 @@
                     </div>
                     <div class="st_profile__pass_input st_profile__pass_input_pop float_left">
                         <input type="password" placeholder="Password confirmation" name="password_confirmation">
-@if ($errors->has('password_confirmation'))
+                        @if ($errors->has('password_confirmation'))
                             <div class="text-danger mt-1">{{ $errors->first('password_confirmation') }}</div>
                         @endif
                     </div>
 
                     <div class="st_form_pop_login_btn float_left">
-                        <button type="submit" class="btn-register">Sign Up</button>
+                        <button type="submit" class="btn-login">Sign Up</button>
                     </div>
                     <div class="st_form_pop_or_btn float_left">
                         <h4>or</h4>
                     </div>
                     <div class="st_form_pop_signin_btn float_left">
-                        <h4>You have an account? <a href="{{route('getLogin')}}">Log in</a></h4>
-                        <h5>I agree to the <a href="#">Terms & Conditions</a> & <a href="#">Privacy Policy</a></h5>
+                        <h4>You have an account? <a href="{{ route('getLogin') }}">Log in</a></h4>
+                        <h5>I agree to the <a href="#">Terms & Conditions</a> & <a href="#">Privacy
+                                Policy</a></h5>
                     </div>
 
                     <div class="st_form_pop_signin_btn st_form_pop_signin_btn_signup float_left">
-                        <h5>I agree to the <a href="#">Terms & Conditions</a> & <a href="#">Privacy Policy</a></h5>
+                        <h5>I agree to the <a href="#">Terms & Conditions</a> & <a href="#">Privacy
+                                Policy</a></h5>
                     </div>
-
-
                 @endif
 
-
-            @endif
-
-
+            </div>
         </div>
-    </div>
-</div>
-</form>
+        
+    </form>
 @endsection
