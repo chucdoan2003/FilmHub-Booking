@@ -25,7 +25,7 @@
         <h1 class="h3 mb-4 text-gray-800">Tạo mới ghế</h1>
         <!--  Page main content   -->
         <!--   Main product information             -->
-        <form action="{{route('admin.seats.store')}}" method="POST" enctype="multipart/form-data">
+        <form action="{{route('admin.seats.store')}}" method="POST" >
             @csrf
             <div class="row">
                 <!--   left content-->
@@ -42,16 +42,18 @@
                                 <div class="mb-3">
                                     <label class="form-label">Số lượng ghế</label>
                                     <input type="number" min="1" class="form-control"  name="seat_quantity"
-                                           placeholder="Vui lòng nhập số lượng ghế">
-                                    @error('seat_quantity')
-                                        <span style="padding: 10px 0; color: red;">{{$message}}</span>
-                                    @enderror
+                                           placeholder="Vui lòng nhập số lượng ghế" required>
+                                    @if(session('error'))
+                                        <div class="alert alert-danger mt-3">
+                                            <strong>{{session('error')}}</strong>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="d-flex justify-content-end mb-3">
-                        <button class="btn btn-success w-sm">Thêm mới</button>
+                        <button type="submit" class="btn btn-success w-sm">Thêm mới</button>
                     </div>
                 </div>
                 <!-- end left content    -->
@@ -70,39 +72,30 @@
                             <!-- end card body -->
                             <div class="card-body">
                                 <!-- chọn phòng -->
-                                <label for="choices-category-input" class="form-label">Chọn phòng</label>
+                                <label for="choices-category-input" class="form-label">Phòng</label>
                                 <select class="form-control" aria-label="Default select example"
                                         id="choices-category-input" name="room_id">
                                         <option value="{{$rooms->room_id}}">
                                             {{ $rooms->room_name }}
                                         </option>
                                 </select>
-                                @error('room_id')
-                                    <span style="padding: 10px 0; color: red;">{{$message}}</span>
-                                @enderror
                                 <!-- chọn hàng ghế -->
                                 <label for="choices-category-input" class="form-label">Chọn hàng ghế</label>
                                 <select class="form-control" aria-label="Default select example"
-                                        id="choices-category-input" name="row_id">
-                                    <option selected>-----------Chọn hàng ghế ----------</option>
+                                        id="choices-category-input" name="row_id" required>
+                                    <option  value="" disabled selected>-----------Chọn hàng ghế ----------</option>
                                     @foreach($rows as $row_id => $row_name)
                                         <option value="{{$row_id}}"> {{$row_name}}</option>
                                     @endforeach
                                 </select>
-                                @error('row_id')
-                                    <span style="padding: 10px 0; color: red;">{{$message}}</span>
-                                @enderror
                                 <!-- trạng thái ghế -->
                                 <label for="choices-publish-status-input" class="form-label mt-3">Trạng thái</label>
                                 <select class="form-control form-select-lg mb-3" id="choices-publish-status-input"
-                                        aria-label="Default select example" name="status">
-                                    <option selected>-----------Trạng thái ----------</option>
+                                        aria-label="Default select example" name="status" required>
+                                    <option value="" disabled selected>-----------Trạng thái ----------</option>
                                     <option value="available">Available</option>
                                     <option value="booked">Booked</option>
                                 </select>
-                                @error('status')
-                                    <span style="padding: 10px 0; color: red;">{{$message}}</span>
-                                @enderror
                                 <br>
                                 <!-- Loại sản phẩm -->
                                 <label for="choices-publish-type-input" class="form-label">Loại ghế</label>

@@ -57,10 +57,9 @@
                                     <td>{{$item->seat_id}}</td>
                                     <td>{{$item->rooms->room_name}}</td>
                                     <td>{{$item->seat_number}}</td>
-                                    <td>{{$item->seat_type}}</td>
+                                    <td>{{$item->types->type_name}}</td>
                                     <td>{{$item->status}}</td>
                                     <td>
-                                        <a href="{{route('admin.seats.show', $item)}}" class="btn btn-success">Xem</a>
                                         <a href="{{route('admin.seats.edit', $item)}}" class="btn btn-info">Sửa</a>
                                         <form action="{{route('admin.seats.destroy', $item)}}" method="POST">
                                             @csrf

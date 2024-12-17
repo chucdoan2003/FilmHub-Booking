@@ -9,7 +9,11 @@ use App\Http\Requests\UpdateSeatRequest;
 use App\Models\Room;
 use App\Models\Row;
 use App\Models\Type;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+use function Laravel\Prompts\alert;
 
 class SeatController extends Controller
 {
@@ -19,11 +23,17 @@ class SeatController extends Controller
     const PATH_VIEW = "admin.seats.";
     public function index()
     {
-        $data = Seat::query()->get();
+        $theater_id = session('theater_id'); // Lấy theater_id từ session
+        $data = Seat::with(['rooms', 'rows', 'types']) // Eager load các mối quan hệ
+        ->whereHas('rooms', function($query) use ($theater_id) {
+            $query->where('theater_id', $theater_id); // Lọc ghế theo theater_id
+        })
+        ->get();
         // dd($data->all());
-        $rooms = Room::query()->pluck('room_name', 'room_id')->all();
-        // $rows = Row::query()->pluck('row_name', 'row_id')->all();
-        // $types = Type::query()->pluck('type_name', 'type_id')->all();
+        $rooms = Room::query()
+        ->where('theater_id', $theater_id) // Lọc các phòng theo theater_id
+        ->pluck('room_name', 'room_id')
+        ->all();
 
         return view(self::PATH_VIEW.__FUNCTION__, compact('data', 'rooms'));
     }
@@ -32,9 +42,13 @@ class SeatController extends Controller
      */
     public function create()
     {
-        $rooms = Room::query()->pluck('room_name', 'room_id')->all();
-
-        return view(self::PATH_VIEW.__FUNCTION__, compact('rooms'));
+        $theater_id = session('theater_id'); // Lấy theater_id từ sessions
+        $theater = DB::table('theaters')->where('theater_id', $theater_id)->first();
+        $rooms = Room::query()
+        ->where('theater_id', $theater_id) // Lọc phòng theo theater_id
+        ->pluck('room_name', 'room_id')
+        ->all();
+        return view(self::PATH_VIEW.__FUNCTION__, compact('rooms', 'theater'));
 
     }
     public function createSeat(Request $request){
@@ -52,14 +66,10 @@ class SeatController extends Controller
      */
     public function store(StoreSeatRequest $request)
 {
-    $request->validate([
-        'room_id' => ['required'],
-        'row_id' => ['required'],
-        'type_id' => ['required'],
-        'status' => ['required', 'in:available,booked'],
-        'seat_quantity' => ['required', 'integer', 'min:1'],
-    ]);
-
+//    dd($request->all());
+    if($request->input('seat_quantity') == null){
+        return back()->with('error', 'Vui lòng nhập số lượng ghế');
+    } 
     $quantity = $request->input('seat_quantity');
     $room_id = $request->input('room_id');
     $row_id = $request->input('row_id');
@@ -105,11 +115,35 @@ class SeatController extends Controller
      */
     public function edit(Seat $seat)
     {
-        $room_id = $seat->room_id;
-        $rooms = Room::query()->pluck('room_name', 'room_id')->all();
-        $rows = Row::query()->where('room_id', $room_id)->pluck('row_name', 'row_id')->all();
-        $types = Type::query()->pluck('type_name', 'type_id')->all();
-        return view(self::PATH_VIEW.__FUNCTION__, compact('seat', 'rooms', 'rows', 'types'));
+        $showtime = DB::table('seats')
+        ->join('rooms', 'seats.room_id', '=', 'rooms.room_id') // Join để lấy thông tin phòng
+        ->join('showtimes', 'rooms.room_id', '=', 'showtimes.room_id') // Join để lấy thông tin ca chiếu
+        ->join('shifts', 'showtimes.shift_id', '=', 'shifts.shift_id') // Join để lấy thông tin ca làm việc
+        ->where('seats.seat_id', $seat->seat_id) // Lọc theo ghế hiện tại
+        ->select('showtimes.showtime_id','showtimes.datetime', 'shifts.start_time', 'shifts.end_time','seats.seat_number','rooms.room_name')
+        ->first();
+        // dd($showtime);
+
+        // Lấy thời gian hiện tại
+        $currentDateTime = Carbon::now('Asia/Ho_Chi_Minh'); // Lấy thời gian hiện tại theo múi giờ Hồ Chí Minh
+        $currentDate = $currentDateTime->format('Y-m-d');
+        $currentTime = $currentDateTime->format('H:i:s');
+        // dd($currentDate, $currentTime);
+         // Kiểm tra thời gian
+        if( $currentDate == $showtime->datetime && $showtime->start_time <= $currentTime && $currentTime <= $showtime->end_time) {
+            return redirect()->route('admin.seats.index')->with('error', 'Không thể sửa ghế trong ca chiếu đang diễn ra.');
+        }
+        else{
+            $theater_id = session('theater_id'); // Lấy theater_id từ session
+            $rooms = Room::query()
+            ->where('theater_id', $theater_id) // Lọc phòng theo theater_id
+            ->pluck('room_name', 'room_id')
+            ->all();
+            $rows = Row::query()->where('room_id', $seat->room_id)->pluck('row_name', 'row_id')->all();
+            $types = Type::query()->pluck('type_name', 'type_id')->all();
+            return view(self::PATH_VIEW.__FUNCTION__, compact('seat', 'rooms', 'rows', 'types'));
+        }
+        
     }
 
     /**
@@ -118,11 +152,9 @@ class SeatController extends Controller
     public function update(UpdateSeatRequest $request, Seat $seat)
     {
         // dd($request->all());
-        $request->validate([
-            'seat_number'=>['required'],
-            'type_id'=>['required'],
-            'status'=>['required', 'in:available,booked']
-        ]);
+        if($request->input('seat_number') == null){
+            return back()->with('error', 'Vui lòng nhập số ghế');
+        }
         $data = $request->all();
         $seat->update($data);
         return redirect()->route('admin.seats.index')->with('success', 'Cập nhật thành công');

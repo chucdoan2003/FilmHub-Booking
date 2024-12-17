@@ -41,10 +41,12 @@
                             <div class="card-body">
                                 <div class="mb-3">
                                     <label class="form-label">Số ghế</label>
-                                    <input type="text" class="form-control"  name="seat_number" value="{{$seat->seat_number}}">
-                                    @error('seat_number')
-                                        <span style="padding: 10px 0; color: red;">{{$message}}</span>
-                                    @enderror
+                                    <input type="text" class="form-control"  name="seat_number" value="{{$seat->seat_number}}" required>
+                                    @if(session('error'))
+                                        <div class="alert alert-danger mt-3">
+                                            <strong>{{session('error')}}</strong>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -85,6 +87,30 @@
                                     <span style="padding: 10px 0; color: red;">{{$message}}</span>
                                 @enderror
                                 <br>
+                                <!-- chọn phòng -->
+                                <label for="choices-category-input" class="form-label">Phòng</label>
+                                <select class="form-control" aria-label="Default select example"
+                                    id="choices-category-input" name="room_id">
+                                    @foreach($rooms as $room_id => $room_name)
+                                        <option name="room_id" value="{{$room_id}}">
+                                            {{ $room_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('room_id')
+                                    <span style="padding: 10px 0; color: red;">{{$message}}</span>
+                                @enderror
+                                <!-- chọn hàng ghế -->
+                                <label for="choices-category-input" class="form-label">Chọn hàng ghế</label>
+                                <select class="form-control" aria-label="Default select example"
+                                        id="choices-category-input" name="row_id">
+                                    @foreach($rows as $row_id => $row_name)
+                                        <option value="{{$row_id}}"> {{$row_name}}</option>
+                                    @endforeach
+                                </select>
+                                @error('row_id')
+                                    <span style="padding: 10px 0; color: red;">{{$message}}</span>
+                                @enderror
                                 <!-- Loại ghế -->
                                 <label for="choices-publish-type-input" class="form-label">Loại ghế</label>
                                 <div class="form-group custom-control custom-radio small d-flex ">
