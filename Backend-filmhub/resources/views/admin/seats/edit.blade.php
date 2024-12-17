@@ -75,17 +75,8 @@
                                 <label for="choices-publish-status-input" class="form-label mt-3">Trạng thái</label>
                                 <select class="form-control form-select-lg mb-3" id="choices-publish-status-input"
                                         aria-label="Default select example" name="status">
-                                    @if($seat->status == "available")
-                                        <option value="available">Available</option>
-                                        <option value="booked">Booked</option>
-                                    @else
-                                        <option value="booked">Booked</option>
-                                        <option value="available">Available</option>
-                                    @endif
+                                        <option value="available">{{$seat->status}}</option>
                                 </select>
-                                @error('status')
-                                    <span style="padding: 10px 0; color: red;">{{$message}}</span>
-                                @enderror
                                 <br>
                                 <!-- chọn phòng -->
                                 <label for="choices-category-input" class="form-label">Phòng</label>

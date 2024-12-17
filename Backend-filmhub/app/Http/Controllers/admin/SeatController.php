@@ -123,17 +123,13 @@ class SeatController extends Controller
         ->select('showtimes.showtime_id','showtimes.datetime', 'shifts.start_time', 'shifts.end_time','seats.seat_number','rooms.room_name')
         ->first();
         // dd($showtime);
-
+        //  dd($showtime->datetime);
         // Lấy thời gian hiện tại
         $currentDateTime = Carbon::now('Asia/Ho_Chi_Minh'); // Lấy thời gian hiện tại theo múi giờ Hồ Chí Minh
         $currentDate = $currentDateTime->format('Y-m-d');
         $currentTime = $currentDateTime->format('H:i:s');
         // dd($currentDate, $currentTime);
-         // Kiểm tra thời gian
-        if( $currentDate == $showtime->datetime && $showtime->start_time <= $currentTime && $currentTime <= $showtime->end_time) {
-            return redirect()->route('admin.seats.index')->with('error', 'Không thể sửa ghế trong ca chiếu đang diễn ra.');
-        }
-        else{
+        if(!$showtime ||  !($currentDate == $showtime->datetime && $showtime->start_time <= $currentTime && $currentTime <= $showtime->end_time)){
             $theater_id = session('theater_id'); // Lấy theater_id từ session
             $rooms = Room::query()
             ->where('theater_id', $theater_id) // Lọc phòng theo theater_id
@@ -142,6 +138,10 @@ class SeatController extends Controller
             $rows = Row::query()->where('room_id', $seat->room_id)->pluck('row_name', 'row_id')->all();
             $types = Type::query()->pluck('type_name', 'type_id')->all();
             return view(self::PATH_VIEW.__FUNCTION__, compact('seat', 'rooms', 'rows', 'types'));
+        }
+         // Kiểm tra thời gian
+        elseif( $currentDate == $showtime->datetime && $showtime->start_time <= $currentTime && $currentTime <= $showtime->end_time) {
+            return redirect()->route('admin.seats.index')->with('error', 'Không thể sửa ghế trong ca chiếu đang diễn ra.');
         }
         
     }

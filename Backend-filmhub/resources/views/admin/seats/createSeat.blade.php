@@ -92,9 +92,7 @@
                                 <label for="choices-publish-status-input" class="form-label mt-3">Trạng thái</label>
                                 <select class="form-control form-select-lg mb-3" id="choices-publish-status-input"
                                         aria-label="Default select example" name="status" required>
-                                    <option value="" disabled selected>-----------Trạng thái ----------</option>
                                     <option value="available">Available</option>
-                                    <option value="booked">Booked</option>
                                 </select>
                                 <br>
                                 <!-- Loại sản phẩm -->
