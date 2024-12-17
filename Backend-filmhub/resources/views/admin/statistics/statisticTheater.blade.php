@@ -20,7 +20,10 @@
     <form method="GET" action="{{ route('admin.statistics.statisticTheater', $theater->theater_id) }}">
         <div class="form-row mb-4">
             <div class="col">
-                <input type="date" name="datetime" class="form-control" placeholder="Chọn thời gian">
+                <input type="month" name="month" class="form-control" placeholder="Chọn tháng" value="{{ request('month') }}">
+            </div>
+            <div class="col">
+                <input type="date" name="datetime" class="form-control" placeholder="Chọn ngày" value="{{ request('datetime') }}">
             </div>
             <div class="col">
                 <button type="submit" class="btn btn-primary">Tìm kiếm</button>
@@ -68,7 +71,7 @@
                     @php
                         $totalRevenue = 0; // Khởi tạo biến tổng doanh thu
                     @endphp
-                    @foreach($movies as $movie)
+                    @foreach($showtimes as $movie)
                         <tr>
                             <td>{{ $movie->movie_name }}</td>
                             <td>{{ $movie->show_count }}</td>

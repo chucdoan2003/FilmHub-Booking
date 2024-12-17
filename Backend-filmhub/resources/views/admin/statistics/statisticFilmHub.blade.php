@@ -123,9 +123,20 @@
 @endsection
 @section('content')
 <div class="container-fluid">
+        <form method="GET" action="{{ route('admin.statistics.statisticFilmHub') }}">
+            <div class="form-row mb-4">
+                <div class="col">
+                    <input type="date" name="datetime" class="form-control" placeholder="Chọn thời gian">
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                </div>
+            </div>
+        </form>
         <div class="card shadow mb-4">
             <div class="card-body">
                 <h4>Thống kê doanh thu toàn hệ thống</h4>
+                
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>

@@ -15,13 +15,15 @@
 @endsection
 @section('content')
 <div class="container-fluid">
-    <h1 class="h3 mb-2 text-gray-800">Thống kê doanh số phim</h1>
-    <a style="margin-bottom: 10px;" href="{{route('admin.statistics.statisticTheater', $theater_id)}}" class="btn btn-secondary">Quay lại</a>
+
+<!-- Page Heading -->
+<h1 class="h3 mb-2 text-gray-800">Thống kê doanh số phim</h1>
+<a style="margin-bottom: 10px;" href="{{route('admin.statistics.statisticFilm')}}" class="btn btn-secondary">Quay lại</a>
     <div class="alert alert-info">
         <strong>Tên Phim: {{ $movie->title }}</strong>
     </div>
-    <form method="GET" action="{{ route('admin.statistics.statisticFilmTheater', [$theater_id, $movie->movie_id]) }}">
-        <div class="form-row mb-4">
+<form method="GET" action="{{ route('admin.statistics.statisticDetailFilm', $movie->movie_id) }}">
+<div class="form-row mb-4">
             <div class="col">
                 <input type="month" name="month" class="form-control" placeholder="Chọn tháng" value="{{ request('month') }}">
             </div>
@@ -35,8 +37,8 @@
                 <button type="submit" class="btn btn-primary">Tìm kiếm</button>
             </div>
         </div>
-    </form>
-    <div class="card shadow mb-4">
+</form>
+<div class="card shadow mb-4">
         <div class="card-body">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
@@ -76,6 +78,5 @@
             </table>
         </div>
     </div>
-    
 </div>
 @endsection
