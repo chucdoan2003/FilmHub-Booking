@@ -17,7 +17,7 @@ class MovieController extends Controller
      */
     public function index()
     {
-        $data = Movie::all();
+        $data = Movie::orderBy('movie_id', 'desc')->get();
         // dd($data);
         return view(self::PATH_VIEW . __FUNCTION__, compact('data'));
     }
@@ -42,12 +42,29 @@ class MovieController extends Controller
             'description' => 'required',
             'duration' => 'required|numeric',
             'release_date' => 'required|date',
+            'poster_url' => 'required',
             'genres' => 'required|array|min:1',
             'genres.*' => 'exists:genres,genre_id',
             'status' => 'required',
             'director' => 'required',
             'performer' => 'required',
             'trailer' => 'required|url', // Đảm bảo trailer là URL hợp lệ
+            'type' => 'required|in:2D,3D',
+        ], [
+            'title.required' => 'Tiêu đề không được để trống.',
+            'description.required' => 'Mô tả không được để trống.',
+            'release_date.required' => 'Thời gian phát hành không được để trống.',
+            'release_date.date' => 'Thời gian phát hành phải là ngày',
+            'duration.required' => 'Thời lượng không được để trống.',
+            'duration.numeric' => 'Thời lượng phải là một số.',
+            'genres.required' => 'Thể loại không được để trống.',
+            'status.required' => 'Trạng thái không được để trống.',
+            'director.required' => 'Đạo diễn không được để trống.',
+            'performer.required' => 'Diễn viên không được để trống.',
+            'trailer.required' => 'Trailer không được để trống.',
+            'poster_url.required' => 'Poster không được để trống.',
+            'type.required' => 'Dạng phim không được để trống.',
+            'type.in:2D,3D' => 'Dạng phim chỉ có thể là 2D hoặc 3D.',
         ]);
 
         // Xử lý đường dẫn trailer để chuyển đổi sang dạng embed
@@ -119,6 +136,21 @@ class MovieController extends Controller
             'director' => 'required',
             'performer' => 'required',
             'trailer' => 'required',
+            'type' => 'required|in:2D,3D',
+        ], [
+            'title.required' => 'Tiêu đề không được để trống.',
+            'description.required' => 'Mô tả không được để trống.',
+            'release_date.required' => 'Thời gian phát hành không được để trống.',
+            'release_date.date' => 'Thời gian phát hành phải là ngày',
+            'duration.required' => 'Thời lượng không được để trống.',
+            'duration.numeric' => 'Thời lượng phải là một số.',
+            'genres.required' => 'Thể loại không được để trống.',
+            'status.required' => 'Trạng thái không được để trống.',
+            'director.required' => 'Đạo diễn không được để trống.',
+            'performer.required' => 'Diễn viên không được để trống.',
+            'trailer.required' => 'Trailer không được để trống.',
+            'type.required' => 'Dạng phim không được để trống.',
+            'type.in:2D,3D' => 'Dạng phim chỉ có thể là 2D hoặc 3D.',
         ]);
         $movie = Movie::find($id);
 
@@ -152,15 +184,23 @@ class MovieController extends Controller
     {
         $movie = Movie::findOrFail($id);
 
-        // Xóa các thể loại liên kết nếu cần thiết
+        // Kiểm tra nếu phim đang có lịch chiếu
+        if ($movie->showtimes()->exists()) {
+            return redirect()->route('admin.movies.index')->with('error', 'Không thể xóa phim vì đang có lịch chiếu.');
+        }
+
+        // Kiểm tra nếu phim có bình luận
+        if ($movie->comments()->exists()) {
+            return redirect()->route('admin.movies.index')->with('error', 'Không thể xóa phim vì đang có bình luận.');
+        }
+
+        // Nếu không bị ràng buộc, thực hiện xóa
         $movie->genres()->detach();
 
-        // Xóa ảnh poster nếu có
         if ($movie->poster_url) {
             Storage::disk('public')->delete($movie->poster_url);
         }
 
-        // Xóa phim
         $movie->delete();
 
         return redirect()->route('admin.movies.index')->with('success', 'Phim đã được xóa thành công!');

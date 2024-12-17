@@ -10416,6 +10416,7 @@ i:before {
 .seat-vip {
 	background-color: blue;
 }
+
 .seat-vip::after {
 	background-color: blue;
 }
@@ -10520,7 +10521,7 @@ i:before {
 }
 
 .st_seat_lay_row li {
-	float: left;
+	text-align: center;
 	margin-right: 50px;
 	margin-top: 40px;
 }
@@ -10533,10 +10534,14 @@ i:before {
 	text-align: center;
 	text-transform: uppercase;
 	padding-top: 19px;
+	margin-left: -50px;
 }
 
 .st_seat_lay_row ul {
-	float: left;
+	display: flex;
+	max-width: 100%;
+	flex-wrap: wrap;
+	justify-content: center;
 }
 
 .st_eco_second_row {

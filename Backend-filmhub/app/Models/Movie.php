@@ -21,7 +21,8 @@ class Movie extends Model
         'director',
         'performer',
         'trailer',
-        'status'
+        'status',
+        'type',
     ];
     public function genres()
     {

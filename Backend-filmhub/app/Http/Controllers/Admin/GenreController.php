@@ -34,6 +34,8 @@ class GenreController extends Controller
     {
         $data = $request->validate([
             'name' => 'required',
+        ], [
+            'name.required' => 'Tên thể loại không được để trống.',
         ]);
         Genre::query()->create([
             'name' => $request->name,
@@ -45,9 +47,7 @@ class GenreController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-    }
+    public function show(string $id) {}
 
     /**
      * Show the form for editing the specified resource.
@@ -65,6 +65,8 @@ class GenreController extends Controller
     {
         $data = $request->validate([
             'name' => 'required',
+        ], [
+            'name.required' => 'Tên thể loại không được để trống.',
         ]);
         $genre = Genre::find($id);
         $genre->update($data);
@@ -77,8 +79,20 @@ class GenreController extends Controller
     public function destroy(string $id)
     {
         $genre = Genre::findOrFail($id);
-        // Xóa phim
+
+        // Kiểm tra nếu thể loại đang được liên kết với bất kỳ phim nào
+        if ($genre->movies()->exists()) {
+            return redirect()->route('admin.genres.index')->with('error', 'Không thể xóa thể loại vì đang được liên kết với phim.');
+        }
+
+        // Kiểm tra nếu thể loại đang được liên kết với lịch chiếu
+        if ($genre->showtimes()->exists()) {
+            return redirect()->route('admin.genres.index')->with('error', 'Không thể xóa thể loại vì đang được liên kết với lịch chiếu.');
+        }
+
+        // Nếu không bị ràng buộc, thực hiện xóa
         $genre->delete();
-        return redirect()->route('admin.genres.index')->with('success', 'Phim đã được xóa thành công!');
+
+        return redirect()->route('admin.genres.index')->with('success', 'Thể loại đã được xóa thành công!');
     }
 }

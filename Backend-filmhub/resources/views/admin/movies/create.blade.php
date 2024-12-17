@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Create Movie
+    Thêm Phim
 @endsection
 
 @section('style-libs')
@@ -50,45 +50,45 @@
     }
 </style>
 @section('content')
-    <form action="{{ route('admin.movies.store') }}"  enctype="multipart/form-data" method="POST">
+    <form action="{{ route('admin.movies.store') }}" enctype="multipart/form-data" method="POST">
         @csrf
         <div class="row">
             <div class="mb-3 col-6">
-                <label for="title" class="form-label">Title:</label>
+                <label for="title" class="form-label">Tên phim:</label>
                 <input type="text" class="form-control" id="title" name="title">
                 @error('title')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="mb-3 col-6">
-                <label for="description" class="form-label">Description:</label>
+                <label for="description" class="form-label">Mô tả:</label>
                 <textarea type="text" class="form-control" id="description" name="description"></textarea>
                 @error('description')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="mb-3 col-6">
-                <label for="duration" class="form-label">Duration:</label>
+                <label for="duration" class="form-label">Thời lượng:</label>
                 <input type="number" class="form-control" id="duration" name="duration">
                 @error('duration')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="mb-3 col-6">
-                <label for="release_date" class="form-label">Release date:</label>
+                <label for="release_date" class="form-label">Ngày ra mắt:</label>
                 <input type="date" class="form-control" id="release_date" name="release_date">
                 @error('release_date')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="mb-4 col-6">
-                <label for="genres" class="form-label">Genre:</label>
+                <label for="genres" class="form-label">Thể loại:</label>
                 <select id="genres" name="genres[]" class="selectpicker form-control" multiple data-live-search="true">
                     @foreach ($genres as $data)
                         <option value="{{ $data->genre_id }}">{{ $data->name }}</option>
                     @endforeach
                 </select>
-                @error('genre')
+                @error('genres')
                     <div class="text-danger mt-2">{{ $message }}</div>
                 @enderror
             </div>
@@ -100,7 +100,7 @@
                 @enderror
             </div>
             <div class="mb-3 col-6">
-                <label for="status" class="form-label">Status:</label>
+                <label for="status" class="form-label">Trạng thái:</label>
                 <select name="status" class="form-control" id="status">
                     <option value="Sắp ra mắt" selected>Sắp ra mắt</option>
                     <option value="Đang chiếu">Đang chiếu</option>
@@ -111,14 +111,14 @@
                 @enderror
             </div>
             <div class="mb-3 col-6">
-                <label for="director" class="form-label">Director:</label>
+                <label for="director" class="form-label">Đạo diễn:</label>
                 <input type="text" class="form-control" id="director" name="director">
                 @error('director')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="mb-3 col-6">
-                <label for="performer" class="form-label">Performer:</label>
+                <label for="performer" class="form-label">Diễn viên:</label>
                 <input type="text" class="form-control" id="performer" name="performer">
                 @error('performer')
                     <div class="text-danger">{{ $message }}</div>
@@ -131,8 +131,18 @@
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
+            <div class="mb-3 col-6">
+                <label for="type">Dạng phim</label>
+                <select name="type" id="type" class="form-control">
+                    <option value="2D">2D</option>
+                    <option value="3D">3D</option>
+                </select>
+                @error('type')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary ">Save</button>
+        <button type="submit" class="btn btn-primary ">Lưu</button>
     </form>
 @endsection
 <script>

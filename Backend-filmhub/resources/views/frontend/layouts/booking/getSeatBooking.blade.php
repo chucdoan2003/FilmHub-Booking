@@ -17,18 +17,6 @@
                                 href="{{ route('booking.index', $showtime->movie->movie_id) }}"><i
                                     class="fas fa-long-arrow-alt-left"></i> &nbsp;Trở về</a>
                         </div>
-                        {{-- <div class="cc_ps_quantily_info cc_ps_quantily_info_tecket">
-                            <p>Select Ticket</p>
-                            <div class="select_number">
-                                <button onclick="changeQty(1); return false;" class="increase"><i class="fa fa-plus"></i>
-                                </button>
-                                <input type="text" name="quantity" value="1" size="2" id="input-quantity"
-                                    class="form-control" />
-                                <button onclick="changeQty(0); return false;" class="decrease"><i class="fa fa-minus"></i>
-                                </button>
-                            </div>
-                            <input type="hidden" name="product_id" />
-                        </div> --}}
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                         <div class="st_bt_top_center_heading st_bt_top_center_heading_seat_book_page float_left">
@@ -88,51 +76,50 @@
 
                 </div>
                 <div class="st_seat_full_container">
-                    <div class="st_seat_lay_economy_wrapper float_left">
+                    <div class="st_seat_lay_economy_wrapper ">
                         <div class="screen">
                             <img src="{{ asset('website/images/content/screen.png') }}">
                         </div>
-                        <div class="st_seat_lay_economy_heading float_left">
-                            <h3>Economy</h3>
+                        <div class="st_seat_lay_economy_heading ">
+                            <h3>Danh sách ghế</h3>
                         </div>
                         <!-- Danh sách ghế -->
                         @foreach ($showtime->rooms->rows as $row)
-                            <div class="st_seat_lay_row float_left">
-                                <ul>
-                                    <li class="st_seat_heading_row">{{ $row->row_name }}</li>
-                                    @foreach ($row->seats as $index => $seat)
-                                        @php
-                                            $isBooked = in_array($seat->seat_id, $bookedSeats); // Kiểm tra xem ghế đã được đặt chưa
-                                            $isVip = $seat->types->type_name === 'VIP'; // Kiểm tra loại ghế
-                                            $seatPrice = $isVip ? $showtime->vip_price : $showtime->normal_price; // Giá ghế dựa trên loại
-                                        @endphp
+                            @php
+                                $seats = $row->seats; // Danh sách ghế trong hàng
+                                $seatChunks = $seats->chunk(20); // Chia ghế thành từng nhóm 20 ghế
+                            @endphp
 
-                                        <li class="{{ $isVip ? 'vip' : 'normal-seat' }}"
-                                            style="background-color: {{ $isBooked ? 'red' : 'transparent' }} !important;">
-                                            @if ($isBooked)
-                                                <span style="color: white;">Ghế đã được đặt</span>
-                                            @else
-                                                <span>{{ $seatPrice }} VNĐ</span>
-                                            @endif
-
-                                            <input type="checkbox" id="c{{ $seat->seat_id }}" name="selected_seats[]"
-                                                value="{{ $seat->seat_id }}" class="seat-checkbox"
-                                                data-price="{{ $seatPrice }}"
-                                                @if ($isBooked) disabled @endif>
-
-                                            <label for="c{{ $seat->seat_id }}" class="seat-label"
-                                                data-seat-number="{{ $seat->seat_number }}">
-                                            </label>
-                                        </li>
-
-                                        {{-- Thêm khoảng cách sau mỗi 5 ghế --}}
-                                        @if (($index + 1) % 5 === 0)
-                                            <li class="seat-gap"></li>
-                                        @endif
-                                    @endforeach
-                                </ul>
-                            </div>
+                            @foreach ($seatChunks as $chunk)
+                                <div class="st_seat_lay_row float_left">
+                                    <ul>
+                                        <li class="st_seat_heading_row">{{ $row->row_name }}</li>
+                                        @foreach ($chunk as $seat)
+                                            @php
+                                                $isBooked = in_array($seat->seat_id, $bookedSeats);
+                                                $isVip = $seat->types->type_name === 'VIP';
+                                                $seatPrice = $isVip ? $showtime->vip_price : $showtime->normal_price;
+                                            @endphp
+                                            <li class="{{ $isVip ? 'vip' : 'normal-seat' }}"
+                                                style="background-color: {{ $isBooked ? 'red' : 'transparent' }} !important;">
+                                                @if ($isBooked)
+                                                    <span style="color: white;">Ghế đã được đặt</span>
+                                                @else
+                                                    <span>{{ $seatPrice }} VNĐ</span>
+                                                @endif
+                                                <input type="checkbox" id="c{{ $seat->seat_id }}" name="selected_seats[]"
+                                                    value="{{ $seat->seat_id }}" class="seat-checkbox"
+                                                    data-price="{{ $seatPrice }}"
+                                                    @if ($isBooked) disabled @endif>
+                                                <label for="c{{ $seat->seat_id }}" class="seat-label"
+                                                    data-seat-number="{{ $seat->seat_number }}"></label>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endforeach
                         @endforeach
+
 
                     </div>
                 </div>
@@ -167,72 +154,59 @@
             seatCheckboxes.forEach((checkbox) => {
                 checkbox.addEventListener("change", function() {
                     let totalPrice = 0; // Tổng tiền
-                    const selectedSeats = []; // Danh sách ghế được chọn
                     const selectedSeatsByRow = {}; // Lưu danh sách ghế theo từng hàng
 
-                    // Lặp qua các checkbox để kiểm tra trạng thái
-                    seatCheckboxes.forEach((cb) => {
-                        if (cb.checked) {
-                            selectedSeats.push(cb.value);
+                    const rows = document.querySelectorAll(
+                        ".st_seat_lay_row ul"); // Tất cả hàng ghế
+                    rows.forEach((row) => {
+                        const checkboxesInRow = row.querySelectorAll(".seat-checkbox");
+                        const rowName = row.querySelector(".st_seat_heading_row")
+                            .textContent.trim();
+                        const seatsInRow = [];
 
-                            const rowName = cb.closest("ul").querySelector(
-                                ".st_seat_heading_row"
-                            ).textContent.trim();
-                            const seatId = parseInt(cb.value);
-
-                            // Lưu ghế theo hàng
-                            if (!selectedSeatsByRow[rowName]) {
-                                selectedSeatsByRow[rowName] = [];
+                        // Thu thập trạng thái checkbox trong hàng
+                        checkboxesInRow.forEach((cb, index) => {
+                            if (cb.checked) {
+                                seatsInRow.push(index); // Lưu index ghế
+                                const price = parseFloat(cb.getAttribute(
+                                    "data-price"));
+                                if (!isNaN(price)) totalPrice += price;
                             }
-                            selectedSeatsByRow[rowName].push(seatId);
+                        });
 
-                            // Tính tổng tiền
-                            const price = parseFloat(cb.getAttribute("data-price"));
-                            if (!isNaN(price)) {
-                                totalPrice += price;
-                            }
+                        if (seatsInRow.length > 0) {
+                            selectedSeatsByRow[rowName] = seatsInRow;
                         }
                     });
 
-                    // Kiểm tra số lượng ghế tối đa
-                    if (selectedSeats.length > maxSeats) {
-                        alert(`Bạn chỉ được chọn tối đa ${maxSeats} ghế.`);
-                        checkbox.checked = false; // Hủy chọn ghế hiện tại
-                        return;
-                    }
+                    const currentRow = checkbox.closest("ul"); // Hàng ghế chứa checkbox hiện tại
+                    const checkboxesInCurrentRow = Array.from(
+                        currentRow.querySelectorAll(".seat-checkbox")
+                    );
 
-                    // Kiểm tra quy tắc ghế không được so le trong từng hàng
+                    // Kiểm tra ghế ở giữa bị bỏ chọn hoặc bỏ trống
                     for (const row in selectedSeatsByRow) {
                         const seats = selectedSeatsByRow[row];
-                        seats.sort((a, b) => a - b); // Sắp xếp ghế theo thứ tự trong hàng
+                        seats.sort((a, b) => a - b); // Sắp xếp vị trí ghế trong hàng
 
-                        // Kiểm tra khoảng cách giữa các ghế
                         for (let i = 0; i < seats.length - 1; i++) {
                             if (seats[i + 1] - seats[i] === 2) {
-                                const isolatedSeat = seats[i] + 1; // Ghế cô lẻ
-                                const isolatedCheckbox = document.querySelector(
-                                    `.seat-checkbox[value="${isolatedSeat}"]`
-                                );
+                                const isolatedSeatIndex = seats[i] + 1; // Ghế ở giữa bị bỏ trống
+                                const isolatedCheckbox = checkboxesInCurrentRow[isolatedSeatIndex];
 
-                                // Nếu ghế bị bỏ chọn làm trống ở giữa
-                                if (!checkbox.checked && isolatedCheckbox) {
-                                    const uncheckedSeatId = parseInt(checkbox.value);
-
-                                    // Ghế hiện tại nằm giữa hai ghế đã chọn
-                                    if (uncheckedSeatId === isolatedSeat) {
-                                        alert(
-                                            "Bạn không thể bỏ ghế ở giữa làm trống khoảng cách giữa các ghế đã chọn!"
+                                // Trường hợp bỏ chọn ghế ở giữa đã được chọn
+                                if (!checkbox.checked && checkbox === isolatedCheckbox) {
+                                    alert(
+                                        "Bạn không thể bỏ ghế ở giữa khi nó nằm giữa 2 ghế đã chọn!"
                                         );
-                                        checkbox.checked = true; // Khôi phục trạng thái được chọn
-                                        return;
-                                    }
+                                    checkbox.checked = true; // Khôi phục trạng thái
+                                    return;
                                 }
 
-                                // Nếu ghế cô lẻ chưa được chọn, không cho phép
-                                if (isolatedCheckbox && !isolatedCheckbox.checked) {
-                                    alert(
-                                        "Bạn không được để ghế trống ở giữa. Vui lòng chọn lại."
-                                    );
+                                // Trường hợp chọn ghế làm trống ghế ở giữa
+                                if (checkbox.checked && isolatedCheckbox && !isolatedCheckbox
+                                    .checked) {
+                                    alert("Bạn không được để ghế trống ở giữa. Vui lòng chọn lại!");
                                     checkbox.checked = false; // Hủy chọn ghế hiện tại
                                     return;
                                 }
@@ -240,9 +214,20 @@
                         }
                     }
 
-                    // Cập nhật danh sách ghế và tổng tiền vào input hidden
-                    selectedSeatsInput.value = selectedSeats.join(",");
-                    totalPriceInput.value = totalPrice.toFixed(0); // Tổng tiền làm tròn
+                    // Kiểm tra số lượng ghế tối đa
+                    let totalSelectedSeats = 0;
+                    for (const row in selectedSeatsByRow) {
+                        totalSelectedSeats += selectedSeatsByRow[row].length;
+                    }
+                    if (totalSelectedSeats > maxSeats) {
+                        alert(`Bạn chỉ được chọn tối đa ${maxSeats} ghế.`);
+                        checkbox.checked = false; // Hủy chọn ghế hiện tại
+                        return;
+                    }
+
+                    // Cập nhật input hidden
+                    selectedSeatsInput.value = JSON.stringify(selectedSeatsByRow);
+                    totalPriceInput.value = totalPrice.toFixed(0);
                 });
             });
         });
