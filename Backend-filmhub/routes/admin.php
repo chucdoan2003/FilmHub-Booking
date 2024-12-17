@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\BannerController;
 use App\Http\Controllers\admin\RowController;
 use App\Http\Controllers\admin\SeatController;
 use App\Http\Controllers\admin\TypeController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\admin\FoodController;
 use App\Http\Controllers\Admin\ProductController;
 
 use App\Http\Controllers\admin\ShowtimesController;
+use App\Http\Controllers\admin\VourcherEventController;
 use App\Http\Controllers\BookingController;
 
 use App\Http\Controllers\admin\UserController;
@@ -145,9 +147,44 @@ Route::prefix('admin/statistics')->group(function () {
     Route::get('/statistics/theater/data', [StatisticController::class, 'statisticTheaterData'])->name('admin.statistics.statisticTheaterData');
 
 });
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
 use App\Http\Controllers\admin\PostController;
 use App\Http\Controllers\admin\CategoryController;
 Route::prefix("admin")->as('admin.')->group(function () {
     Route::resource('category', CategoryController::class);
     Route::resource('post', PostController::class);
+<<<<<<< HEAD
 });
+=======
+});
+
+
+// vourcher_event
+Route::prefix('admin/vourcher-events')->group(function () {
+    Route::get('/', [VourcherEventController::class, 'index'])->name('vourcher-events.index'); // Lấy danh sách tất cả vourcher events
+    Route::get('/create', [VourcherEventController::class, 'create'])->name('vourcher-events.create'); // Tạo một vourcher event mới
+    Route::post('/', [VourcherEventController::class, 'store'])->name('vourcher-events.store'); // Lưu vourcher event mới
+    Route::get('/{vourcher_event}/edit', [VourcherEventController::class, 'edit'])->name('vourcher-events.edit'); // Chỉnh sửa một vourcher event
+    Route::put('/{vourcher_event}', [VourcherEventController::class, 'update'])->name('vourcher-events.update'); // Cập nhật một vourcher event
+    Route::delete('/{vourcher_event}', [VourcherEventController::class, 'destroy'])->name('vourcher-events.destroy'); // Xóa một vourcher event
+});
+
+
+// banner
+Route::prefix("admin")->group(function(){
+    Route::get('banners', [BannerController::class,'index'])->name('banner.index');
+    Route::get('banner/create', [BannerController::class,'create'])->name('banner.create');
+    Route::post('banner/store', [BannerController::class,'store'])->name('banner.store');
+    Route::get('banner/edit/{id}', [BannerController::class,'edit'])->name('banner.edit');
+    Route::put('banner/update/{id}', [BannerController::class,'update'])->name('banner.update');
+    Route::delete('banner/destroy/{id}', [BannerController::class,'destroy'])->name('banner.destroy');
+
+
+
+
+});
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5

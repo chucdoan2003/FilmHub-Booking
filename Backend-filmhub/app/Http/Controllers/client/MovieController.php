@@ -36,10 +36,19 @@ class MovieController extends Controller
             ->get();
         $genres = Genre::withCount('movies')->get();
 
+<<<<<<< HEAD
         // dd($topMovies);
         // Trả về view với danh sách phim
 
         return view('frontend.movies.index', compact('movieUpcoming1', 'movieUpcoming2', 'movieReleased1', 'movieReleased2', 'genres'));
+=======
+
+        $topMoviesRating = Movie::orderBy('rating', 'desc')->limit(10)->get();
+        // dd($topMovies);
+        // Trả về view với danh sách phim
+
+        return view('frontend.movies.index', compact('movieUpcoming1', 'movieUpcoming2', 'movieReleased1', 'movieReleased2', 'genres' ,'topMoviesRating'));
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
     }
     public function detail(string $id)
     {

@@ -19,11 +19,23 @@ class UserInforController extends Controller
         ->join('users', 'tickets.user_id', '=', 'users.user_id')
         ->join('showtimes', 'tickets.showtime_id', '=', 'showtimes.showtime_id')
         ->join('movies', 'showtimes.movie_id', '=', 'movies.movie_id')
+<<<<<<< HEAD
+=======
+        ->leftJoin('foods', 'tickets.food_id', '=', 'foods.id')
+        ->leftJoin('drinks', 'tickets.drink_id', '=', 'drinks.id')
+        ->leftJoin('combos', 'tickets.combo_id', '=', 'combos.id')
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
         ->select(
             'tickets.*',
             "movies.*",
             "showtimes.*",
             'users.name as user_name',
+<<<<<<< HEAD
+=======
+            'foods.name as food_name',
+            'drinks.name as drink_name',
+            'combos.name as combo_name'
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
         )
         ->where('tickets.user_id', Auth::user()->user_id)
         ->where('tickets.status','completed')
@@ -36,11 +48,19 @@ class UserInforController extends Controller
             ->get();
             $theater = DB::table('theaters')->where('theater_id', $ticket->theater_id)->first();
             $shift = DB::table('shifts')->where('shift_id', $ticket->shift_id)->first();
+<<<<<<< HEAD
+=======
+            $showtime = DB::table('showtimes')->where('showtime_id', $ticket->showtime_id)->first();
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
             $ticket->theater = $theater->name;
             $ticket->seats = $seats;
             $ticket->shift_name = $shift->shift_name;
             $ticket->shift_start = $shift->start_time;
             $ticket->shift_end = $shift->end_time;
+<<<<<<< HEAD
+=======
+            $ticket->datetime = $showtime->datetime;
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
         }
 
         return view("frontend.users.history", compact('tickets'));
@@ -90,13 +110,21 @@ class UserInforController extends Controller
             $path = $request->file('avt')->store('storage/users', 'public'); //
             DB::table('users')->where('user_id',$user->user_id)->update([
                 'name' => $request->name,
+<<<<<<< HEAD
                 'email' => $request->email,
+=======
+
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
                 'avt'=>$path
             ]);
         }else{
             DB::table('users')->where('user_id',$user->user_id)->update([
                 'name' => $request->name,
+<<<<<<< HEAD
                 'email' => $request->email,
+=======
+
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
             ]);
 
         }
@@ -105,4 +133,18 @@ class UserInforController extends Controller
 
     }
 
+<<<<<<< HEAD
+=======
+    public function Payment()
+{
+    // Lấy thông tin của người dùng hiện tại
+    $userId = session('user_id');
+
+    // Lấy tất cả thông tin thanh toán của người dùng từ bảng payments
+    $payments = \DB::table('payments')->where('user_id', $userId)->get();
+
+    return view('frontend.users.payment', compact('payments'));
+}
+
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
 }

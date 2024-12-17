@@ -1,19 +1,5 @@
 @extends('frontend.layouts.master3')
 @section('content')
-<style>
-    .custom-spacing {
-        margin: 10px;
-    }
-
-    .select-row {
-        display: flex;
-        gap: 10px; /* Khoảng cách giữa các phần tử */
-        align-items: center; /* Căn giữa theo chiều dọc (nếu cần) */
-    }
-    .select-row select {
-        flex: 1; /* Đảm bảo cả hai phần tử chia sẻ không gian đều nhau */
-    }
-</style>
 @if (session('error'))
         <script>
             alert('{{ session('error') }}');
@@ -27,7 +13,7 @@
     @endphp --}}
     <input type="hidden" name="showtime_id" value="{{ $showtime->showtime_id }}">
     <input type="hidden" name="user_id" value="{{ $user_id }}">
-    <input type="hidden" name="total" value="{{ $totalAmount }}">
+    <input type="hidden" name="total" value="{{ $selectedSeats2->sum('totalPrice') }}">
     <input type="hidden" name="selected_seats" value="{{ implode(',', $selectedSeats2->pluck('seat_id')->toArray()) }}">
 
     <!-- st top header Start -->
@@ -81,30 +67,17 @@
                                     </div>
                                     <div class="st_cherity_img_cont float_left">
                                         <div class="box">
-                                            <div class="select-row">
-                                                <select id="combo" name="combo_id" class="form-control custom-spacing" onchange="updateTotalPrice()">
-                                                    <option value="">Chọn combo</option>
-                                                    @foreach ($combos as $combo)
-                                                        <option value="{{ $combo->id }}"
-                                                            data-price="{{ $combo->price }}"
-                                                            data-food-id="{{ $combo->comboFoodDrink->first()->food->id ?? '' }}"
-                                                            data-drink-id="{{ $combo->comboFoodDrink->first()->drink->id ?? '' }}">
-                                                            {{ $combo->name }} - {{ number_format($combo->price) }} VNĐ
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                <select id="discount_code" name="discount_code" class="form-control custom-spacing" onchange="updateTotalPrice()">
-                                                    <option value="">Mã giảm giá</option>
-                                                    @foreach($vouchers as $voucher)
-                                                        @if ($voucher->id !== $usedVoucher)
-                                                            <option value="{{ $voucher->vourcher_code }}">
-                                                                {{ $voucher->vourcher_code }} ({{ $voucher->discount_percentage }}% giảm, tối đa {{ $voucher->max_discount_amount }} VNĐ)
-                                                            </option>
-                                                        @endif
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <!-- Input ẩn để lưu food_id và drink_id -->
+                                            <select id="combo" name="combo_id" class="form-control" onchange="updateTotalPrice()">
+                                                <option value="">Chọn combo</option>
+                                                @foreach ($combos as $combo)
+                                                    <option value="{{ $combo->id }}"
+                                                        data-price="{{ $combo->price }}"
+                                                        data-food-id="{{ $combo->comboFoodDrink->first()->food->id ?? '' }}"
+                                                        data-drink-id="{{ $combo->comboFoodDrink->first()->drink->id ?? '' }}">
+                                                        {{ $combo->name }} - {{ number_format($combo->price) }} VNĐ
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                             <input type="hidden" name="food_id" id="food_id" value="">
                                             <input type="hidden" name="drink_id" id="drink_id" value="">
                                         </div>
@@ -113,13 +86,9 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="st_cherity_btn float_left">
-
+                                    <h3>SELECT TICKET TYPE</h3>
                                     <ul>
-                                        @if ($selectedSeats2->isNotEmpty())
-                                            <li><button type="submit" class="btn btn-success">Proceed to Pay</button></li>
-                                        @else
-                                            <li><p class="text-danger">Vui lòng chọn ghế trước khi thanh toán!</p></li>
-                                        @endif
+                                        <li><button type="submit" class="btn btn-success">Proceed to Pay</button></li>
                                     </ul>
                                 </div>
                             </div>
@@ -138,7 +107,7 @@
 
                                         @if ($selectedSeats2->isNotEmpty())
                                             @foreach ($selectedSeats2 as $seat)
-                                                <li>{{ $seat->seat->seat_number }}<br>(1 Ticket) <span>Giá: {{ number_format( $totalAmount) }} VNĐ</span></li>
+                                                <li>{{ $seat->seat->seat_number }}<br>(1 Ticket) <span>Giá: {{ number_format( $selectedSeats2->sum('totalPrice')) }} VNĐ</span></li>
                                             @endforeach
                                         @else
                                             <li>Không có ghế nào được chọn.</li>
@@ -154,9 +123,9 @@
                                     <p>Integrated GST (IGST) @ 18% <span>Rs. 60.00</span></p>
                                 </div>
                                 <div class="st_dtts_sb_h2 float_left">
-                                    <h3>Thành tiền: <span id="totalPriceDisplay">{{ number_format($totalAmount, 0, ',', '.') }} VNĐ</span></h3>
+                                    <h3>Thành tiền: <span id="totalPriceDisplay">{{ number_format($selectedSeats2->sum('totalPrice'), 0, ',', '.') }} VNĐ</span></h3>
                                     <h4>Current State is <span>Kerala</span></h4>
-                                    <h5>Số tiền phải trả <span id="totalAmountDisplay">{{ number_format($totalAmount, 0, ',', '.') }} VNĐ</span></h5>
+                                    <h5>Số tiền phải trả <span id="totalAmountDisplay">{{ number_format($selectedSeats2->sum('totalPrice'), 0, ',', '.') }} VNĐ</span></h5>
                                 </div>
                             </div>
                         </div>
@@ -167,76 +136,39 @@
     </div>
     <script>
         function updateTotalPrice() {
-        var totalPrice = {{ $totalAmount }};  // Lấy tổng giá ghế đã chọn
+        var totalPrice = {{ $selectedSeats2->sum('totalPrice') }};  // Lấy tổng giá ghế đã chọn
         var comboSelect = document.getElementById('combo');
         var selectedOption = comboSelect.options[comboSelect.selectedIndex];
-        var comboPrice = selectedOption.dataset.price ? parseFloat(selectedOption.dataset.price) : 0; // Giá combo
+        var comboPrice = selectedOption.dataset.price ? parseFloat(selectedOption.dataset.price) : 0;  // Lấy giá combo
 
-        totalPrice += comboPrice; // Cộng giá combo vào tổng
+        totalPrice += comboPrice;  // Cộng thêm giá combo vào tổng giá
 
-        var discountCode = document.getElementById('discount_code').value;
-
-    // Giả sử bạn có thông tin mã giảm giá từ server
-    var discounts = {};
-    @foreach($vouchers as $voucher)
-        @if ($voucher->id !== $usedVoucher) // Chỉ thêm mã giảm giá chưa được sử dụng
-            discounts["{{ $voucher->vourcher_code }}"] = {
-                percentage: {{ $voucher->discount_percentage }},
-                max: {{ $voucher->max_discount_amount }}
-            };
-        @endif
-    @endforeach
-
-    // Kiểm tra đối tượng discounts
-    console.log(discounts);
-    if (discountCode && discounts[discountCode]) {
-        var discount = discounts[discountCode];
-        var discountAmount = (totalPrice * discount.percentage) / 100;
-
-        // Giảm theo số tiền tối đa
-        if (discountAmount > discount.max) {
-            discountAmount = discount.max;
-        }
-
-        // Đảm bảo tổng giá không giảm xuống dưới 0
-        if (totalPrice - discountAmount < 0) {
-            discountAmount = totalPrice; // Áp dụng giảm tối đa đến giá trị hiện tại
-        }
-
-        totalPrice -= discountAmount; // Áp dụng giảm giá
-    }
-
-
-        // Cập nhật giá thành hiển thị
+        // Hiển thị lại giá tổng
         document.getElementById('totalPriceDisplay').innerText = new Intl.NumberFormat('vi-VN', {
             style: 'currency',
             currency: 'VND'
         }).format(totalPrice) + ' VNĐ';
 
-        // Cập nhật số tiền phải trả hiển thị
         document.getElementById('totalAmountDisplay').innerText = new Intl.NumberFormat('vi-VN', {
             style: 'currency',
             currency: 'VND'
         }).format(totalPrice) + ' VNĐ';
 
-
-        // Cập nhật giá tổng vào input
+        // Cập nhật giá trị trong input type="hidden"
         document.querySelector('input[name="total"]').value = totalPrice;
-        // Lưu food_id và drink_id vào các input ẩn
+
+        // Cập nhật food_id và drink_id
         var foodId = selectedOption.dataset.foodId;
         var drinkId = selectedOption.dataset.drinkId;
 
         document.querySelector('input[name="food_id"]').value = foodId;
         document.querySelector('input[name="drink_id"]').value = drinkId;
 
-        // Cập nhật thông tin combo đã chọn
+        // Hiển thị tên combo đã chọn
         var comboName = selectedOption.text;
         document.getElementById('selectedComboDisplay').innerText = comboName;
     }
     </script>
-
-
-
     <!-- st dtts section End -->
 </form>
 @endsection

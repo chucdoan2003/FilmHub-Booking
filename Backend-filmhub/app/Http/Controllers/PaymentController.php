@@ -9,13 +9,22 @@ use App\Models\Showtime;
 use App\Models\Genre;
 use App\Models\SelectedSeat;
 use Illuminate\Support\Facades\Mail;
+<<<<<<< HEAD
+=======
+use Carbon\Carbon;
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
 class PaymentController extends Controller
 {
     public function vnpay_payment(Request $request)
     {
 
+<<<<<<< HEAD
         // Lưu thời gian bắt đầu thanh toán vào session
         session(['payment_start_time' => now()]);
+=======
+
+
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
 
         //voucher
         $discountCode = $request->input('discount_code');
@@ -24,7 +33,14 @@ class PaymentController extends Controller
 
         // Kiểm tra mã giảm giá
         try {
+<<<<<<< HEAD
             $vourcher = \DB::table('vourchers')->where('vourcher_code', $discountCode)->first();
+=======
+            $vourcher = \DB::table('vourchers_redeem')->where('vourcher_code', $discountCode)->first();
+            if (!$vourcher) {
+                $vourcher = \DB::table('vourcher_event')->where('vourcher_code', $discountCode)->first();
+            }
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['msg' => 'Lỗi khi truy vấn mã giảm giá: ' . $e->getMessage()]);
         }
@@ -49,11 +65,47 @@ class PaymentController extends Controller
         }
 
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
         $data = $request->all();
+        $showtimeId = $data['showtime_id'];
+
+        $showtime = Showtime::find($showtimeId);  // Giả sử bạn lấy showtime từ cơ sở dữ liệu
+
+        // Kiểm tra nếu không tìm thấy showtime
+        if (!$showtime) {
+            return redirect()->route('movies.index')->with('error', 'Không tìm thấy ca chiếu.');
+        }
+
+
+        $showtimeStartDate = Carbon::parse($showtime->datetime)->setTimezone('Asia/Ho_Chi_Minh'); // Đảm bảo múi giờ là Việt Nam
+        $showtimeStartTime = Carbon::createFromFormat('H:i:s', $showtime->shifts->start_time);  // Giờ bắt đầu từ shifts
+        $showtimeStart = $showtimeStartDate->setTimeFromTimeString($showtimeStartTime->toTimeString());  // Thời gian buổi chiếu
+
+        // Lấy thời gian hiện tại
+        $currentDateTime = Carbon::now('Asia/Ho_Chi_Minh');  // Đảm bảo thời gian hiện tại là múi giờ Việt Nam
+
+        // Kiểm tra nếu thời gian hiện tại đã qua thời gian bắt đầu của ca chiếu
+        if ($currentDateTime->gt($showtimeStart)) {
+            return redirect()->route('movies.index')->with('error', 'Ca chiếu đã qua, vui lòng chọn ca chiếu khác.');
+        }
 
         // dd($data);
 
         $selectedSeats = explode(',', $data['selected_seats']);
+<<<<<<< HEAD
+=======
+
+        foreach ($selectedSeats as $seatId) {
+            $seatExists = \DB::table('selected_seats')->where('seat_id', $seatId)->exists();
+            if (!$seatExists) {
+                return redirect()->route('getSeatBooking', $showtimeId)->with('error', 'Vui lòng chọn lại ghế do quá thời gian');
+            }
+        }
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
 
         // Kiểm tra dữ liệu đầu vào
         $request->validate([
@@ -81,6 +133,7 @@ class PaymentController extends Controller
         }
 
 
+<<<<<<< HEAD
         $showtimeId = $data['showtime_id'];
         session(['user_id' => $data['user_id']]);
 
@@ -93,6 +146,20 @@ class PaymentController extends Controller
         // Nếu có ghế trùng, trả về trang chủ với thông báo lỗi
         return redirect()->route('movies.index')->with('error', 'Một hoặc nhiều ghế đã được đặt. Vui lòng chọn ghế khác.');
     }
+=======
+
+        session(['user_id' => $data['user_id']]);
+
+        $existingSeats = \DB::table('tickets_seats')
+            ->whereIn('seat_id', $selectedSeats)
+            ->where('showtime_id', $data['showtime_id'])
+            ->exists(); // Kiểm tra xem có ghế nào trùng không
+
+        if ($existingSeats) {
+            // Nếu có ghế trùng, trả về trang chủ với thông báo lỗi
+            return redirect()->route('movies.index')->with('error', 'Một hoặc nhiều ghế đã được đặt. Vui lòng chọn ghế khác.');
+        }
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
 
         // Lưu vé vào cơ sở dữ liệu
         $ticket = Ticket::create([
@@ -118,7 +185,11 @@ class PaymentController extends Controller
                     'ticket_id' => $ticket->ticket_id,
                     'seat_id' => $seat->seat_id,
                     'showtime_id' => $data['showtime_id'],
+<<<<<<< HEAD
                     'created_at' =>now(),
+=======
+                    'created_at' => now(),
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
                 ]);
             } else {
                 return redirect()->back()->withErrors([
@@ -135,7 +206,7 @@ class PaymentController extends Controller
 
 
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        $vnp_Returnurl = route('vnpay.return');
+        $vnp_Returnurl = route('vnpay.return', );
         $vnp_TmnCode = "HUV2CWXV";//Mã website tại VNPAY
         $vnp_HashSecret = "8HOY25NHQSM6K2134OEFF1Z69GOJOSBG"; //Chuỗi bí mật
 
@@ -207,6 +278,7 @@ class PaymentController extends Controller
         // Chuyển hướng tới VNPAY
         if ($vnp_Url) {
             return redirect()->away($vnp_Url);
+
         } else {
             // Nếu không có URL, bạn có thể xử lý lỗi ở đây
             return redirect()->route('movies.index')->with('error', 'Có lỗi xảy ra khi thanh toán.');
@@ -228,6 +300,28 @@ class PaymentController extends Controller
         $ticketId = session('ticket_id');
         $userId = session('user_id');  // Truy xuất user_id từ session
         $showtimeId = session('showtime_id');
+<<<<<<< HEAD
+=======
+
+        $showtime = Showtime::find($showtimeId);  // Giả sử bạn lấy showtime từ cơ sở dữ liệu
+
+        // Kiểm tra nếu không tìm thấy showtime
+        if (!$showtime) {
+            return redirect()->route('movies.index')->with('error', 'Không tìm thấy ca chiếu.');
+        }
+
+        $showtimeStartDate = Carbon::parse($showtime->datetime)->setTimezone('Asia/Ho_Chi_Minh'); // Đảm bảo múi giờ là Việt Nam
+        $showtimeStartTime = Carbon::createFromFormat('H:i:s', $showtime->shifts->start_time);  // Giờ bắt đầu từ shifts
+        $showtimeStart = $showtimeStartDate->setTimeFromTimeString($showtimeStartTime->toTimeString());  // Thời gian buổi chiếu
+
+        $currentDateTime = Carbon::now('Asia/Ho_Chi_Minh');  // Đảm bảo thời gian hiện tại là múi giờ Việt Nam
+
+        // Kiểm tra nếu thời gian hiện tại đã qua thời gian bắt đầu của ca chiếu
+        if ($currentDateTime->gt($showtimeStart)) {
+            return redirect()->route('movies.index')->with('error', 'Thanh toán thất bại do ca chiếu đã hết thời gian thanh toán , vui lòng chọn ca chiếu khác.');
+        }
+
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
 
         $paymentStatus = $data['vnp_ResponseCode']; // Mã phản hồi từ VNPAY
 
@@ -244,6 +338,7 @@ class PaymentController extends Controller
                 // Nếu không tìm thấy vé trong cơ sở dữ liệu, trả về trang chủ
                 return redirect()->route('movies.index');
             } else {
+<<<<<<< HEAD
                  // Xóa các ghế đã lưu trong bảng tickets_seats
             \DB::table('tickets_seats')->where('ticket_id', $ticketId)->delete();
 
@@ -258,6 +353,22 @@ class PaymentController extends Controller
             }
 
 
+=======
+                // Xóa các ghế đã lưu trong bảng tickets_seats
+                \DB::table('tickets_seats')->where('ticket_id', $ticketId)->delete();
+
+                SelectedSeat::where('user_id', $userId)
+                    ->where('showtime_id', $showtimeId)
+                    ->delete();
+
+                // Xóa vé trong bảng tickets
+                $ticket->delete();
+
+                return redirect()->route('movies.index')->with('status', 'Thanh toán thất bại. Ghế đã được hủy.');
+            }
+
+
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
         }
 
         // Nếu thanh toán thành công
@@ -265,8 +376,13 @@ class PaymentController extends Controller
         $ticket->save();
 
         SelectedSeat::where('user_id', $userId)
+<<<<<<< HEAD
         ->where('showtime_id', $showtimeId)
         ->delete();
+=======
+            ->where('showtime_id', $showtimeId)
+            ->delete();
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
 
         // Kiểm tra và thêm điểm cho người dùng
         $user = User::find($userId);
@@ -295,6 +411,10 @@ class PaymentController extends Controller
                 'amount' => $ticket->total_price, // Tổng tiền thanh toán
                 'payment_method' => 'VNPAY', // Phương thức thanh toán
                 'payment_time' => now(), // Thời gian thanh toán
+<<<<<<< HEAD
+=======
+                'ticket_id' => $ticketId,
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
             ]);
 
             return redirect()->route('confirmBooking')->with('status', 'Thanh toán thành công và đã cộng điểm!')->with($data);

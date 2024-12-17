@@ -1,3 +1,6 @@
+@php
+    use Carbon\Carbon;
+@endphp
 @extends('admin.layouts.master')
 
 @section('title')
@@ -35,6 +38,10 @@
                 ]}}</span>
             </div>
             @endif
+<<<<<<< HEAD
+=======
+
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
             @if(isset($errors['price_not_except']))
             <div class="alert alert-danger" role="alert">
                 <span>{{$errors[
@@ -42,6 +49,18 @@
                 ]}}</span>
             </div>
             @endif
+<<<<<<< HEAD
+=======
+
+            @if(isset($errors['date_not_future']))
+            <div class="alert alert-danger" role="alert">
+                <span>{{$errors[
+                   'date_not_future'
+                ]}}</span>
+            </div>
+            @endif
+
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
             @if(isset($errors['start_end_time']))
             <div class="alert alert-danger" role="alert">
                 <span>{{$errors[
@@ -78,7 +97,11 @@
                 <span>{{$errors[
                    'shift_not_except'
                 ]}}</span>
+<<<<<<< HEAD
                 <h5>List shift in date </h5>
+=======
+                <h5>Các ca chiếu trong ngày @if(isset($datetime)) {{$datetime}} @endif </h5>
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
                 <ul>
                     @foreach( $showtimes as $show)
                         <li>
@@ -93,13 +116,22 @@
                         <div
                             class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                             <h6 class="m-0 font-weight-bold text-primary">Date</h6>
+<<<<<<< HEAD
 </div>
+
+=======
+                        </div>
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
 
 
                         <!-- Card Body -->
 
                         <div class="card-body">
+<<<<<<< HEAD
                             <input type="date" name="datetime" @if(isset($datetime)) value="{{$datetime}}" @endif id="datetime" >
+=======
+                            <input type="date" name="datetime"  @if(isset($datetime)) value="{{$datetime}}" @endif value="{{ Carbon::now()->format('Y-m-d') }}" id="datetime" >
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
 
                         </div>
 
@@ -125,6 +157,9 @@
                     </div>
 
             </div> --}}
+
+
+
 
 
 
@@ -213,6 +248,10 @@
                         name="start_time" @if(isset($start_time)) value="{{$start_time}}" @endif>
                     </div>
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
                 </div>
                 <div class="card shadow mb-4">
                     <!-- Card Header - Dropdown -->
@@ -244,7 +283,11 @@
                     <!-- Card Body -->
 
                     <div class="card-body">
+<<<<<<< HEAD
 <input type="text" class="form-control form-control-user form-radius" id="exampleLastName"
+=======
+                        <input type="text" class="form-control form-control-user form-radius" id="exampleLastName"
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
                         placeholder="100.000" name="normal_price" @if(isset($normal_price)) value="{{$normal_price}}" @endif id="normal_price">
                     </div>
 

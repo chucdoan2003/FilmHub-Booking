@@ -12,6 +12,10 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
+<<<<<<< HEAD
+=======
+        "pusher/pusher-php-server": "^7.2",
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
         "setasign/fpdf": "^1.8",
         "setasign/fpdi": "^2.6",
         "simplesoftwareio/simple-qrcode": "^4.2",

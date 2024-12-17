@@ -48,6 +48,18 @@
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
                                 <input type="number" class="form-control form-control-user form-radius" id="exampleFirstName"
+<<<<<<< HEAD
+=======
+                                    placeholder="required_points" name="required_points">
+                                    @if ($errors->has('required_points'))
+                                        <div class="text-danger mt-1">{{ $errors->first('required_points') }}</div>
+                                    @endif
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                <input type="number" class="form-control form-control-user form-radius" id="exampleFirstName"
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
                                     placeholder="Discount percentage" name="discount_percentage">
                                     @if ($errors->has('discount_percentage'))
                                         <div class="text-danger mt-1">{{ $errors->first('discount_percentage') }}</div>

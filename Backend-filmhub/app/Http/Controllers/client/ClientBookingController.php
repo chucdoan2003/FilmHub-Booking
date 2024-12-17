@@ -15,15 +15,37 @@ use Illuminate\Support\Facades\Cookie;
 use App\Models\SelectedSeat;
 use App\Models\Combo;
 use App\Models\Voucher;
+<<<<<<< HEAD
+=======
+use App\Models\VourcherEvent;
+use App\Models\VourcherRedeem;
+
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
 class ClientBookingController extends Controller
 {
     public function index($id, Request $request)
     {
+<<<<<<< HEAD
+=======
+        // Lấy thời gian hiện tại
+        $currentDateTime = Carbon::now('Asia/Ho_Chi_Minh');
+
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
         $showtimes = DB::table('showtimes')
             ->join('rooms', 'showtimes.room_id', '=', 'rooms.room_id')
             ->join('shifts', 'showtimes.shift_id', '=', 'shifts.shift_id')
             ->join('theaters', 'showtimes.theater_id', '=', 'theaters.theater_id')
             ->where('showtimes.movie_id', $id)
+<<<<<<< HEAD
+=======
+            ->where(function ($query) use ($currentDateTime) {
+                $query->whereRaw('DATE(showtimes.datetime) > ?', [$currentDateTime->toDateString()])
+                    ->orWhere(function ($subQuery) use ($currentDateTime) {
+                        $subQuery->whereRaw('DATE(showtimes.datetime) = ?', [$currentDateTime->toDateString()])
+                            ->whereRaw('shifts.start_time >= ?', [$currentDateTime->format('H:i:s')]);
+                    });
+            })
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
             ->select(
                 'showtimes.showtime_id',
                 DB::raw('DATE(showtimes.datetime) AS show_date'),
@@ -31,7 +53,12 @@ class ClientBookingController extends Controller
                 'showtimes.normal_price',
                 'showtimes.vip_price',
                 'rooms.room_name as room_name',
+<<<<<<< HEAD
                 'theaters.name as theater_name'
+=======
+                'theaters.name as theater_name',
+                'theaters.theater_id'
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
             )
             ->orderBy('show_date', 'asc')
             ->orderBy('shifts.start_time', 'asc')
@@ -45,6 +72,7 @@ class ClientBookingController extends Controller
 
         // Nếu không có ngày chọn, hiển thị tất cả showtimes
         if ($selectedDate) {
+<<<<<<< HEAD
             // Lọc showtimes cho ngày được chọn
             $selectedShowtimes = $showtimesGroupedByDate->get($selectedDate, collect());
         } else {
@@ -52,13 +80,31 @@ class ClientBookingController extends Controller
             $selectedShowtimes = $showtimes;
         }
         $genres = Genre::withCount('movies')->get();
+=======
+            $selectedShowtimes = $showtimesGroupedByDate->get($selectedDate, collect());
+        } else {
+            $selectedShowtimes = $showtimes;
+        }
+
+        // Lấy danh sách các rạp có chứa showtime của phim
+        $theaters = DB::table('theaters')
+            ->join('showtimes', 'theaters.theater_id', '=', 'showtimes.theater_id')
+            ->where('showtimes.movie_id', $id)
+            ->select('theaters.theater_id', 'theaters.name')
+            ->distinct()
+            ->get();
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
 
         return view('frontend.layouts.booking.index', [
             'showtimesGroupedByDate' => $showtimesGroupedByDate,
             'selectedShowtimes' => $selectedShowtimes,
             'selectedDate' => $selectedDate,
             'movieId' => $id,
+<<<<<<< HEAD
             'genres' => $genres
+=======
+            'theaters' => $theaters,
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
         ]);
     }
 
@@ -88,26 +134,60 @@ class ClientBookingController extends Controller
             return redirect()->route('movies.index')->with('error', 'Bạn cần hoàn thành thanh toán vé chưa hoàn thành trước khi đặt vé mới.');
         }
 
+<<<<<<< HEAD
         $showtime = Showtime::with([
             'movies',
             'rooms.rows.seats.types', // Tải trước hàng và ghế
+=======
+
+        $showtime = Showtime::with([
+            'movies',
+            'rooms.rows.seats.types',
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
             'rooms.theaters',
             'shifts'
         ])
             ->where('showtime_id', $showtime_id)
             ->firstOrFail();
+<<<<<<< HEAD
         // Lấy giá vé
         $normalPrice = $showtime->normal_price;
         $vipPrice = $showtime->vip_price;
 
         $user_id = session('user_id');
+=======
+
+        $currentDateTime = Carbon::now();
+        $showtimeStartDate = Carbon::parse($showtime->datetime);
+        $showtimeStartTime = Carbon::createFromFormat('H:i:s', $showtime->shifts->start_time);
+        $showtimeStart = $showtimeStartDate->setTimeFromTimeString($showtimeStartTime->toTimeString());
+
+        // Kiểm tra nếu ca chiếu đã qua
+        if ($showtimeStart->isPast()) {
+            return redirect()->route('movies.index')->with('error', 'Ca chiếu đã qua, vui lòng chọn ca chiếu khác.');
+        }
+
+        if ($currentDateTime->diffInMinutes($showtimeStart, false) <= 8) {
+            return redirect()->route('movies.index')->with('error', 'Sắp đến giờ chiếu nên sẽ đóng đặt vé trực tuyến, vui lòng mua vé trực tiếp tại quầy hoặc chọn ca chiếu khác.');
+        }
+
+        $user_id = session('user_id');
+
+        // Lấy giá vé
+        $normalPrice = $showtime->normal_price;
+        $vipPrice = $showtime->vip_price;
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
         // dd( $user_id);
         // Lấy các ghế đã đặt từ bảng ticket_seats
         $bookedSeats = DB::table('tickets_seats')
             ->where('showtime_id', $showtime_id)
             ->pluck('seat_id')
             ->toArray();
+<<<<<<< HEAD
         // dd( $bookedSeats);
+=======
+
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
         return view('frontend.layouts.booking.getSeatBooking', compact('showtime', 'normalPrice', 'vipPrice', 'user_id', 'bookedSeats'));
     }
     public function detailBooking(Request $request, $showtime_id)
@@ -169,6 +249,7 @@ class ClientBookingController extends Controller
         // }
 
         if (!empty($selectedSeats)) {
+<<<<<<< HEAD
             foreach ($selectedSeats as $seatId) {
                 $existingSeat = SelectedSeat::where('showtime_id', $showtime_id)
                     ->where('user_id', $user_id)
@@ -181,6 +262,21 @@ class ClientBookingController extends Controller
                 }
 
                 // Thêm ghế vào cơ sở dữ liệu nếu chưa chọn
+=======
+            // Lấy danh sách ghế đã chọn trước đó
+            $existingSelectedSeats = SelectedSeat::where('showtime_id', $showtime_id)
+                ->where('user_id', $user_id)
+                ->pluck('seat_id')
+                ->toArray();
+
+            // Xóa ghế đã chọn trước đó
+            SelectedSeat::where('showtime_id', $showtime_id)
+                ->where('user_id', $user_id)
+                ->delete();
+
+            // Thêm ghế mới
+            foreach ($selectedSeats as $seatId) {
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
                 try {
                     SelectedSeat::create([
                         'user_id' => $user_id,
@@ -189,7 +285,20 @@ class ClientBookingController extends Controller
                         'totalPrice' => $totalPrice
                     ]);
                 } catch (\Exception $e) {
+<<<<<<< HEAD
                     return redirect()->back()->withErrors(['error' => 'Lỗi khi lưu ghế.']);
+=======
+                    // Nếu có lỗi khi thêm ghế, khôi phục ghế cũ
+                    foreach ($existingSelectedSeats as $oldSeatId) {
+                        SelectedSeat::create([
+                            'user_id' => $user_id,
+                            'showtime_id' => $showtime_id,
+                            'seat_id' => $oldSeatId,
+                            'totalPrice' => $totalPrice
+                        ]);
+                    }
+                    return redirect()->back()->withErrors(['error' => 'Lỗi khi lưu ghế mới.']);
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
                 }
             }
         }
@@ -200,6 +309,7 @@ class ClientBookingController extends Controller
             ->with(['seat', 'seat.rows', 'seat.types'])
             ->get();
 
+<<<<<<< HEAD
             $totalAmount = $selectedSeats2->sum(function ($selectedSeat) use ($showtime) {
                 // Kiểm tra loại ghế và lấy giá tương ứng
                 $seatType = $selectedSeat->seat->types; // Lấy thông tin loại ghế (thường hay VIP)
@@ -212,6 +322,20 @@ class ClientBookingController extends Controller
                     return $showtime->vip_price;
                 }
             });
+=======
+        $totalAmount = $selectedSeats2->sum(function ($selectedSeat) use ($showtime) {
+            // Kiểm tra loại ghế và lấy giá tương ứng
+            $seatType = $selectedSeat->seat->types; // Lấy thông tin loại ghế (thường hay VIP)
+
+            if ($seatType->type_id == 1) {
+                // Nếu là ghế thường, dùng giá normal_price từ showtime
+                return $showtime->normal_price;
+            }if ($seatType->type_id == 2) {
+                // Nếu là ghế VIP, dùng giá vip_price từ showtime
+                return $showtime->vip_price;
+            }
+        });
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
 
 
         // dd( $totalAmount);
@@ -242,6 +366,7 @@ class ClientBookingController extends Controller
         //     'total_price' => $totalPrice
         // ], now()->addMinutes(60));
 
+<<<<<<< HEAD
         $combos = Combo::all();
         $foods = DB::table('foods')->get();
         $drinks = DB::table('drinks')->get();
@@ -251,6 +376,24 @@ class ClientBookingController extends Controller
             ->where('user_id', $user_id)
             ->pluck('vourcher_id')
             ->first();
+=======
+        // Tải danh sách combos
+        $combos = Combo::all();
+        $currentDateTime = Carbon::now();
+        $vouchers = VourcherRedeem::where('user_id', $user_id)->with('user')->get();
+        $vourcherEvents = VourcherEvent::all(); // Lấy danh sách voucher event
+
+        // Kiểm tra mã giảm giá đã sử dụng
+        $usedVoucher = DB::table('vourcher_user')
+            ->where('user_id', $user_id)
+            ->pluck('vourcher_id')
+            ->first(); // Lấy mã giảm giá đầu tiên mà người dùng đã sử dụng // Mặc định là null nếu không có mã
+
+        // Lấy danh sách voucher sự kiện còn hạn
+        $vourcherEvents = VourcherEvent::where('is_active', true)
+            ->where('end_time', '>', $currentDateTime)
+            ->get();
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
 
 
         // dd($totalPrice);
@@ -267,11 +410,18 @@ class ClientBookingController extends Controller
             'drinks',
             'combos',
             'vouchers',
+<<<<<<< HEAD
+=======
+            'vourcherEvents',
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
             'usedVoucher'
         ));
     }
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
 }

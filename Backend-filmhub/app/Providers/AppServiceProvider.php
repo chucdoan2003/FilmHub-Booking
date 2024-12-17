@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\CategoryPost;
 use Illuminate\Support\ServiceProvider;
+use App\Models\CategoryPost;
 
 class AppServiceProvider extends ServiceProvider
 {

@@ -10,6 +10,7 @@ use App\Http\Controllers\admin\ShowtimesController;
 
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\VourcherAdmminController;
+use App\Http\Controllers\client\UserInforController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -51,6 +52,7 @@ Route::get('/confirmBooking', [PaymentController::class, 'confirmBooking'])->nam
 
 
 // Movie
+<<<<<<< HEAD
 
 
 
@@ -111,3 +113,84 @@ use App\Http\Controllers\client\CategoryPostController;
 use  App\Http\Controllers\client\PostController as ClientPostController;
 Route::get('/category-post/{id}', [CategoryPostController::class, 'categoryPost'])->name('categoryPost');
 Route::get('post/{id}', [ClientPostController::class, 'postDetail'])->name('postDetail');
+=======
+
+
+
+// Showtimes (Huy)
+use App\Http\Controllers\client\ClientBookingController;
+Route::get('/booking/{id}', [ClientBookingController::class, 'index'])->name('booking.index');
+
+use App\Http\Controllers\client\ContactController;
+Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+use App\Http\Controllers\client\ClientCategoryController;
+Route::get('/category', [ClientCategoryController::class, 'index'])->name('category.index');
+Route::get('category/{id}', [ClientCategoryController::class, 'show'])->name('category.show');
+Route::get('/search', [ClientCategoryController::class, 'search'])->name('movies.search');
+
+Route::get('/payment', [UserInforController::class, 'payment'])->name('Payment.history');
+
+// Route::get('qr-code', function () {
+//     return QrCode::size(500)->generate('Welcome to kerneldev.com!');
+// });
+
+// Đăng nhập, đăng ký ( Chúc)
+use App\Http\Controllers\admin\AuthController;
+Route::get("auth/login", [AuthController::class, 'getLogin'])->name('getLogin');
+Route::get("auth/register", [AuthController::class, 'getRegister'])->name('getRegister');
+Route::get("auth/forgotPassword", [AuthController::class, 'getForgotPassword'])->name('getForgotPassword');
+Route::get("auth/changePassword/{email}", [AuthController::class, 'getChangePassword'])->name('getChangePassword');
+
+Route::post("auth/login", [AuthController::class, "login"])->name('login');
+Route::post("auth/register", [AuthController::class, "register"])->name('register');
+Route::post("auth/forgotPassword", [AuthController::class, "forgotPassword"])->name('forgotPassword');
+Route::post("auth/logout", [AuthController::class, "logout"])->name('logout');
+Route::post('auth/changePassword', [AuthController::class, 'changePassword' ])
+->name('changePassword');
+Route::get("auth/registerconfirm/{email}/{password}", [AuthController::class, "registerConfirm"])->name('register.confirm');
+
+
+Route::get('user/history', [UserInforController::class, 'history'])->name('ticketHistory');
+Route::get('userOverview', [UserInforController::class, 'overview'])->name('userOverview');
+Route::get('user/edit', [UserInforController::class, 'edit'])->name('editUserInfor');
+
+Route::post('user/update', [UserInforController::class, 'update'])->name('updateUserInfor');
+
+
+
+// Đặt ghế ( Hướng)
+Route::get('/showtime/{id}', [ClientBookingController::class, 'getSeatBooking'])->name('getSeatBooking');
+Route::get('detailBooking/{id}', [ClientBookingController::class, 'detailBooking'])->name('detailBooking');
+Route::post('/detailBooking/{id}', [ClientBookingController::class, 'detailBooking'])->name('detailBooking');
+
+// Detail ( Khôi)
+use App\Http\Controllers\client\MovieController as FrontendMovieController;
+use App\Http\Controllers\client\CommentController;
+Route::get('/', [FrontendMovieController::class, 'index'])->name('movies.index');
+Route::get('/show/{id}', [FrontendMovieController::class, 'detail'])->name('movies.detail');
+Route::post('/comments', [CommentController::class, 'store'])->name('comments.store'); // Lưu bình luận
+Route::post('/movies/{movie_id}/comments', [CommentController::class, 'store'])->name('comments.store');
+
+
+//
+use App\Http\Controllers\admin\PostController;
+use App\Http\Controllers\client\CategoryPostController;
+use  App\Http\Controllers\client\PostController as ClientPostController;
+Route::get('/category-post/{id}', [CategoryPostController::class, 'categoryPost'])->name('categoryPost');
+Route::get('post/{id}', [ClientPostController::class, 'postDetail'])->name('postDetail');
+
+
+
+//Đổi Vourcher
+// Route để hiển thị danh sách mã giảm giá
+use App\Http\Controllers\VourchersController;
+Route::get('/redeem/index', [VourchersController::class, 'index'])->name('vouchers.index');
+
+// Route để hiển thị form đổi mã giảm giá
+Route::get('/redeem', [VourchersController::class, 'showForm'])->name('redeem.form');
+
+// Route để xử lý việc đổi mã giảm giá
+Route::post('/redeem', [VourchersController::class, 'redeem'])->name('redeem.submit');
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5

@@ -18,16 +18,12 @@ class VourcherAdmminController extends Controller
     public function store(Request $request){
         $request->validate([
             'vourcher_code'=>'required',
-            'vourcher_name'=>'required',
-            'discount_percentage'=>'required|numeric',
-            'max_discount_amount'=>'required|numeric'
+            'vourcher_price'=>'required|numeric',
         ]);
         DB::table('vourchers')->insert([
             'vourcher_code'=>$request->vourcher_code,
-            'vourcher_name'=>$request->vourcher_name,
-            'discount_percentage'=>$request->discount_percentage,
-            'max_discount_amount'=>$request->max_discount_amount
-
+            'vourcher_price'=>$request->vourcher_price,
+           
         ]);
         return redirect()->route('vourchers.index');
     }
@@ -38,15 +34,11 @@ class VourcherAdmminController extends Controller
     public function update(Request $request,$id){
         $request->validate([
             'vourcher_code'=>'required',
-            'vourcher_name'=>'required',
-            'discount_percentage'=>'required|numeric',
-            'max_discount_amount'=>'required|numeric'
+            'vourcher_price'=>'required|numeric',
         ]);
         DB::table('vourchers')->where('id',$id)->update([
             'vourcher_code'=>$request->vourcher_code,
-            'vourcher_name'=>$request->vourcher_price,
-            'discount_percentage'=>$request->discount_percentage,
-            'max_discount_amount'=>$request->max_discount_amount
+            'vourcher_price'=>$request->vourcher_price,
         ]);
         return redirect()->route('vourchers.index');
     }

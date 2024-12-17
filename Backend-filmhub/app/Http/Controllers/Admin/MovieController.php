@@ -78,7 +78,7 @@ class MovieController extends Controller
         // Gắn thể loại phim
         $movie->genres()->attach($data['genres']);
 
-        return redirect()->route('admin.movies.index')->with('success', 'Phim đã thêm thành công!');
+        return redirect()->route('admin.movies.index');
     }
 
     /**
@@ -142,7 +142,7 @@ class MovieController extends Controller
         // Cập nhật lại các thể loại đã chọn
         $movie->genres()->sync($request->genres);
 
-        return redirect()->route('admin.movies.index')->with('success', 'Phim đã cập nhật thành công!');
+        return redirect()->route('admin.movies.index');
     }
 
     /**

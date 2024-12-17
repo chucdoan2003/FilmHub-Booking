@@ -17,6 +17,7 @@ class CheckExpiredSelectedSeats
      */
     public function handle(Request $request, Closure $next): Response
     {
+<<<<<<< HEAD
         // $timeout = 5; // Thời gian timeout là 5 phút
 
         // // Lấy các ghế đã hết thời gian chờ
@@ -28,6 +29,19 @@ class CheckExpiredSelectedSeats
         //     // Xóa ghế đã chọn
         //     DB::table('selected_seats')->where('selected_seat_id', $seat->selected_seat_id)->delete();
         // }
+=======
+        $timeout = 5;
+
+
+        $expiredSeats = DB::table('selected_seats')
+            ->where('created_at', '<', Carbon::now()->subMinutes($timeout))
+            ->get();
+
+        foreach ($expiredSeats as $seat) {
+            // Xóa ghế đã chọn
+            DB::table('selected_seats')->where('selected_seat_id', $seat->selected_seat_id)->delete();
+        }
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
 
         return $next($request);
     }

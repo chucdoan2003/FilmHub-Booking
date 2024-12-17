@@ -46,6 +46,10 @@
                                 <th>Id</th>
                                 <th>Code Vourcher</th>
                                 <th>Mô tả</th>
+<<<<<<< HEAD
+=======
+                                <th>Point</th>
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
                                 <th>%</th>
                                 <th>Tối đa</th>
                                 
@@ -58,6 +62,10 @@
                                 <td>{{$item->id}}</td>
                                 <td>{{$item->vourcher_code}}</td>
                                 <td>{{$item->vourcher_name}}</td>
+<<<<<<< HEAD
+=======
+                                <td>{{$item->required_points}}</td>
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
                                 <td>{{$item->discount_percentage}}%</td>
                                 <td>{{$item->max_discount_amount}}</td>
                                 <td>

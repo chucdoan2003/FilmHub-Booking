@@ -1,6 +1,9 @@
 @extends('frontend.layouts.master')
 @section('content')
+<<<<<<< HEAD
 
+=======
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
     <style>
         .movie-title,
         .movie-genre {
@@ -70,6 +73,11 @@
             alert('{{ session('error') }}');
         </script>
     @endif
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
     {{-- <h1>{{ session('user_id') }}</h1> --}}
     <!-- prs upcomung Slider Start -->
     <div class="prs_upcom_slider_main_wrapper">
@@ -359,6 +367,77 @@
             </div>
         </div>
     </div>
+<<<<<<< HEAD
+=======
+    <div class="prs_ms_rm_main_wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="prs_heading_section_wrapper">
+                        <h2>TOP 10 HIGHEST RATED MOVIES</h2>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="prs_ms_rm_slider_wrapper">
+                        <div class="owl-carousel owl-theme">
+                            @foreach ($topMoviesRating as $mv)
+                                <div class="item">
+                                    <div class="prs_upcom_movie_box_wrapper">
+                                        <div class="prs_upcom_movie_img_box">
+                                            <img src="{{ Storage::url($mv->poster_url) }} " style="height: 350px;"
+                                                alt="movie_img" />
+                                            <div class="prs_upcom_movie_img_overlay"></div>
+                                            <div class="prs_upcom_movie_img_btn_wrapper">
+                                                <ul>
+                                                    <li>
+                                                        <a href="#"
+                                                            onclick="openTrailerModal('{{ $mv->trailer }}')">View
+                                                            Trailer</a>
+                                                    </li>
+                                                    <li><a href="{{ route('movies.detail', $mv->movie_id) }}">View
+                                                            Details</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="prs_upcom_movie_content_box">
+                                            <div class="prs_upcom_movie_content_box_inner">
+                                                <h2 class="movie-title"><a
+                                                        href="{{ route('movies.detail', $mv->movie_id) }}">{{ $mv->title }}</a>
+                                                </h2>
+
+                                                <p class="movie-genre">
+                                                    @foreach ($mv->genres as $genre)
+                                                        {{ $genre->name }}@if (!$loop->last)
+                                                            ,
+                                                        @endif
+                                                    @endforeach
+                                                </p>
+                                                <div class="star-rating" style="direction: ltr;">
+                                                    @for ($i = 1; $i <= 5; $i++)
+                                                        <span class="fa {{ $i <= $mv->rating ? 'fa-star' : 'fa-star-o' }}"
+                                                            style="color: #f39c12;"></span>
+                                                    @endfor
+                                                </div>
+                                            </div>
+                                            <div class="prs_upcom_movie_content_box_inner_icon">
+                                                <ul>
+                                                    <li><a href="/booking/{{ $mv->movie_id }}"><i
+                                                                class="flaticon-cart-of-ecommerce"></i></a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
     <div id="trailerModal" class="modal-overlay" onclick="closeTrailerModal()" style="display: none;">
         <div class="modal-content" onclick="event.stopPropagation()">
             <div class="video-container">

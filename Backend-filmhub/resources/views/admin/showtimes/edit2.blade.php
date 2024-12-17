@@ -78,7 +78,11 @@
                 <span>{{$errors[
                    'shift_not_except'
                 ]}}</span>
+<<<<<<< HEAD
                 <h5>List shift in date </h5>
+=======
+                <h5>Các ca chiếu trong ngày @if(isset($datetime)) {{$datetime}} @endif </h5>
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
                 <ul>
                     @foreach( $showtimes as $show)
                         <li>
@@ -111,6 +115,7 @@
                         </div>
 
                 </div>
+<<<<<<< HEAD
                 <div class="card shadow mb-4">
                     <!-- Card Header - Dropdown -->
                     <div
@@ -133,6 +138,9 @@
                     </div>
 
                 </div>
+=======
+
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
 
                 <div class="card shadow mb-4">
                     <!-- Card Header - Dropdown -->
@@ -146,7 +154,11 @@
                     <div class="card-body">
                         <select name="movie">
                             @foreach ($movies as $item)
+<<<<<<< HEAD
                                 <option value="{{ $item->movie_id }}" 
+=======
+                                <option value="{{ $item->movie_id }}"
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
                                     @if (isset($movie_id) && $item->movie_id == $movie_id)
                                     @selected(true)
                                 @endif
@@ -173,7 +185,11 @@
                                     @if (isset($room_id) && $item->room_id == $room_id)
                                     @selected(true)
                                 @endif
+<<<<<<< HEAD
                                    
+=======
+
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
                                     >{{ $item->room_name }}</option>
                             @endforeach
                         </select>
@@ -225,7 +241,11 @@
                     <div
                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">End time</h6>
+<<<<<<< HEAD
                         
+=======
+
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
                     </div>
 
 
@@ -235,7 +255,11 @@
                         <input type="time" class="form-control form-control-user form-radius" id="end_time"
                         name="end_time" @if(isset($end_time)) value="{{$end_time}}" @endif>
                         <div id="error_message" style="color: red"></div>
+<<<<<<< HEAD
                         
+=======
+
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
                     </div>
 
                 </div>
@@ -285,7 +309,11 @@
     const select1 = document.querySelector('select[name="movie"]');
     const select2 = document.querySelector('select[name="room"]');
     const select3 = document.querySelector('input[name="datetime"]');
+<<<<<<< HEAD
    
+=======
+
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
     const shift_minute = document.querySelector('input[name="shift_minute"]');
     const select4 = document.querySelector('select[name="theater"]');
     select1.disabled = false;  // Kích hoạt lại trước khi submit
@@ -304,15 +332,25 @@
     //     // Display error message if validation fails
     //     document.getElementById("error_message").innerText = "end time must be larger than start time.";
     //     e.preventDefault();
+<<<<<<< HEAD
         
     // }
     
+=======
+
+    // }
+
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
     // var differenceInMilliseconds = end - start;
     // var differenceInMinutes = differenceInMilliseconds / (1000 * 60);
     // shift_minute.value = differenceInMinutes;
 
 
+<<<<<<< HEAD
        
+=======
+
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
   });
 
 </script>

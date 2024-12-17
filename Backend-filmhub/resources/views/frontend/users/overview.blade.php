@@ -18,6 +18,10 @@
                     <p>Member poin: {{Auth::user()->member_point}} </p>
                     <p>Description: </p>
                     <a href="{{route('editUserInfor')}}"><button style="padding: 6px 8px; margin: 12px 0; background-color: rgb(33, 127, 203); border-radius: 5px; color: #fff; border: none">Edit information</button></a>
+<<<<<<< HEAD
+=======
+                    <a href="{{route('Payment.history')}}"><button style="padding: 6px 8px; margin: 12px 0; background-color: rgb(33, 127, 203); border-radius: 5px; color: #fff; border: none">Payment History</button></a>
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
                 </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">

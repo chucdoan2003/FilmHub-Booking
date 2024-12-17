@@ -37,9 +37,12 @@
 <div class="prs_navigation_main_wrapper">
     <div class="container-fluid">
         <div id="search_open" class="gc_search_box">
-            <input type="text" placeholder="Search here">
-            <button><i class="fa fa-search" aria-hidden="true"></i>
-            </button>
+            <form action="{{ route('movies.search') }}" method="GET">
+                <input type="text"  name="search" placeholder="Search Movie, Video, Music" value="">
+                <button type="submit"><i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+            </form>
+
         </div>
         <div class="prs_navi_left_main_wrapper">
             <div class="prs_logo_main_wrapper">
@@ -300,13 +303,8 @@
             </div>
             <div class="product-heading">
                 <div class="con">
-
                     <form action="{{ route('movies.search') }}" method="GET">
-
-
-
                         <input type="text" name="search" placeholder="Search Movie, Video, Music" value="">
-
                         <button type="submit"><i class="flaticon-tool"></i></button>
                     </form>
                 </div>

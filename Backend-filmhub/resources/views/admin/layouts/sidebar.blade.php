@@ -127,6 +127,7 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVourchers"
+<<<<<<< HEAD
                     aria-expanded="true" aria-controls="collapseVourchers">
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Quản lý voucher</span>
@@ -136,6 +137,18 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">List function</h6>
                         <a class="collapse-item" href="{{ route('vourchers.index') }}">Danh sách Vourchers</a>
+=======
+                   aria-expanded="true" aria-controls="collapseVourchers">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span>Manage Vourchers</span>
+                </a>
+                <div id="collapseVourchers" class="collapse" aria-labelledby="headingOrders"
+                     data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">List function</h6>
+                        <a class="collapse-item" href="{{ route('vourchers.index') }}">List Vourchers</a>
+                        <a class="collapse-item" href="{{ route('vourcher-events.index') }}">List Vourchers Event</a>
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
 
 
                     </div>
@@ -205,6 +218,24 @@
                     </div>
                 </div>
             </li>
+<<<<<<< HEAD
+=======
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#banner"
+                    aria-expanded="true" aria-controls="collapseMovies">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Quản lý banner</span>
+                </a>
+                <div id="banner" class="collapse" aria-labelledby="headingMovies"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Danh sách banner</h6>
+                        <a class="collapse-item" href="{{ route('banner.index') }}">Danh sách</a>
+                    </div>
+                </div>
+            </li>
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
 
 
         {{-- SIDEBAR MANAGER --}}
@@ -256,7 +287,11 @@
                 </div>
             </li>
 
+<<<<<<< HEAD
             <li class="nav-item">
+=======
+            {{-- <li class="nav-item">
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseShifts"
                     aria-expanded="true" aria-controls="collapseShifts">
                     <i class="fas fa-fw fa-cog"></i>
@@ -265,14 +300,22 @@
                 <div id="collapseShifts" class="collapse" aria-labelledby="headingShifts"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
+<<<<<<< HEAD
                         {{--                <h6 class="collapse-header">Custom Components:</h6> --}}
+=======
+
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
                         <a class="collapse-item" href="{{ route('admin.shifts.index') }}">Danh sách ca chiếu</a>
 
                         <a class="collapse-item" href="{{ route('admin.shifts.create') }}">Tạo mới</a>
 
                     </div>
                 </div>
+<<<<<<< HEAD
             </li>
+=======
+            </li> --}}
+>>>>>>> c34dbe889404f10f96635ee1e20595a13ffb06b5
 
 
             <li class="nav-item">
