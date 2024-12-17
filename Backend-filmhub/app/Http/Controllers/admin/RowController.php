@@ -16,7 +16,9 @@ class RowController extends Controller
     const PATH_VIEW = "admin.rows.";
     public function index()
     {
+        $theater_id = session('theater_id'); // Lấy theater_id từ session
         $data = Row::leftJoin('rooms', 'rows.room_id', '=', 'rooms.room_id')
+        ->where('rooms.theater_id', $theater_id) // Lọc theo theater_id
         ->select('rows.*', 'rooms.room_name')
         ->get();
         return view(self::PATH_VIEW.__FUNCTION__, compact('data'));
@@ -27,7 +29,11 @@ class RowController extends Controller
      */
     public function create()
     {
-        $rooms = Room::query()->pluck('room_name', 'room_id')->all();
+        $theater_id = session('theater_id'); // Lấy theater_id từ session
+        $rooms = Room::query()
+        ->where('theater_id', $theater_id) // Lọc các phòng theo theater_id
+        ->pluck('room_name', 'room_id')
+        ->all();
         return view(self::PATH_VIEW.__FUNCTION__, compact('rooms'));
 
     }
@@ -39,7 +45,6 @@ class RowController extends Controller
     {
         $request->validate([
             'row_name'=>['required'],
-            'room_id'=>['required'],
         ]);
         $data = $request->all();
         // dd($request->all());
@@ -60,7 +65,11 @@ class RowController extends Controller
      */
     public function edit(Row $row)
     {
-        $rooms = Room::query()->pluck('room_name', 'room_id')->all();
+        $theater_id = session('theater_id'); // Lấy theater_id từ session
+        $rooms = Room::query()
+        ->where('theater_id', $theater_id) // Lọc các phòng theo theater_id
+        ->pluck('room_name', 'room_id')
+        ->all();
         return view(self::PATH_VIEW.__FUNCTION__, compact('row', 'rooms'));
     }
 

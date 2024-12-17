@@ -63,15 +63,12 @@
                                 <!-- chọn phòng -->
                                 <label for="choices-category-input" class="form-label">Chọn phòng</label>
                                 <select class="form-control" aria-label="Default select example"
-                                        id="choices-category-input" name="room_id">
-                                    <option selected>-----------Chọn phòng----------</option>
+                                        id="choices-category-input" name="room_id" required>
+                                    <option value="" disabled selected>-----------Chọn phòng----------</option>
                                     @foreach($rooms as $room_id => $room_name)
                                         <option value="{{$room_id}}"> {{$room_name}}</option>
                                     @endforeach
                                 </select>
-                                @error('room_id')
-                                    <span style="padding: 10px 0; color: red;">{{$message}}</span>
-                                @enderror
                             </div>
                         </div>
                     </div>
