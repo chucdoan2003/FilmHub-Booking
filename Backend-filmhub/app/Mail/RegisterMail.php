@@ -9,17 +9,17 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ForgotPasswordMail extends Mailable
+class RegisterMail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $email;
+    public $user;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($email)
+    public function __construct($user)
     {
-        $this->email = $email;
+        $this->user = $user;
     }
 
     /**
@@ -28,7 +28,7 @@ class ForgotPasswordMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Đổi mật khẩu tài khoản filmhub',
+            subject: 'Register Mail',
         );
     }
 
@@ -38,7 +38,7 @@ class ForgotPasswordMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'admin.mail.forgotpassword'
+            view: 'admin.mail.registermail',
         );
     }
 
@@ -53,8 +53,7 @@ class ForgotPasswordMail extends Mailable
     }
     public function build()
     {
-        return $this->view('admin.mail.forgotpassword')
-                    ->with('email', $this->email);
+        return $this->view('admin.mail.registermail')
+                    ->with('user', $this->user);
     }
-
 }

@@ -17,8 +17,12 @@ use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
-    public function getLogin(){
-        return view("frontend.auth.login");
+    public function getLogin()
+    {
+        if(Auth::check()){
+            Auth::logout();
+        }
+        return view("frontend.auth.login", compact('genres'));
     }
     public function getRegister(){
         return view("frontend.auth.register");

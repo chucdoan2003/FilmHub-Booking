@@ -1,10 +1,7 @@
-@php
-    use Carbon\Carbon;
-@endphp
 @extends('admin.layouts.master')
 
 @section('title')
-    Create new showtimes
+    Update showtimes
 @endsection
 @section('content')
 <style>
@@ -28,9 +25,9 @@
 </style>
 
    <div class="col-xl-12 col-lg-7">
-        <form action="{{ route('showtimes.addshowtime') }}" method="POST" id="myForm">
+        <form action="{{ route('showtimes.update', $showtime_id) }}" method="POST" id="myForm">
             @csrf
-            @method("POST")
+            @method("PUT")
             @if(isset($errors['isNotEnoughtTime']))
             <div class="alert alert-danger" role="alert">
                 <span>{{$errors[
@@ -38,7 +35,6 @@
                 ]}}</span>
             </div>
             @endif
-
             @if(isset($errors['price_not_except']))
             <div class="alert alert-danger" role="alert">
                 <span>{{$errors[
@@ -46,15 +42,6 @@
                 ]}}</span>
             </div>
             @endif
-
-            @if(isset($errors['date_not_future']))
-            <div class="alert alert-danger" role="alert">
-                <span>{{$errors[
-                   'date_not_future'
-                ]}}</span>
-            </div>
-            @endif
-
             @if(isset($errors['start_end_time']))
             <div class="alert alert-danger" role="alert">
                 <span>{{$errors[
@@ -108,18 +95,23 @@
                             <h6 class="m-0 font-weight-bold text-primary">Date</h6>
                         </div>
 
-
                         <!-- Card Body -->
 
                         <div class="card-body">
-                            <input type="date" name="datetime"  @if(isset($datetime)) value="{{$datetime}}" @endif value="{{ Carbon::now()->format('Y-m-d') }}" id="datetime" >
+                            <input type="date" name="datetime" @if(isset($datetime)) value="{{$datetime}}" @endif id="datetime" >
+
+
+
+
+
+
+
+
 
                         </div>
 
                 </div>
-           
                 
-               
 
                 <div class="card shadow mb-4">
                     <!-- Card Header - Dropdown -->
@@ -203,9 +195,8 @@
 
                     <div class="card-body">
                         <input type="time" class="form-control form-control-user form-radius" id="start_time"
-                        name="start_time" @if(isset($start_time)) value="{{$start_time}}" @endif>
+                        name="start_time"  @if(isset($start_time)) value="{{$start_time}}" @endif>
                     </div>
-
 
                 </div>
                 <div class="card shadow mb-4">
