@@ -168,6 +168,19 @@
 
         @elseif(Auth::user()->status == 'manager')
             <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRoom"
+                    aria-expanded="true" aria-controls="collapseRoom">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Quản lý phòng</span>
+                </a>
+                <div id="collapseRoom" class="collapse" aria-labelledby="headingRoom" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{{ route('admin.rooms.index') }}">Danh sách phòng</a>
+                        <a class="collapse-item" href="{{ route('admin.rooms.create') }}">Tạo mới</a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
@@ -264,7 +277,7 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">List function</h6>
-                        <a class="collapse-item" href="{{ route('admin.statistics.statisticFilmHub') }}">Thống kê hệ thống</a>
+                        <a class="collapse-item" href="{{ route('admin.statistics.statisticFilmHub') }}">Thống kê rạp chiếu</a>
                     </div>
                 </div>
             </li>

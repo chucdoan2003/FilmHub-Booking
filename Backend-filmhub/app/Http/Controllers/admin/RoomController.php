@@ -9,6 +9,8 @@ use App\Http\Requests\UpdateRoomRequest;
 use App\Models\Row;
 use App\Models\Theater;
 use App\Models\Type;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class RoomController extends Controller
 {
@@ -18,8 +20,10 @@ class RoomController extends Controller
     const PATH_VIEW = "admin.rooms.";
     public function index()
     {
-        $data = Room::query()->get();
-        $theaters = Theater::query()->pluck('name', 'theater_id')->all();
+        $theater_id = session('theater_id'); // Lấy theater_id từ session
+        $data = Room::query()->where('theater_id', $theater_id)->get();
+        $theaters = Theater::query()->where('theater_id', $theater_id)->pluck('name', 'theater_id')->all();
+        // dd($theaters);
         return view(self::PATH_VIEW.__FUNCTION__, compact('data', 'theaters'));
     }
 
@@ -28,7 +32,8 @@ class RoomController extends Controller
      */
     public function create()
     {
-        $theaters = Theater::query()->pluck('name', 'theater_id')->all();
+        $theater_id = session('theater_id'); // Lấy theater_id từ session
+        $theaters = Theater::query()->where('theater_id', $theater_id)->first();
         return view(self::PATH_VIEW.__FUNCTION__, compact('theaters'));
 
     }
@@ -40,7 +45,6 @@ class RoomController extends Controller
     {
         $request->validate([
             'room_name' => ['required'],
-            'theater_id' => ['required'],
 
         ]);
 
@@ -62,7 +66,24 @@ class RoomController extends Controller
      */
     public function edit(Room $room)
     {
-        $theaters = Theater::query()->pluck('name', 'theater_id')->all();
+        $showtime = DB::table('rooms')
+        ->join('showtimes', 'rooms.room_id', '=', 'showtimes.room_id') // Join để lấy thông tin ca chiếu
+        ->join('shifts', 'showtimes.shift_id', '=', 'shifts.shift_id') // Join để lấy thông tin ca làm việc
+        ->where('rooms.room_id', $room->room_id) // Lọc theo phòng hiện tại
+        ->select('showtimes.showtime_id','showtimes.datetime', 'shifts.start_time', 'shifts.end_time', 'rooms.room_id', 'rooms.room_name')
+        ->first();
+        // dd($showtime);
+        // Lấy thời gian hiện tại
+        $currentDateTime = Carbon::now('Asia/Ho_Chi_Minh'); // Lấy thời gian hiện tại theo múi giờ Hồ Chí Minh
+        $currentDate = $currentDateTime->format('Y-m-d');
+        $currentTime = $currentDateTime->format('H:i:s');
+        // dd($currentDate, $currentTime);
+         // Kiểm tra thời gian
+        if( $currentDate == $showtime->datetime && $showtime->start_time <= $currentTime && $currentTime <= $showtime->end_time) {
+            return redirect()->route('admin.rooms.index')->with('error', 'Không thể sửa phòng trong ca chiếu đang diễn ra.');
+        }
+        $theater_id = session('theater_id'); // Lấy theater_id từ session
+        $theaters = Theater::query()->where('theater_id', $theater_id)->first();
         return view(self::PATH_VIEW.__FUNCTION__, compact('theaters', 'room'));
     }
 
@@ -71,7 +92,6 @@ class RoomController extends Controller
      */
     public function update(UpdateRoomRequest $request, Room $room)
     {
-
         $request->validate([
             'room_name'=>['required'],
             'theater_id'=>['required'],

@@ -41,7 +41,7 @@
                             <div class="card-body">
                                 <div class="mb-3">
                                     <label class="form-label">Tên phòng</label>
-                                    <input type="text" class="form-control"  name="room_name" value="{{$room->room_name}}">
+                                    <input type="text" class="form-control"  name="room_name" value="{{$room->room_name}}" required>
                                     @error('room_name')
                                         <span style="padding: 10px 0; color: red;">{{$message}}</span>
                                     @enderror
@@ -58,16 +58,13 @@
                         <div class="collapse show" id="collapseStatus">
                             <div class="card-body">
                                 <!-- chọn rạp -->
-                                <label for="choices-category-input" class="form-label">Chọn rạp</label>
+                                <label for="choices-category-input" class="form-label">Thông tin rạp</label>
                                 <select class="form-control" aria-label="Default select example"
                                         id="choices-category-input" name="theater_id" >
-                                    @foreach($theaters as $theater_id => $name)
-                                        <option value="{{$room->theater_id}}" {{ $room->theater_id == $theater_id ? 'selected' : '' }}>{{$name}}</option>
-                                    @endforeach
+                                        <option value="{{$theaters->theater_id}}">
+                                            {{ $theaters->name }}
+                                        </option>
                                 </select>
-                                @error('theater_id')
-                                    <span style="padding: 10px 0; color: red;">{{$message}}</span>
-                                @enderror
                             </div>
                         </div>
                     </div>

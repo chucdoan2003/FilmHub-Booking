@@ -16,6 +16,7 @@ use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\VourcherAdmminController;
 
 use App\Http\Controllers\admin\AdminShiftController;
+use App\Http\Controllers\admin\RoomController;
 use App\Http\Controllers\admin\StatisticController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +35,7 @@ Route::prefix('admin')->as('admin.')->group(function() {
     Route::get('/', function () {
         return view('admin.dashboard');
     })->name('dashboard');
+    Route::resource('rooms', RoomController::class);
     Route::resource('seats', SeatController::class);
     Route::resource('rows', RowController::class);
     Route::resource('types', TypeController::class);
@@ -95,6 +97,7 @@ Route::prefix('admin/shifts')->group(function () {
 // Route cho thống kê doanh số 
 Route::prefix('admin/statistics')->group(function () {
     Route::get('/film', [StatisticController::class, 'statisticFilm'])->name('admin.statistics.statisticFilm');
+    Route::get('/Detailfilm/{movie_id}', [StatisticController::class, 'statisticDetailFilm'])->name('admin.statistics.statisticDetailFilm');
     Route::get('/filmHub', [StatisticController::class, 'statisticFilmHub'])->name('admin.statistics.statisticFilmHub');
     Route::get('/theater/{theater_id}', [StatisticController::class, 'statisticTheater'])->name('admin.statistics.statisticTheater');
     Route::get('/statistics/filmTheater/{theater_id}/{movie_id}', [StatisticController::class, 'statisticFilmTheater'])->name('admin.statistics.statisticFilmTheater');

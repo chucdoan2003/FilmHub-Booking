@@ -24,6 +24,11 @@
         @if(session('success'))
             <h4 style="padding: 10px 0;color: #17A673; font-weight: bold;">{{session('success')}}</h4>
         @endif
+        @if(session('error'))
+            <div class="alert alert-info">
+                <strong>{{session('error')}}</strong>
+            </div>
+        @endif
         <!-- List seat -->
         <div class="card shadow mb-4">
             <div class="card-body">
