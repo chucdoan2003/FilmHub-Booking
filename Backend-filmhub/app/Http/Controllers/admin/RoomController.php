@@ -79,12 +79,15 @@ class RoomController extends Controller
         $currentTime = $currentDateTime->format('H:i:s');
         // dd($currentDate, $currentTime);
          // Kiểm tra thời gian
-        if( $currentDate == $showtime->datetime && $showtime->start_time <= $currentTime && $currentTime <= $showtime->end_time) {
+        if(!$showtime || !($currentDate == $showtime->datetime && $showtime->start_time <= $currentTime && $currentTime <= $showtime->end_time)){
+            $theater_id = session('theater_id'); // Lấy theater_id từ session
+            $theaters = Theater::query()->where('theater_id', $theater_id)->first();
+            return view(self::PATH_VIEW.__FUNCTION__, compact('theaters', 'room')); 
+        }
+        elseif( $currentDate == $showtime->datetime && $showtime->start_time <= $currentTime && $currentTime <= $showtime->end_time) {
             return redirect()->route('admin.rooms.index')->with('error', 'Không thể sửa phòng trong ca chiếu đang diễn ra.');
         }
-        $theater_id = session('theater_id'); // Lấy theater_id từ session
-        $theaters = Theater::query()->where('theater_id', $theater_id)->first();
-        return view(self::PATH_VIEW.__FUNCTION__, compact('theaters', 'room'));
+        
     }
 
     /**
