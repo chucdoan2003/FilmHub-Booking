@@ -48,7 +48,12 @@ class StatisticController extends Controller
                   // Lọc theo ngày cụ thể
                 if ($request->filled('datetime')) {
                     $data->whereDate('showtimes.datetime', $request->datetime);
-                   
+                    // Tính lại tổng số lượng phim
+                    $totalMovies = DB::table('movies')
+                    ->join('showtimes', 'movies.movie_id', '=', 'showtimes.movie_id')
+                    ->where('showtimes.datetime', '=', $request->datetime)
+                    ->distinct()
+                    ->count('movies.movie_id');
                 }
                 $result = $data->get();
                 // Tính tổng doanh thu của toàn bộ hệ thống
