@@ -1,5 +1,31 @@
 @extends('frontend.layouts.master3')
+<style>
+    .bootstrap-select .dropdown-toggle {
+        height: 50px;
+        border: 2px solid black;
+        border-radius: 10px;
+        background-color: #f8f9fa;
+        color: #495057;
+    }
+
+    .bootstrap-select .dropdown-menu {
+        border-radius: 10px;
+        background-color: #ffffff;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .bootstrap-select .dropdown-menu li a {
+        color: #495057;
+    }
+
+    .bootstrap-select .dropdown-menu li a:hover {
+        background-color: #2855a7;
+        color: white;
+    }
+</style>
 @section('content')
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
     <form action="{{ route('vnpay_payment') }}" method="post" enctype="multipart/form-data" id="payment-form">
         @csrf
 
@@ -55,14 +81,13 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="st_cherity_section float_left">
-                                        <div class="st_cherity_img float_left">
-                                            {{-- <img src="images/content/cc1.jpg" alt="img"> --}}
-                                        </div>
+                                        
                                         <div class="st_cherity_img_cont float_left">
                                             <div class="box">
-                                                <select id="combo" name="combo_id" class="form-control"
-                                                    onchange="updateTotalPrice()">
-                                                    <option value="" >Chọn combo</option>
+                                                <div class="mb-4">
+                                                <label for="combo" class="form-label">Combo:</label>
+                                                <select id="combo" name="combo_id[]" multiple class="selectpicker form-control"
+                                                    onchange="updateTotalPrice()" data-live-search="true">
                                                     @foreach ($combos as $combo)
                                                         <option value="{{ $combo->id }}"
                                                             data-price="{{ $combo->price }}">
@@ -70,26 +95,34 @@
                                                         </option>
                                                     @endforeach
                                                 </select>
-                                                <select id="food" name="food_id" class="form-control" onchange="updateTotalPrice()">
-                                                    <option value="">Chọn món ăn</option>
+                                                </div>
+                                                <div class="mb-4">
+                                                <label for="food" class="form-label">Food:</label>
+                                                <select id="food" name="food_id[]" multiple class="selectpicker form-control" 
+                                                    onchange="updateTotalPrice()" data-live-search="true">
                                                     @foreach ($foods as $food)
                                                         <option value="{{ $food->id }}" data-price="{{ $food->price }}">
                                                             {{ $food->name }} - {{ number_format($food->price) }} VNĐ
                                                         </option>
                                                     @endforeach
                                                 </select>
-                                                <select id="drink" name="drink_id" class="form-control" onchange="updateTotalPrice()">
-                                                    <option value="">Chọn đồ uống</option>
+                                                </div>
+                                                <div class="mb-4">
+                                                <label for="drink" class="form-label">Drink:</label>
+                                                <select id="drink" name="drink_id[]" class="selectpicker form-control" 
+                                                    onchange="updateTotalPrice()" multiple data-live-search="true">
                                                     @foreach ($drinks as $drink)
                                                         <option value="{{ $drink->id }}" data-price="{{ $drink->price }}">
                                                             {{ $drink->name }} - {{ number_format($drink->price) }} VNĐ
                                                         </option>
                                                     @endforeach
                                                 </select>
-                                                <select id="discount_code" name="discount_code" class="form-control" onchange="updateTotalPrice()">
+                                                </div>
+                                                <div class="mb-4">
+                                                <label for="Vourcher" class="form-label">Vourcher:</label>
+                                                <select id="discount_code" name="discount_code" class="form-control" 
+                                                    onchange="updateTotalPrice()" data-live-search="true">
                                                     <option value="">Chọn mã giảm giá</option>
-                                                
-                                                    <!-- Hiển thị voucher thông thường -->
                                                     <optgroup label="Mã giảm giá thông thường">
                                                         @foreach($vouchers as $voucher)
                                                             @if (!in_array($voucher->id, $usedVoucher))
@@ -111,6 +144,12 @@
                                                         @endforeach
                                                     </optgroup>
                                                 </select>
+                                                </div>
+                                                @if (session('error'))
+                                                    <div class="alert alert-danger">
+                                                        {{ session('error') }}
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -268,4 +307,11 @@
 function number_format(number) {
     return new Intl.NumberFormat('vi-VN').format(number);
 }
+$(document).ready(function() {
+        $('.selectpicker').selectpicker();
+    });
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+

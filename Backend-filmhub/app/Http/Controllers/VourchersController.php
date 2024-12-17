@@ -28,11 +28,28 @@ class VourchersController extends Controller
             ->toArray();
 
 
-        $vourcherEvents = VourcherEvent::where('is_active', true)
-            ->where('end_time', '>', $currentDateTime)
-            ->get();
-
-        return view('frontend.redeemvourcher.index', compact('vouchers', 'usedVouchers', 'vourcherEvents'));
+        // $vourcherEvents = VourcherEvent::where('is_active', true)
+        //     ->where('end_time', '>', $currentDateTime)
+        //     ->get();
+        $vourcherEvents = VourcherEvent::all();
+        
+            $voucherCounts = [];
+            foreach ($vouchers as $voucher) {
+                if (!in_array($voucher->id, $usedVouchers)) {
+                    if (isset($voucherCounts[$voucher->vourcher_code])) {
+                        $voucherCounts[$voucher->vourcher_code]['count']++;
+                    }else {
+                        $voucherCounts[$voucher->vourcher_code] = [
+                            'code' => $voucher->vourcher_code,
+                            'name' => $voucher->vourcher_name,
+                            'discount_percentage' => $voucher->discount_percentage,
+                            'max_discount_amount' => $voucher->max_discount_amount,
+                            'count' => 1,
+                        ];
+                    }
+                }
+            }
+        return view('frontend.redeemvourcher.index', compact('voucherCounts', 'usedVouchers', 'vourcherEvents'));
     }
     public function showForm() {
          if (!Auth::check()) {

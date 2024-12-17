@@ -14,21 +14,22 @@ class PaymentController extends Controller
         //voucher
         $discountCode = $request->input('discount_code');
         $userId = $request->input('user_id');
-        $totalPrice = $request->input('total'); // Giá trước khi giảm
-
+        $totalPrice = $request->input('total'); // Giá trước khi giả
         // Kiểm tra mã giảm giá
         try {
             $vourcher = \DB::table('vourchers_redeem')->where('vourcher_code', $discountCode)->first();
             if (!$vourcher) {
                 $vourcher = \DB::table('vourcher_event')->where('vourcher_code', $discountCode)->first();
             }
+
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['msg' => 'Lỗi khi truy vấn mã giảm giá: ' . $e->getMessage()]);
         }
         if ($vourcher) {
+
         // Tính toán số tiền giảm
         $discountAmount = ($totalPrice * $vourcher->discount_percentage) / 100;
-
+            
         // Giảm tối đa
         if ($discountAmount > $vourcher->max_discount_amount) {
             $discountAmount = $vourcher->max_discount_amount;
@@ -48,8 +49,16 @@ class PaymentController extends Controller
         $data = $request->all();
 
         // dd($data);
+           
 
         $selectedSeats = explode(',', $data['selected_seats']);
+            // Lấy danh sách combo, food và drink từ request
+        $comboIds = $request->input('combo_id', []);
+        $foodIds = $request->input('food_id', []);
+        $drinkIds = $request->input('drink_id', []);
+
+        
+
 
         // Kiểm tra dữ liệu đầu vào
         $request->validate([
@@ -57,11 +66,12 @@ class PaymentController extends Controller
             'showtime_id' => 'required|exists:showtimes,showtime_id',
             'total' => 'required|numeric',
             'selected_seats' => 'required|string',
-            'food_id' => 'nullable|integer',
-            'drink_id' => 'nullable|integer',
-            'combo_id' => 'nullable|integer',
+            // 'food_id' => 'nullable|integer',
+            // 'drink_id' => 'nullable|integer',
+            // 'combo_id' => 'nullable|integer',
         ]);
         // dd($data['showtime_id']);
+
 
 
         $showtimeId = $data['showtime_id'];
@@ -88,12 +98,40 @@ class PaymentController extends Controller
             'total_price' => $data['total'],
             'ticket_time' => now(),
             'status' => 'pending',
-            'food_id' => $data['food_id'],
-            'drink_id' => $data['drink_id'],
-            'combo_id' => $data['combo_id'],
+            // 'food_id' => $data['food_id'],
+            // 'drink_id' => $data['drink_id'],
+            // 'combo_id' => $data['combo_id'],
 
         ]);
 
+
+        // Lưu thông tin vào bảng ticket_combo
+    foreach ($comboIds as $comboId) {
+        \DB::table('ticket_combo')->insert([
+            'ticket_id' => $ticket->ticket_id,
+            'combo_id' => $comboId,
+            'food_id' => null, // Nếu không chọn food, có thể để null
+            'drink_id' => null // Nếu không chọn drink, có thể để null
+        ]);
+    }
+
+    foreach ($foodIds as $foodId) {
+        \DB::table('ticket_combo')->insert([
+            'ticket_id' => $ticket->ticket_id,
+            'combo_id' => null, // Nếu không chọn combo, có thể để null
+            'food_id' => $foodId,
+            'drink_id' => null // Nếu không chọn drink, có thể để null
+        ]);
+    }
+
+    foreach ($drinkIds as $drinkId) {
+        \DB::table('ticket_combo')->insert([
+            'ticket_id' => $ticket->ticket_id,
+            'combo_id' => null, // Nếu không chọn combo, có thể để null
+            'food_id' => null, // Nếu không chọn food, có thể để null
+            'drink_id' => $drinkId
+        ]);
+    }
         // Lưu thông tin ghế đã chọn vào bảng ticket_seats
         foreach ($selectedSeats as $seatId) {
             // Kiểm tra seat_id tồn tại trong bảng seats

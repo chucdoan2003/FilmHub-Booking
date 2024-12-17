@@ -30,8 +30,8 @@ class UpdateVoucherStatus extends Command
     {
          // Cập nhật trạng thái cho các voucher đã hết hạn
          DB::table('vourcher_event')
-         ->where('end_time', '<', Carbon::now())
-         ->update(['is_active' => false]);
+         ->where('end_time', '<', Carbon::now());
+        //  ->update(['is_active' => 0]);
 
      $this->info('Voucher statuses updated successfully.');
     }

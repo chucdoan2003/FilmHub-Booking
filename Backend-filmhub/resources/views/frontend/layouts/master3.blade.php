@@ -22,6 +22,7 @@ Author: Webstrot
     <meta name="keywords" content="Movie Pro" />
     <meta name="author" content="" />
     <meta name="MobileOptimized" content="320" />
+
     <!--Template style -->
     <link rel="stylesheet" type="text/css" href="{{ asset('website/css/animate.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('website/css/bootstrap.css') }}" />
@@ -61,7 +62,7 @@ Author: Webstrot
     <script src="{{ asset('website/js/owl.carousel.js') }}"></script>
     <script src="{{ asset('website/js/jquery.dlmenu.js') }}"></script>
     <script src="{{ asset('website/js/jquery.sticky.js') }}"></script>
-    <script src="{{ asset('website/js/jquery.nice-select.min.js') }}"></script>
+    {{-- <script src="{{ asset('website/js/jquery.nice-select.min.js') }}"></script> --}}
     <script src="{{ asset('website/js/jquery.magnific-popup.js') }}"></script>
     <script src="{{ asset('website/js/jquery.bxslider.min.js') }}"></script>
     <script src="{{ asset('website/js/venobox.min.js') }}"></script>

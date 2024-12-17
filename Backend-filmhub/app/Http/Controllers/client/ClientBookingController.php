@@ -122,7 +122,6 @@ class ClientBookingController extends Controller
         ->where('end_time', '>', $currentDateTime)
         ->get();
 
-
         // Truyền dữ liệu đến view
         return view('frontend.layouts.booking.detailBooking', compact(
             'showtime',
