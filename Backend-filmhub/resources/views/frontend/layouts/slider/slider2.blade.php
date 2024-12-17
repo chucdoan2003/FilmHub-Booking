@@ -1,4 +1,5 @@
 @php
+    use Carbon\Carbon;
     $topMovies = DB::table('movies')
         ->join('showtimes', 'movies.movie_id', '=', 'showtimes.movie_id')
         ->join('tickets', 'showtimes.showtime_id', '=', 'tickets.showtime_id')
@@ -14,6 +15,7 @@
             DB::raw('COUNT(tickets.ticket_id) as total_bookings'),
             DB::raw('GROUP_CONCAT(DISTINCT genres.name) as genres'), // Dùng DISTINCT để loại bỏ trùng lặp thể loại
         )
+        ->where('movies.created_at', '>=', Carbon::now()->subMonth())
         ->groupBy(
             'movies.movie_id',
             'movies.title',

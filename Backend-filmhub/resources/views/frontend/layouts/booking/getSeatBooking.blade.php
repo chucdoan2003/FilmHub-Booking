@@ -198,7 +198,7 @@
                                 if (!checkbox.checked && checkbox === isolatedCheckbox) {
                                     alert(
                                         "Bạn không thể bỏ ghế ở giữa khi nó nằm giữa 2 ghế đã chọn!"
-                                        );
+                                    );
                                     checkbox.checked = true; // Khôi phục trạng thái
                                     return;
                                 }

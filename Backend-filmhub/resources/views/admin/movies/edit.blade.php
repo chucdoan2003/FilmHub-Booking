@@ -49,7 +49,17 @@
         color: white;
     }
 </style>
+
 @section('content')
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <form action="{{ route('admin.movies.update', $movie->movie_id) }}" enctype="multipart/form-data" method="POST">
         @csrf
         @method('put')
@@ -134,7 +144,8 @@
             </div>
             <div class="mb-3 col-6">
                 <label for="trailer" class="form-label">Trailer:</label>
-                <input type="text" class="form-control" value="{{ $movie->trailer }}" id="trailer" name="trailer">
+                <input type="text" class="form-control" value="{{ $movie->trailer }}" id="trailer"
+                    name="trailer">
                 @error('trailer')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror

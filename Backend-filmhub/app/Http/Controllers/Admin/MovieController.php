@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Genre;
 use App\Models\Movie;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class MovieController extends Controller
@@ -141,7 +142,7 @@ class MovieController extends Controller
             'title.required' => 'Tiêu đề không được để trống.',
             'description.required' => 'Mô tả không được để trống.',
             'release_date.required' => 'Thời gian phát hành không được để trống.',
-            'release_date.date' => 'Thời gian phát hành phải là ngày',
+            'release_date.date' => 'Thời gian phát hành phải là ngày.',
             'duration.required' => 'Thời lượng không được để trống.',
             'duration.numeric' => 'Thời lượng phải là một số.',
             'genres.required' => 'Thể loại không được để trống.',
@@ -152,13 +153,22 @@ class MovieController extends Controller
             'type.required' => 'Dạng phim không được để trống.',
             'type.in:2D,3D' => 'Dạng phim chỉ có thể là 2D hoặc 3D.',
         ]);
+
         $movie = Movie::find($id);
+
+        // Kiểm tra nếu phim có ca chiếu
+        $hasShowtimes = DB::table('showtimes')
+            ->where('movie_id', $id)
+            ->exists();
+
+        if ($hasShowtimes) {
+            return redirect()->back()->withErrors(['error' => 'Phim đang có ca chiếu, không thể chỉnh sửa.']);
+        }
 
         // Xử lý đường dẫn trailer để chuyển đổi sang dạng embed
         if (str_contains($data['trailer'], 'watch?v=')) {
             $data['trailer'] = str_replace('watch?v=', 'embed/', $data['trailer']);
         }
-
 
         if ($request->hasFile('poster_url')) {
             if ($movie->poster_url) {
