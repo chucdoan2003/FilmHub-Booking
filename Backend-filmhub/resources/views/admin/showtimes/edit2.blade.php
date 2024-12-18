@@ -78,7 +78,7 @@
                 <span>{{$errors[
                    'shift_not_except'
                 ]}}</span>
-                <h5>Các ca chiếu trong ngày @if(isset($datetime)) {{$datetime}} @endif </h5>
+                <h7>, Các ca chiếu trong ngày @if(isset($datetime)) {{$datetime}} @endif </h7>
                 <ul>
                     @foreach( $showtimes as $show)
                         <li>
@@ -88,17 +88,22 @@
                 </ul>
             </div>
             @endif
+            <div class="row">
+
+                <!-- Grow In Utility -->
+                <div class="col-lg-6">
+
                     <div class="card shadow mb-4">
                         <!-- Card Header - Dropdown -->
                         <div
                             class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-primary">Date</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Ngày chiếu</h6>
                         </div>
 
                         <!-- Card Body -->
 
                         <div class="card-body">
-                            <input type="date" name="datetime" @if(isset($datetime)) value="{{$datetime}}" @endif id="datetime" >
+                            <input type="date" class="form-control form-control-user form-radius" name="datetime" @if(isset($datetime)) value="{{$datetime}}" @endif id="datetime" >
 
 
 
@@ -110,152 +115,141 @@
 
                         </div>
 
-                </div>
-
-
-                <div class="card shadow mb-4">
-                    <!-- Card Header - Dropdown -->
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Movie</h6>
                     </div>
+                
 
-                    <!-- Card Body -->
+                    <div class="card shadow mb-4">
+                        <!-- Card Header - Dropdown -->
+                        <div
+                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Phim chiếu</h6>
+                        </div>
 
-                    <div class="card-body">
-                        <select name="movie">
-                            @foreach ($movies as $item)
-                                <option value="{{ $item->movie_id }}"
-                                    @if (isset($movie_id) && $item->movie_id == $movie_id)
-                                    @selected(true)
-                                @endif
-                                >{{ $item->title }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                        <!-- Card Body -->
 
-                </div>
-
-                <div class="card shadow mb-4">
-                    <!-- Card Header - Dropdown -->
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Room</h6>
-                    </div>
-
-                    <!-- Card Body -->
-
-                    <div class="card-body">
-                        <select name="room"  >
-                            @foreach ($rooms as $item)
-                                <option value="{{ $item->room_id }}"
-                                    @if (isset($room_id) && $item->room_id == $room_id)
-                                    @selected(true)
-                                @endif
-
-                                    >{{ $item->room_name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                </div>
-
-                {{-- <div class="card shadow mb-4">
-                    <!-- Card Header - Dropdown -->
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Shift</h6>
-                    </div>
-
-                    <!-- Card Body -->
-
-                    <div class="card-body">
-                        <select name="shift" id="" >
-                            @foreach ($shifts as $item)
-                                <option value="{{ $item->shift_id }}"
-                                    @if (in_array($item->shift_id, $shiftInroomBook))
-                                    @disabled(true)
-
+                        <div class="card-body">
+                            <select name="movie" class="form-control form-control-user form-radius">
+                                @foreach ($movies as $item)
+                                    <option value="{{ $item->movie_id }}" 
+                                        @if (isset($movie_id) && $item->movie_id == $movie_id)
+                                        @selected(true)
                                     @endif
-                                    >{{ $item->shift_name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                </div> --}}
-                <div class="card shadow mb-4">
-                    <!-- Card Header - Dropdown -->
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Start time</h6>
-                    </div>
-
-
-                    <!-- Card Body -->
-
-                    <div class="card-body">
-                        <input type="time" class="form-control form-control-user form-radius" id="start_time"
-                        name="start_time"  @if(isset($start_time)) value="{{$start_time}}" @endif>
-                    </div>
-
-                </div>
-                <div class="card shadow mb-4">
-                    <!-- Card Header - Dropdown -->
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">End time</h6>
+                                    >{{ $item->title }}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
                     </div>
 
+                    <div class="card shadow mb-4">
+                        <!-- Card Header - Dropdown -->
+                        <div
+                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Phòng chiếu</h6>
+                        </div>
 
-                    <!-- Card Body -->
+                        <!-- Card Body -->
 
-                    <div class="card-body">
-                        <input type="time" class="form-control form-control-user form-radius" id="end_time"
-                        name="end_time" @if(isset($end_time)) value="{{$end_time}}" @endif>
-                        <div id="error_message" style="color: red"></div>
+                        <div class="card-body">
+                            <select name="room"  class="form-control form-control-user form-radius" >
+                                @foreach ($rooms as $item)
+                                    <option value="{{ $item->room_id }}"
+                                        @if (isset($room_id) && $item->room_id == $room_id)
+                                        @selected(true)
+                                    @endif
+                                    
+                                        >{{ $item->room_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
                     </div>
-
-                </div>
-                <div class="card shadow mb-4">
-                    <!-- Card Header - Dropdown -->
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Price</h6>
-                    </div>
+                    <div class="card shadow mb-4">
+                        <!-- Card Header - Dropdown -->
+                        <div
+                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Giá thường</h6>
+                        </div>
 
 
-                    <!-- Card Body -->
+                        <!-- Card Body -->
 
-                    <div class="card-body">
-                        <input type="text" class="form-control form-control-user form-radius" id="exampleLastName"
-                        placeholder="100.000" name="normal_price" @if(isset($normal_price)) value="{{$normal_price}}" @endif id="normal_price">
+                        <div class="card-body">
+                            <input type="text" class="form-control form-control-user form-radius" id="exampleLastName"
+                            placeholder="100.000" name="normal_price" @if(isset($normal_price)) value="{{$normal_price}}" @endif id="normal_price">
+                        </div>
+
                     </div>
 
                 </div>
 
-                <div class="card shadow mb-4">
-                    <!-- Card Header - Dropdown -->
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Vip Price</h6>
+                <!-- Fade In Utility -->
+                <div class="col-lg-6">
+
+                    <div class="card shadow mb-4">
+                        <!-- Card Header - Dropdown -->
+                        <div
+                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Thời gian bắt đầu</h6>
+                        </div>
+
+
+                        <!-- Card Body -->
+
+                        <div class="card-body">
+                            <input type="time" class="form-control form-control-user form-radius" id="start_time"
+                            name="start_time"  @if(isset($start_time)) value="{{$start_time}}" @endif>
+                        </div>
+
                     </div>
+                    <div class="card shadow mb-4">
+                        <!-- Card Header - Dropdown -->
+                        <div
+                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Thời gian kết thúc</h6>
+                            
+                        </div>
 
 
-                    <!-- Card Body -->
+                        <!-- Card Body -->
 
-                    <div class="card-body">
-                        <input type="text" class="form-control form-control-user form-radius" id="exampleLastName"
-                        placeholder="100.000" name="vip_price" @if(isset($vip_price)) value="{{$vip_price}}" @endif id="vip_price">
-                        <div id="price_message" style="color: red"></div>
+                        <div class="card-body">
+                            <input type="time" class="form-control form-control-user form-radius" id="end_time"
+                            name="end_time" @if(isset($end_time)) value="{{$end_time}}" @endif>
+                            <div id="error_message" style="color: red"></div>
+                            
+                        </div>
+
+                    </div>
+                    
+
+                    <div class="card shadow mb-4">
+                        <!-- Card Header - Dropdown -->
+                        <div
+                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Giá vip</h6>
+                        </div>
+
+
+                        <!-- Card Body -->
+
+                        <div class="card-body">
+                            <input type="text" class="form-control form-control-user form-radius" id="exampleLastName"
+                            placeholder="100.000" name="vip_price" @if(isset($vip_price)) value="{{$vip_price}}" @endif id="vip_price">
+                            <div id="price_message" style="color: red"></div>
+                        </div>
+
                     </div>
 
                 </div>
+
+            </div>
+                    
+
                 <input type="hidden" id="between_timestart_end" value="11" name="shift_minute">
 
             <button class="btn btn-primary btn-user btn-block">
-                        Submit
+                        Xác nhận
             </button>
         </form>
     </div>
@@ -264,7 +258,7 @@
     const select1 = document.querySelector('select[name="movie"]');
     const select2 = document.querySelector('select[name="room"]');
     const select3 = document.querySelector('input[name="datetime"]');
-
+   
     const shift_minute = document.querySelector('input[name="shift_minute"]');
     const select4 = document.querySelector('select[name="theater"]');
     select1.disabled = false;  // Kích hoạt lại trước khi submit
@@ -283,15 +277,15 @@
     //     // Display error message if validation fails
     //     document.getElementById("error_message").innerText = "end time must be larger than start time.";
     //     e.preventDefault();
-
+        
     // }
-
+    
     // var differenceInMilliseconds = end - start;
     // var differenceInMinutes = differenceInMilliseconds / (1000 * 60);
     // shift_minute.value = differenceInMinutes;
 
 
-
+       
   });
 
 </script>

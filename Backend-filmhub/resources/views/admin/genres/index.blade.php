@@ -22,6 +22,20 @@
     @if (session('message'))
         <h4>{{ session('message') }}</h4>
     @endif
+    @if (session('message'))
+        <h4>{{ session('message') }}</h4>
+    @endif
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
     <!-- DataTales Example -->
     <div class="card shadow mb-4 mt-3">
         <div class="card-header py-3">
@@ -33,15 +47,15 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
-                            <th>Action</th>
+                            <th>Tên</th>
+                            <th>Hành động</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
-                            <th>Action</th>
+                            <th>Tên</th>
+                            <th>Hành động</th>
                         </tr>
                     </tfoot>
                     <tbody>

@@ -33,17 +33,14 @@
                         <!-- Chọn rạp chiếu -->
                         <div class="card-body">
                             <div class="mb-3">
-                                <label for="choices-category-input" class="form-label">Chọn rạp</label>
+                                <label for="choices-category-input" class="form-label">Thông tin rạp</label>
                                 <select class="form-control" aria-label="Default select example"
-                                        id="choices-category-input" name="theater_id">
-                                    <option selected>-----------Chọn rạp chiếu----------</option>
-                                    @foreach($theaters as $theater_id => $name)
-                                        <option value="{{$theater_id}}"> {{$name}}</option>
-                                    @endforeach
+                                        id="choices-category-input" name="theater_id" required>
+                                    <!-- <option value="" disabled selected>Chọn rạp chiếu</option> -->
+                                        <option value="{{$theaters->theater_id}}">
+                                            {{ $theaters->name }}
+                                        </option>
                                 </select>
-                                @error('theater_id')
-                                    <span style="padding: 10px 0; color: red;">{{$message}}</span>
-                                @enderror
                             </div>
                         </div>
                         <!-- Nhập tên phòng -->

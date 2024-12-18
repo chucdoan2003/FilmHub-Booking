@@ -34,6 +34,17 @@
     @if (session('message'))
         <h4>{{ session('message') }}</h4>
     @endif
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
     <!-- DataTales Example -->
     <div class="card shadow mb-4 mt-3">
         <div class="card-header py-3">
@@ -45,25 +56,25 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Title</th>
-                            <th>Duration</th>
-                            <th>Genre</th>
-                            <th>Rating</th>
+                            <th>Tên phim</th>
+                            <th>Thời lượng</th>
+                            <th>Thể loại</th>
+                            <th>Đánh giá</th>
                             <th>Poster</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th>ID</th>
-                            <th>Title</th>
-                            <th>Duration</th>
-                            <th>Genre</th>
-                            <th>Rating</th>
+                            <th>Tên phim</th>
+                            <th>Thời lượng</th>
+                            <th>Thể loại</th>
+                            <th>Đánh giá</th>
                             <th>Poster</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
                         </tr>
                     </tfoot>
                     <tbody>

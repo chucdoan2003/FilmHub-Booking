@@ -23,7 +23,13 @@
     <form method="GET" action="{{ route('admin.statistics.statisticFilmTheater', [$theater_id, $movie->movie_id]) }}">
         <div class="form-row mb-4">
             <div class="col">
-                <input type="date" name="datetime" class="form-control" placeholder="Chọn thời gian">
+                <input type="month" name="month" class="form-control" placeholder="Chọn tháng" value="{{ request('month') }}">
+            </div>
+            <div class="col">
+                <input type="week" name="week" class="form-control" placeholder="Chọn tuần" value="{{ request('week') }}">
+            </div>
+            <div class="col">
+                <input type="date" name="datetime" class="form-control" placeholder="Chọn ngày" value="{{ request('datetime') }}">
             </div>
             <div class="col">
                 <button type="submit" class="btn btn-primary">Tìm kiếm</button>

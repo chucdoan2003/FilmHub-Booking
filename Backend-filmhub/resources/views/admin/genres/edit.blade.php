@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Tạo mới Phim
+    Sửa thể loại
 @endsection
 
 @section('style-libs')
@@ -54,13 +54,13 @@
         @csrf
         @method('put')
         <div class="mb-3">
-            <label for="name" class="form-label">Name:</label>
+            <label for="name" class="form-label">Tên thể loại:</label>
             <input type="text" class="form-control" value="{{ $genre->name }}" id="name" name="name">
             @error('name')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary">Lưu</button>
     </form>
 @endsection
 <script>

@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Showtimes
+    Xuất chiếu
 @endsection
 @section('content')
 <style>
@@ -31,29 +31,60 @@
 
 </style>
    <div class="col-xl-12 col-lg-7">
+
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div
                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">List Showtimes</h6>
-                    <a href="{{ route("showtimes.create") }}"><button class="btn-success"> Add new showtimes</button></a>
+                    <h6 class="m-0 font-weight-bold text-primary">Danh sách xuất chiếu</h6>
+                    <a href="{{ route("showtimes.create") }}"><button class="btn-success"> Thêm mới xuất chiếu</button></a>
                 </div>
+                
+                @if(isset($not_delete_showtime) && $not_delete_showtime)
+                    <div class="alert alert-danger" role="alert">
+                        <span>Xuất chiếu có vé đặt rồi, không được phép xóa</span>
+                    </div>
+                @endif
+                @if(isset($not_edit))
+                    <div class="alert alert-danger" role="alert">
+                        <span>Xuất chiếu có vé đặt rồi, không được phép sửa</span>
+                    </div>
+                @endif
+
+                @if(isset($not_delete_showtime) && !$not_delete_showtime)
+                    <div class="alert alert-success" role="alert">
+                        <span>Xóa xuất chiếu thành công</span>
+                    </div>
+                @endif
+                <div>
+                    <form action="{{route('findShowtime')}}" method="POST">
+                        @csrf
+                        @method('POST')
+                        <div class="card-body">
+                                <input type="date" class="form-control form-control-user form-radius" name="datetime"  id="datetime" >
+                                <button class="mt-2 btn-success">Tìm kiếm</button>
+
+                            
+                        </div>
+                    </form>
+                </div>
+
                 <!-- Card Body -->
                 <div class="card-body">
                     <table border="1" class="w-full">
                         <thead>
                             <tr>
                                 <th>Id</th>
-                                <th>Thearter</th>
-                                <th>Movie</th>
-                                <th>Room</th>
-
-                                <th>Price</th>
-                                <th>Vip Price</th>
-                                <th>Start time</th>
-                                <th>End time</th>
-                                <th>Date</th>
-                                <th>Action</th>
+                                <th>Rạp</th>
+                                <th>Phim chiếu</th>
+                                <th>Phòng</th>
+                                
+                                <th>Giá thường</th>
+                                <th>Giá Vip</th>
+                                <th>Thời gian bắt đầu</th>
+                                <th>Thời gian kết thúc</th>
+                                <th>Ngày</th>
+                                <th>Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -63,19 +94,18 @@
                                     <td>{{ $item->thearter_name }}</td>
                                     <td>{{ $item->movie_name }}</td>
                                     <td>{{ $item->room_name }}</td>
-
                                     <td>{{ $item->normal_price }}</td>
                                     <td>{{ $item->vip_price }}</td>
                                     <td>{{ $item->start_time }}</td>
 
                                     <td>{{ $item->end_time}}</td>
                                     <td>{{ $item->datetime }}</td>
-                                    <td>
-                                        <a href="{{ route('showtimes.edit', $item->showtime_id) }}"><button class="btn-warning">Edit</button></a>
-                                        <form action="{{ route('showtimes.destroy', $item->showtime_id) }}" method="POST">
+                                    <td style="text-align: center">
+                                        <a href="{{ route('showtimes.edit', $item->showtime_id) }}"><button class="btn-warning">Sửa</button></a>
+                                        <form class="mt-2" action="{{ route('showtimes.destroy', $item->showtime_id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                        <button class="btn-danger" onclick="return confirm('Do you want to delete this showtime ?')">Delete</button>
+                                        <button class="btn-danger" onclick="return confirm('Do you want to delete this showtime ?')">Xóa</button>
 
 
                                         </form>

@@ -17,58 +17,45 @@
 <div class="container-fluid">
 
 <!-- Page Heading -->
-<h1 class="h3 mb-2 text-gray-800">Thống kê doanh số phim</h1>
-<form method="GET" action="{{ route('admin.statistics.statisticFilm') }}">
-        <div class="form-row mb-4">
-            <div class="col">
-                <input type="date" name="datetime" class="form-control" placeholder="Chọn thời gian">
-            </div>
-            <div class="col">
-                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-            </div>
-        </div>
-</form>
+<h1 class="h3 mb-2 text-gray-800">Thống kê doanh số phim trong hệ thống</h1>
 <div class="card shadow mb-4">
-    <div class="card-body">
+        <div class="card-body">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>Tên phim</th>
-                        <th>Ca chiếu</th>
-                        <th>Thời gian bắt đầu</th>
-                        <th>Thời gian kết thúc</th>
-                        <th>Ngày chiếu</th>
-                        <th>Số lượng vé</th>
-                        <th>Tổng tiền</th>
+                        <th>Tên Phim</th>
+                        <th>Số Lượng Suất Chiếu</th>
+                        <th>Số Lượng vé</th>
+                        <th>Tổng Doanh Thu</th>
+                        <th>Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
                     @php
                         $totalRevenue = 0; // Khởi tạo biến tổng doanh thu
                     @endphp
-                    @foreach($results as $item)
+                    @foreach($movies as $movie)
                         <tr>
-                            <td>{{ $item->movie_name }}</td>
-                            <td>{{ $item->shift_name }}</td>
-                            <td>{{ $item->start_time}}</td>
-                            <td>{{ $item->end_time}}</td>
-                            <td>{{ $item->datetime}}</td>
-                            <td>{{ $item->ticket_count}}</td>
-                            <td>{{ number_format($item->total_revenue, 0, ',', '.') }} VNĐ</td>
+                            <td>{{ $movie->movie_name }}</td>
+                            <td>{{ $movie->show_count }}</td>
+                            <td>{{ $movie->ticket_count }}</td>
+                            <td>{{ number_format($movie->total_revenue, 0, ',', '.') }} VNĐ</td>
+                            <td>
+                                <a href="{{ route('admin.statistics.statisticDetailFilm', $movie->movie_id) }}" class="btn btn-info">Xem Chi Tiết</a>
+                            </td>
                         </tr>
                         @php
-                            $totalRevenue += $item->total_revenue; // Cộng dồn doanh thu
+                            $totalRevenue += $movie->total_revenue; // Cộng dồn doanh thu
                         @endphp
                     @endforeach
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="6" style="text-align: right; color:red"><strong>Tổng doanh thu phim: </strong></td>
-                        <td><strong style="color:red">{{ number_format($totalRevenue, 0, ',', '.') }} VNĐ</strong></td>
+                        <td colspan="4" style="text-align: right;"><strong>Tổng tiền:</strong></td>
+                        <td><strong style="color: red;">{{ number_format($totalRevenue, 0, ',', '.') }} VNĐ</strong></td>
                     </tr>
                 </tfoot>
             </table>
         </div>
     </div>
-</div>
 @endsection
