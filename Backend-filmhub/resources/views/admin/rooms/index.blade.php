@@ -22,10 +22,12 @@
         <h1 class="h3 mb-2 text-gray-800">Danh sách phòng</h1>
         <a href="{{route('admin.rooms.create')}}" class="btn btn-success mb-3">Tạo mới</a>
         @if(session('success'))
-            <h4 style="padding: 10px 0;color: #17A673; font-weight: bold;">{{session('success')}}</h4>
+            <div class="alert alert-info">
+                <strong>{{session('success')}}</strong>
+            </div>
         @endif
         @if(session('error'))
-            <div class="alert alert-info">
+            <div class="alert alert-danger">
                 <strong>{{session('error')}}</strong>
             </div>
         @endif

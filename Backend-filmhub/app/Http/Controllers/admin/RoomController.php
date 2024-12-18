@@ -109,7 +109,16 @@ class RoomController extends Controller
      */
     public function destroy(Room $room)
     {
-        $room->delete();
-        return back()->with('success', 'Xóa thành công');
+        $showtime = DB::table('rooms')
+        ->join('showtimes', 'rooms.room_id', '=', 'showtimes.room_id') // Join để lấy thông tin ca chiếu
+        ->where('rooms.room_id', $room->room_id) // Lọc theo phòng hiện tại
+        ->select('showtimes.showtime_id','showtimes.datetime', 'rooms.room_id', 'rooms.room_name')
+        ->first();
+        if(!$showtime){
+            $room->delete();
+            return back()->with('success', 'Xóa thành công');
+        }else{
+            return redirect()->route('admin.rooms.index')->with('error', 'Không thể xóa phòng đã có ca chiếu');
+        }
     }
 }
