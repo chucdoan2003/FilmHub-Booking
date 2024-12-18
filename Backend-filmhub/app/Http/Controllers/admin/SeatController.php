@@ -118,7 +118,7 @@ class SeatController extends Controller
         $showtime = DB::table('seats')
         ->join('rooms', 'seats.room_id', '=', 'rooms.room_id') // Join để lấy thông tin phòng
         ->join('showtimes', 'rooms.room_id', '=', 'showtimes.room_id') // Join để lấy thông tin ca chiếu
-        ->join('shifts', 'showtimes.shift_id', '=', 'shifts.shift_id') // Join để lấy thông tin ca làm việc
+        ->join('shifts', 'showtimes.shift_id', '=', 'shifts.shift_id') // Join để lấy thông tin ca chiếu
         ->where('seats.seat_id', $seat->seat_id) // Lọc theo ghế hiện tại
         ->select('showtimes.showtime_id','showtimes.datetime', 'shifts.start_time', 'shifts.end_time','seats.seat_number','rooms.room_name')
         ->first();
@@ -181,8 +181,12 @@ class SeatController extends Controller
     }
     // lọc ghế theo phòng
     public function filterSeatByRoom($room_id){
+        $theater_id = session('theater_id'); // Lấy theater_id từ session
         $seats = Seat::query()->where('room_id', $room_id)->get();
-        $rooms = Room::query()->pluck('room_name', 'room_id')->all();
+        $rooms = Room::query()
+        ->where('theater_id', $theater_id) // Lọc các phòng theo theater_id
+        ->pluck('room_name', 'room_id')
+        ->all();
         $roomName = Room::query()->where('room_id', $room_id)->first();
         return view(self::PATH_VIEW.__FUNCTION__, compact('seats', 'roomName', 'rooms'));
     }

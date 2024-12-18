@@ -21,7 +21,7 @@
     <div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="h3 mb-4 text-gray-800">Cập nhật ghế</h1>
+        <h1 class="h3 mb-4 text-gray-800">Cập nhật ghế của {{$seat->rooms->room_name}}</h1>
         <!--  Page main content   -->
         <!--   Main product information             -->
         <form action="{{route('admin.seats.update', $seat)}}" method="POST" enctype="multipart/form-data">
