@@ -165,8 +165,19 @@ class SeatController extends Controller
      */
     public function destroy(Seat $seat)
     {
-        $seat->delete();
-        return back()->with('success', 'Xóa thành công');
+        $showtime = DB::table('seats')
+        ->join('rooms', 'seats.room_id', '=', 'rooms.room_id') // Join để lấy thông tin phòng
+        ->join('showtimes', 'rooms.room_id', '=', 'showtimes.room_id') // Join để lấy thông tin ca chiếu
+        ->where('seats.seat_id', $seat->seat_id) // Lọc theo ghế hiện tại
+        ->select('showtimes.showtime_id','showtimes.datetime', 'seats.seat_number','rooms.room_name')
+        ->first();
+        if(!$showtime){
+            $seat->delete();
+            return back()->with('success', 'Xóa thành công');
+        } else{
+            return redirect()->route('admin.seats.index')->with('error', 'Không thể xóa ghế đã có ca chiếu');
+        }
+       
     }
     // lọc ghế theo phòng
     public function filterSeatByRoom($room_id){
