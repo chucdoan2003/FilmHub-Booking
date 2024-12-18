@@ -11,6 +11,7 @@ class VourcherRedeem extends Model
     use HasFactory;
     protected $table="vourchers_redeem";
     protected $fillable = [
+        'id',
         'voucher_id',
         'user_id',
         'vourcher_code',

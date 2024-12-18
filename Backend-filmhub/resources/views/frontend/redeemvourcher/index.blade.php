@@ -1,4 +1,4 @@
-<style>
+{{-- <style>
     .table {
         width: 100%;
         margin-bottom: 20px;
@@ -85,7 +85,7 @@
             padding: 10px;
         }
     }
-</style>
+</style> --}}
 
 @extends('frontend.layouts.master4')
 @section('content')

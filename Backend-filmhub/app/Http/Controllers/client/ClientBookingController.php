@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Combo;
 use App\Models\Drink;
 use App\Models\Food;
+use App\Models\Genre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Showtime;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Seat;
+use App\Models\SelectedSeat;
 use App\Models\Voucher;
 use App\Models\VourcherEvent;
 use App\Models\VourcherRedeem;
@@ -96,16 +98,86 @@ class ClientBookingController extends Controller
             return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để tiếp tục.');
         }
 
-        $showtime = Showtime::findOrFail($showtime_id); // Lấy thông tin showtime
+        $showtime = Showtime::find($showtime_id);
+        if ($showtime) {
+            $showtimeId = $showtime->showtime_id;
+
+        }
 
         $user_id = session('user_id');
 
-        // Nhận ghế đã chọn từ request
         $selectedSeats = $request->input('selected_seats');
+        $existingSelectedSeats = session('selected_seats', []);
         $totalPrice = $request->input('total_price'); // Tổng giá tiền
-        $seats = Seat::whereIn('seat_id', $selectedSeats)->get(); // Truy vấn các ghế từ cơ sở dữ liệu
-        $seatNumbers = $seats->pluck('seat_number');
+        // Nhận ghế đã chọn từ request
+        // $selectedSeats = $request->input('selected_seats');
+        // $totalPrice = $request->input('total_price'); // Tổng giá tiền
+        // $seats = Seat::whereIn('seat_id', $selectedSeats)->get(); // Truy vấn các ghế từ cơ sở dữ liệu
+        // $seatNumbers = $seats->pluck('seat_number');
         // dd(   $selectedSeats);
+
+        if (!empty($selectedSeats)) {
+            // Lấy danh sách ghế đã chọn trước đó
+            $existingSelectedSeats = SelectedSeat::where('showtime_id', $showtime_id)
+                ->where('user_id', $user_id)
+                ->pluck('seat_id')
+                ->toArray();
+
+            // Xóa ghế đã chọn trước đó
+            SelectedSeat::where('showtime_id', $showtime_id)
+                ->where('user_id', $user_id)
+                ->delete();
+
+            // Thêm ghế mới
+            foreach ($selectedSeats as $seatId) {
+                try {
+                    SelectedSeat::create([
+                        'user_id' => $user_id,
+                        'showtime_id' => $showtime_id,
+                        'seat_id' => $seatId,
+                        'totalPrice' => $totalPrice
+                    ]);
+                } catch (\Exception $e) {
+                    // Nếu có lỗi khi thêm ghế, khôi phục ghế cũ
+                    foreach ($existingSelectedSeats as $oldSeatId) {
+                        SelectedSeat::create([
+                            'user_id' => $user_id,
+                            'showtime_id' => $showtime_id,
+                            'seat_id' => $oldSeatId,
+                            'totalPrice' => $totalPrice
+                        ]);
+                    }
+                    return redirect()->back()->withErrors(['error' => 'Lỗi khi lưu ghế mới.']);
+                }
+            }
+        }
+
+        $selectedSeats2 = SelectedSeat::where('user_id', $user_id)
+            ->where('showtime_id', $showtimeId)
+            ->with(['seat', 'seat.rows', 'seat.types'])
+            ->get();
+
+        $totalAmount = $selectedSeats2->sum(function ($selectedSeat) use ($showtime) {
+            // Kiểm tra loại ghế và lấy giá tương ứng
+            $seatType = $selectedSeat->seat->types; // Lấy thông tin loại ghế (thường hay VIP)
+
+            if ($seatType->type_id == 1) {
+                // Nếu là ghế thường, dùng giá normal_price từ showtime
+                return $showtime->normal_price;
+            }if ($seatType->type_id == 2) {
+                // Nếu là ghế VIP, dùng giá vip_price từ showtime
+                return $showtime->vip_price;
+            }
+        });
+
+        $seatIds = $selectedSeats2->pluck('seat_id')->toArray();
+
+        $seats = Seat::whereIn('seat_id', $seatIds)->get();
+
+        $genres = Genre::withCount('movies')->get();
+
+        // Lấy danh sách seat_number
+        $seatNumbers = $seats->pluck('seat_number');
 
         // Tải danh sách combos
         $combos = Combo::all();
@@ -125,10 +197,12 @@ class ClientBookingController extends Controller
         // Truyền dữ liệu đến view
         return view('frontend.layouts.booking.detailBooking', compact(
             'showtime',
-            'selectedSeats', // Truyền mảng ghế đã chọn
+            'selectedSeats2', // Truyền mảng ghế đã chọn
             'totalPrice',
             'user_id',
             'seatNumbers',
+            'genres',
+            'totalAmount',
             'combos',
             'foods',
             'drinks',
