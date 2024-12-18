@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Type;
 use App\Http\Requests\StoreTypeRequest;
 use App\Http\Requests\UpdateTypeRequest;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class TypeController extends Controller
 {
@@ -53,7 +55,19 @@ class TypeController extends Controller
      */
     public function edit(Type $type)
     {
-        return view(self::PATH_VIEW.__FUNCTION__, compact('type'));
+        $showtime = DB::table('types')
+        ->join('seats', 'types.type_id', '=', 'seats.type_id') // Join để lấy thông tin ghế
+        ->join('rooms', 'seats.room_id', '=', 'rooms.room_id') // Join để lấy thông tin phòng
+        ->join('showtimes', 'rooms.room_id', '=', 'showtimes.room_id') // Join để lấy thông tin ca chiếu
+        ->where('types.type_id', $type->type_id) // Lọc theo loại ghế hiện tại
+        ->select('showtimes.showtime_id','showtimes.datetime', 'types.type_name','rooms.room_name')
+        ->first();
+        // dd($showtime);
+        if(!$showtime){
+            return view(self::PATH_VIEW.__FUNCTION__, compact('type'));
+        } else{
+            return redirect()->route('admin.types.index')->with('error', 'Không thể sửa loại ghế trong ghế đã có ca chiếu');
+        }
     }
 
     /**
@@ -74,7 +88,17 @@ class TypeController extends Controller
      */
     public function destroy(Type $type)
     {
-        $type->delete();
-        return back()->with('success', 'Xóa thành công');
+        $showtime = DB::table('types')
+        ->join('seats', 'types.type_id', '=', 'seats.type_id') // Join để lấy thông tin ghế
+        ->where('seats.type_id', $type->type_id) // Lọc theo loại ghế hiện tại
+        ->first();
+        // dd($showtime);
+        if(!$showtime){
+            $type->delete();
+            return back()->with('success', 'Xóa thành công');
+        } else{
+            return redirect()->route('admin.types.index')->with('error', 'Không thể xóa loại ghế đã có trong ghế');
+        }
+        
     }
 }
