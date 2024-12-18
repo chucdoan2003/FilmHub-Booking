@@ -116,8 +116,14 @@
                         title="Terrible">★</label>
                 </div>
             </div>
+            @error('rating')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
             <!-- Comment Box -->
-            <textarea class="comment-input" placeholder="What is your view?" name="comment" id="comment" required></textarea>
+            <textarea class="comment-input" placeholder="What is your view?" name="comment" id="comment"></textarea>
+            @error('comment')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
             <!-- Submit Button -->
             <br>
             <button type="submit" class="btn btn-success" id="submit-comment">Send</button>
@@ -164,10 +170,10 @@
                         <!-- Hiển thị đánh giá sao -->
                         <div class="star-rating" style="direction: ltr;">
                             @for ($i = 1; $i <= 5; $i++)
-                            <span
-                                class="fa {{ $i <= $comment->rating ? 'fa-star' : 'fa-star-o' }}"
-                                style="color: #f39c12;"></span>
-                        @endfor
+                                <span class="fa {{ $i <= $comment->rating ? 'fa-star' : 'fa-star-o' }}"
+                                    style="color: #f39c12;"></span>
+                            @endfor
+
                         </div>
 
                         <!-- Nội dung bình luận -->

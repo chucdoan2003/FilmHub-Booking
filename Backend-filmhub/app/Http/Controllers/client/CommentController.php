@@ -26,6 +26,15 @@ class CommentController extends Controller
     // Lưu bình luận mới
     public function store(Request $request, $movie_id)
     {
+        // Validate dữ liệu từ form
+        $request->validate([
+            'comment' => 'required|string|max:255',
+            'rating' => 'required|integer|between:1,5',
+        ], [
+            'comment.required' => 'Nội dung bình luận không được để trống.',
+            'rating.required' => 'Vui lòng chọn số sao đánh giá.',
+            'rating.between' => 'Số sao đánh giá phải nằm trong khoảng từ 1 đến 5.',
+        ]);
         // Kiểm tra người dùng đăng nhập
         if (!Auth::check()) {
             session()->flash('error', 'Bạn cần đăng nhập để đánh giá và bình luận.');
@@ -45,15 +54,24 @@ class CommentController extends Controller
             return redirect()->back()->with('error', 'Bạn cần mua vé cho phim này để đánh giá và bình luận.');
         }
 
-        // Validate dữ liệu từ form
-        $request->validate([
-            'comment' => 'required|string|max:255',
-            'rating' => 'required|integer|between:1,5',
-        ], [
-            'comment.required' => 'Nội dung bình luận không được để trống.',
-            'rating.required' => 'Vui lòng chọn số sao đánh giá.',
-            'rating.between' => 'Số sao đánh giá phải nằm trong khoảng từ 1 đến 5.',
-        ]);
+        // Lấy các bình luận của người dùng cho phim này
+        $userComments = Comment::where('user_id', $user_id)
+            ->where('movie_id', $movie_id)
+            ->orderBy('created_at', 'desc')
+            ->take(3) // Chỉ lấy 3 bình luận gần nhất
+            ->get();
+
+        if ($userComments->count() >= 3) {
+            // Lấy thời gian của bình luận gần nhất trong 3 bình luận
+            $lastCommentTime = $userComments->last()->created_at;
+
+            // Kiểm tra thời gian của bình luận gần nhất
+            if ($lastCommentTime->diffInHours(now()) < 1) {
+                return redirect()->back()->with('error', 'Bạn đã đạt giới hạn 3 bình luận. Vui lòng chờ 1 tiếng để bình luận tiếp.');
+            }
+        }
+
+
 
         // Lưu bình luận kèm đánh giá
         Comment::create([
