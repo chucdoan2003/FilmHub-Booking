@@ -7,6 +7,8 @@ use App\Models\Row;
 use App\Http\Requests\StoreRowRequest;
 use App\Http\Requests\UpdateRowRequest;
 use App\Models\Room;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class RowController extends Controller
 {
@@ -65,12 +67,26 @@ class RowController extends Controller
      */
     public function edit(Row $row)
     {
-        $theater_id = session('theater_id'); // Lấy theater_id từ session
-        $rooms = Room::query()
-        ->where('theater_id', $theater_id) // Lọc các phòng theo theater_id
-        ->pluck('room_name', 'room_id')
-        ->all();
-        return view(self::PATH_VIEW.__FUNCTION__, compact('row', 'rooms'));
+        $showtime = DB::table('rows')
+        ->join('rooms', 'rows.room_id', '=', 'rooms.room_id') // Join để lấy thông tin phòng
+        ->join('showtimes', 'rooms.room_id', '=', 'showtimes.room_id') // Join để lấy thông tin ca chiếu
+        ->where('rows.room_id', $row->room_id) // Lọc theo ghế hiện tại
+        ->select('showtimes.showtime_id','showtimes.datetime', 'rows.row_name','rooms.room_name')
+        ->first();
+        // dd($currentDate, $currentTime);
+        if(!$showtime){
+            $theater_id = session('theater_id'); // Lấy theater_id từ session
+            $rooms = Room::query()
+            ->where('theater_id', $theater_id) // Lọc các phòng theo theater_id
+            ->pluck('room_name', 'room_id')
+            ->all();
+            return view(self::PATH_VIEW.__FUNCTION__, compact('row', 'rooms'));
+        }
+         // Kiểm tra thời gian
+        else {
+            return redirect()->route('admin.rows.index')->with('error', 'Không thể sửa hàng ghế khi có ca chiếu');
+        }
+        
     }
 
     /**
@@ -92,7 +108,18 @@ class RowController extends Controller
      */
     public function destroy(Row $row)
     {
-        $row->delete();
-        return back()->with('success', 'Xóa thành công');
+        $showtime = DB::table('rows')
+        ->join('rooms', 'rows.room_id', '=', 'rooms.room_id') // Join để lấy thông tin phòng
+        ->join('showtimes', 'rooms.room_id', '=', 'showtimes.room_id') // Join để lấy thông tin ca chiếu
+        ->where('rows.room_id', $row->room_id) // Lọc theo ghế hiện tại
+        ->select('showtimes.showtime_id','showtimes.datetime', 'rows.row_name','rooms.room_name')
+        ->first();
+        if(!$showtime){
+            $row->delete();
+            return back()->with('success', 'Xóa thành công');
+        }else{
+            return redirect()->route('admin.rows.index')->with('error', 'Không thể xóa hàng ghế khi có ca chiếu');
+        }
+       
     }
 }
