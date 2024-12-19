@@ -21,7 +21,7 @@
                 <!-- Card Header - Dropdown -->
                 <div
                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Add new event vourcher</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Thêm mới voucher</h6>
                 </div>
                
                 <!-- Card Body -->
@@ -31,6 +31,7 @@
                         @method("POST")
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
+                                <label for="exampleFirstName">Mã giảm giá</label>
                                 <input type="text" class="form-control form-control-user form-radius" id="exampleFirstName"
                                     placeholder="Vourcher code" name="vourcher_code">
                                     @if ($errors->has('vourcher_code'))
@@ -38,6 +39,7 @@
                                     @endif
                             </div>
                             <div class="col-sm-6">
+                                <label for="exampleLastName">Nội dung</label>
                                 <input type="text" class="form-control form-control-user form-radius" id="exampleLastName"
                                     placeholder="Vourcher Name" name="vourcher_name">
                                     @if ($errors->has('vourcher_name'))
@@ -47,13 +49,15 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input type="text" class="form-control form-control-user form-radius" id="exampleFirstName"
+                                <label for="event">Sự kiện</label>
+                                <input type="text" class="form-control form-control-user form-radius" id="event"
                                     placeholder="event_name" name="event_name">
                                     @if ($errors->has('event_name'))
                                         <div class="text-danger mt-1">{{ $errors->first('event_name') }}</div>
                                     @endif
                             </div>
                             <div class="col-sm-6 mb-3 mb-sm-0">
+                                <label for="start_time">%</label>
                                 <input type="number" class="form-control form-control-user form-radius" id="exampleFirstName"
                                     placeholder="Discount percentage" name="discount_percentage">
                                     @if ($errors->has('discount_percentage'))
@@ -63,6 +67,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-6">
+                                <label for="">Tối đa</label>
                                 <input type="number" class="form-control form-control-user form-radius" id="exampleLastName"
                                     placeholder="Max discount amount" name="max_discount_amount">
                                     @if ($errors->has('max_discount_amount'))
@@ -70,6 +75,7 @@
                                     @endif
                             </div>
                             <div class="col-sm-6">
+                                <label for="start_time">Thời gian bắt đầu</label>
                                 <input type="datetime-local" class="form-control form-control-user form-radius" id="exampleLastName"
                                     placeholder="start_time" name="start_time">
                                     @if ($errors->has('start_time'))
@@ -79,6 +85,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-6">
+                                <label for="end_time">Thời gian kết thúc</label>
                                 <input type="datetime-local" class="form-control form-control-user form-radius" id="exampleLastName"
                                     placeholder="end_time" name="end_time">
                                     @if ($errors->has('end_time'))
