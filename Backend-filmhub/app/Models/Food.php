@@ -15,4 +15,10 @@ class Food extends Model
     {
         return $this->belongsToMany(Combo::class, 'combo_food_drink');
     }
+    // Trong Food.php
+public function tickets()
+{
+    return $this->hasMany(Ticket::class, 'food_id');
+}
+
 }

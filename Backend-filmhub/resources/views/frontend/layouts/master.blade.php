@@ -68,7 +68,7 @@
     <script src="{{ asset('website/js/modernizr.js') }}"></script>
     <script src="{{ asset('website/js/bootstrap.js') }}"></script>
     <script src="{{ asset('website/js/owl.carousel.js') }}"></script>
-    <script src="{{ asset('website/js/jquery.dlmenu.js') }}"></script>
+    <script src="{{ asset('website/js/jquery.dlmenu.js') }}"></script> 
     <script src="{{ asset('website/js/jquery.sticky.js') }}"></script>
     <script src="{{ asset('website/js/jquery.nice-select.min.js') }}"></script>
     <script src="{{ asset('website/js/jquery.magnific-popup.js') }}"></script>

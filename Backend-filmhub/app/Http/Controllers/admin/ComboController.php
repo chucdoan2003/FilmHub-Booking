@@ -106,17 +106,21 @@ class ComboController extends Controller
         // Lưu thay đổi
         $combo->save();
 
-        return redirect()->route('admin.combos.index')->with('success', 'Combo updated successfully.');
+        return redirect()->route('admin.combos.index')->with('success', 'Combo sửa thành công.');
     }
 
     // Xử lý xóa combo
     public function destroy($id)
     {
         $combo = Combo::findOrFail($id);
+        // Kiểm tra xem có vé nào liên quan đến combo không
+        if ($combo->tickets()->exists()) {
+        return redirect()->route('admin.combos.index')->with('error', 'Không thể xóa combo vì đã có vé liên quan.');
+        }
         $combo->foods()->detach();
         $combo->drinks()->detach();
         $combo->delete();
 
-        return redirect()->route('admin.combos.index')->with('success', 'Combo deleted successfully.');
+        return redirect()->route('admin.combos.index')->with('success', 'Xóa thành công.');
     }
 }

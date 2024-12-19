@@ -57,6 +57,9 @@ class DrinkController extends Controller
     public function destroy($id)
     {
         $drink = Drink::findOrFail($id);
+        if ($drink->tickets()->exists()) {
+            return redirect()->route('admin.drinks.index')->with('error', 'Không thể xóa đồ uống vì đã có vé liên quan.');
+        }
         $drink->delete();
         return redirect()->route('admin.drinks.index')->with('success', 'Drink deleted successfully.');
     }
