@@ -243,4 +243,22 @@
 
     // Hiển thị bình luận cho trang đầu tiên khi tải trang
     showComments(currentPage);
+
+    // cấm từ ngữ không phù hợp
+    document.getElementById('submit-comment').addEventListener('click', function(e) {
+        const comment = document.getElementById('comment').value.trim();
+        const bannedWords = ['lồn', 'buồi', 'địt mẹ', 'địt cha', 'lol', 'loz', 'djt', 'fuck', 'bitch',
+            'dcm',
+            'ngu', 'shit', 'porn'
+        ]; // Danh sách từ cấm
+
+        // Kiểm tra từ cấm
+        for (let word of bannedWords) {
+            if (comment.toLowerCase().includes(word.toLowerCase())) {
+                e.preventDefault(); // Ngăn gửi form
+                alert('Bình luận chứa từ ngữ không phù hợp! Vui lòng sửa lại.');
+                return;
+            }
+        }
+    });
 </script>

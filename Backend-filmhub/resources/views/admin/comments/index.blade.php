@@ -1,8 +1,7 @@
-@@ -0,0 +1,94 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    List Comment
+    Danh sách comment
 @endsection
 
 @section('style-libs')
@@ -38,7 +37,18 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4 mt-3">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">List Comment</h6>
+            <form action="{{ route('admin.comments.index') }}" method="GET">
+                <select name="movie_id" id="movie_filter" class="form-control mb-3">
+                    <option value="">-- Tìm kiếm tất cả --</option>
+                    @foreach ($movies as $movie)
+                        <option value="{{ $movie->movie_id }}"
+                            {{ request('movie_id') == $movie->movie_id ? 'selected' : '' }}>
+                            {{ $movie->title }}
+                        </option>
+                    @endforeach
+                </select>
+                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            </form>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -46,26 +56,26 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>User Name</th>
-                            <th>Movie</th>
-                            <th>Comment</th>
-                            <th>Rating</th>
-                            <th>Action</th>
+                            <th>Tên người dùng</th>
+                            <th>Tên phim</th>
+                            <th>BÌnh luận</th>
+                            <th>Đánh giá</th>
+                            <th>Hành động</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th>ID</th>
-                            <th>User Name</th>
-                            <th>Movie</th>
-                            <th>Comment</th>
-                            <th>Rating</th>
-                            <th>Action</th>
+                            <th>Tên người dùng</th>
+                            <th>Tên phim</th>
+                            <th>BÌnh luận</th>
+                            <th>Đánh giá</th>
+                            <th>Hành động</th>
                         </tr>
                     </tfoot>
                     <tbody>
                         @foreach ($comments as $index => $comment)
-                            <tr>
+                            <tr data-movie-id="{{ $comment->movie->id }}">
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ $comment->user->name ?? 'Không xác định' }}</td>
                                 <td> {{ $comment->movie->title }}</td>
@@ -81,7 +91,7 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger"
-                                            onclick="return confirm('Bạn có muốn xóa phim này không')">Delete</button>
+                                            onclick="return confirm('Bạn có muốn xóa phim này không')">Xóa bình luận</button>
                                     </form>
                                 </td>
                             </tr>
@@ -91,5 +101,18 @@
             </div>
         </div>
     </div>
-    <!-- /.container-fluid -->
+    <script>
+        function filterComments() {
+            const movieId = document.querySelector('[name="movie_id"]').value;
+            const rows = document.querySelectorAll('#comments_table_body tr');
+
+            rows.forEach(row => {
+                if (movieId === "" || row.getAttribute('data-movie-id') === movieId) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
 @endsection
