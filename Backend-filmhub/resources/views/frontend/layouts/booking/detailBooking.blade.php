@@ -111,7 +111,7 @@
                                                         </optgroup>
                                                         <optgroup label="Mã giảm giá sự kiện">
                                                             @foreach($vourcherEvents as $event)
-                                                                @if (!in_array($event->id, $usedVoucher))
+                                                                @if (!in_array($event->id, $usedVoucher)  && \Carbon\Carbon::now()->greaterThanOrEqualTo($event->start_time))
                                                                     <option value="{{ $event->id }}" 
                                                                         data-percentage="{{ $event->discount_percentage }}" 
                                                                         data-max="{{ $event->max_discount_amount }}">

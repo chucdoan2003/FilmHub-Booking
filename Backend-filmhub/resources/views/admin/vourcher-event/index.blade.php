@@ -66,16 +66,11 @@
                                 <td>{{$item->max_discount_amount}}</td>
                                 <td>{{$item->start_time}}</td>
                                 <td>{{$item->end_time}}</td>
-                                {{-- <td>
-                                    @if ($item->is_active)
-                                        <span class="text-success">Còn thời hạn</span>
-                                    @else
-                                        <span class="text-danger">Hết hạn</span>
-                                    @endif
-                                </td> --}}
                                 <td>
                                     @if (\Carbon\Carbon::now()->greaterThan($item->end_time))
                                         <span class="text-danger">Hết hạn</span>
+                                    @elseif (\Carbon\Carbon::now()->lessThan($item->start_time))
+                                        <span class="text-warning">Sắp có</span>
                                     @else
                                         <span class="text-success">Còn thời hạn</span>
                                     @endif

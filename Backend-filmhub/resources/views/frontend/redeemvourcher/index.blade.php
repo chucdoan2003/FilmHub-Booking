@@ -131,6 +131,7 @@
             </thead>
             <tbody>
                 @foreach ($vourcherEvents as $event)
+                @if (\Carbon\Carbon::now()->greaterThanOrEqualTo($event->start_time) || \Carbon\Carbon::now()->greaterThan($event->end_time))
                 <tr>
                     <td>{{ $event->event_name }}</td>
                     <td>{{ $event->vourcher_code }}</td>
@@ -146,6 +147,7 @@
                         @endif
                     </td>
                 </tr>
+                @endif
                 @endforeach
             </tbody>
         </table>

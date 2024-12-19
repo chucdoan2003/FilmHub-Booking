@@ -56,7 +56,9 @@ class VourchersController extends Controller
         return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để tiếp tục.');
     }
         $vouchers = Voucher::all(); // Lấy danh sách mã giảm giá
-        return view('frontend.redeemvourcher.redeem', compact('vouchers'));
+        $userId = auth()->id(); // Lấy ID người dùng hiện tại
+        $user = User::find($userId); // Lấy thông tin người dùng
+        return view('frontend.redeemvourcher.redeem', compact('vouchers', 'user'));
     }
     public function redeem(Request $request)
 {
