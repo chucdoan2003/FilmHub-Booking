@@ -74,13 +74,13 @@
 
                     </div>
                     <div class="st_profile__pass_input st_profile__pass_input_pop float_left">
-                        <input type="password" placeholder="Mật khẩu" name="password" id="password">
+                        <input type="password" placeholder="Password" name="password" id="password">
                         @if ($errors->has('password'))
                             <div class="text-danger mt-1">{{ $errors->first('password') }}</div>
                         @endif
                     </div>
                     <div class="st_profile__pass_input st_profile__pass_input_pop float_left">
-                        <input type="password" placeholder="Xác nhận mật khẩu " name="password_confirmation" id="password_confirm">
+                        <input type="password" placeholder="Password confirmation" name="password_confirmation" id="password_confirm">
                         @if ($errors->has('password_confirmation'))
                             <div class="text-danger mt-1">{{ $errors->first('password_confirmation') }}</div>
                         @endif

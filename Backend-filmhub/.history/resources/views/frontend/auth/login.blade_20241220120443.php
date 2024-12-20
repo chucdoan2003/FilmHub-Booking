@@ -64,7 +64,7 @@
                             @endif
                         </div>
                         <div class="st_profile__pass_input st_profile__pass_input_pop float_left">
-                            <input type="password" placeholder="Password" name="password" id="password">
+                            <input type="password" placeholder="Password" name="password">
                             @if ($errors->has('password'))
                                 <div class="text-danger mt-1">{{ $errors->first('password') }}</div>
                             @endif
@@ -174,16 +174,4 @@
         </div> --}}
 
     </form>
-
-
-    <script>
-        const showmatkhau = document.getElementById('showmatkhau');
-        const password = document.getElementById('password');
-        showmatkhau.addEventListener('click', function() {
-            let isPassword = password.type === 'password';
-            password.type = isPassword ? 'text' : 'password';
-            showmatkhau.textContent = isPassword ? 'Ẩn mật khẩu' : 'Hiển thị mật khẩu' ;
-        });
-
-    </script>
 @endsection

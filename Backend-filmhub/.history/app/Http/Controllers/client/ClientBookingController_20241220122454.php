@@ -259,9 +259,9 @@ class ClientBookingController extends Controller
 
                 // Tìm loại ghế và gắn giá tương ứng
                 $typeId = $seat->type_id; // Lấy type_id từ seat
-                if ($typeId == 1) {
+                if ($typeId == 'normal') {
                     $selectedSeat->price = $showtime->normal_price;
-                } elseif ($typeId == 2 ) {
+                } elseif ($typeId == 'vip') {
                     $selectedSeat->price = $showtime->vip_price;
                 } else {
                     $selectedSeat->price = 0; // Giá mặc định nếu không phải normal hoặc vip

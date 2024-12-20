@@ -65,17 +65,4 @@
     </div>
 </div>
 </form>
-
-<script>
-    const showmatkhau = document.getElementById('showmatkhau');
-    const password = document.getElementById('password');
-    const password_confirm = document.getElementById('password_confirm');
-    showmatkhau.addEventListener('click', function() {
-        let isPassword = password.type === 'password';
-        password.type = isPassword ? 'text' : 'password';
-        password_confirm.type = isPassword ? 'text' : 'password';
-        showmatkhau.textContent = isPassword ? 'Ẩn mật khẩu' : 'Hiển thị mật khẩu' ;
-    });
-
-</script>
 @endsection

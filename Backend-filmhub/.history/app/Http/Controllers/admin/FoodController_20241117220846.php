@@ -64,9 +64,6 @@ class FoodController extends Controller
     public function destroy($id)
     {
         $food = Food::findOrFail($id);
-        if ($food->tickets()->exists()) {
-            return redirect()->route('admin.foods.index')->with('error', 'Không thể xóa món ăn vì đã có vé liên quan.');
-        }
         $food->delete();
         return redirect()->route('admin.foods.index')->with('success', 'Food deleted successfully.');
     }

@@ -64,7 +64,7 @@
                             @endif
                         </div>
                         <div class="st_profile__pass_input st_profile__pass_input_pop float_left">
-                            <input type="password" placeholder="Password" name="password" id="password">
+                            <input type="password" placeholder="Password" name="password">
                             @if ($errors->has('password'))
                                 <div class="text-danger mt-1">{{ $errors->first('password') }}</div>
                             @endif

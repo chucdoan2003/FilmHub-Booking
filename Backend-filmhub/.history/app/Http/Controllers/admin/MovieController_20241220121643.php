@@ -205,7 +205,7 @@ class MovieController extends Controller
 
         // Kiểm tra nếu phim đang có lịch chiếu
         if (Showtime::where('movie_id', $movie->movie_id)->exists()) {
-            return redirect()->route('admin.movies.index')->with('error', 'Không thể xóa phim vì có lịch chiếu.');
+            return redirect()->route('admin.movies.index')->with('error', 'Không thể xóa phim vì đang có lịch chiếu.');
         }
 
         // Kiểm tra nếu phim có bình luận

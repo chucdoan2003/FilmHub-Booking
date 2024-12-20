@@ -74,17 +74,17 @@
 
                     </div>
                     <div class="st_profile__pass_input st_profile__pass_input_pop float_left">
-                        <input type="password" placeholder="Mật khẩu" name="password" id="password">
+                        <input type="password" placeholder="Password" name="password" id="password">
                         @if ($errors->has('password'))
                             <div class="text-danger mt-1">{{ $errors->first('password') }}</div>
                         @endif
                     </div>
                     <div class="st_profile__pass_input st_profile__pass_input_pop float_left">
-                        <input type="password" placeholder="Xác nhận mật khẩu " name="password_confirmation" id="password_confirm">
+                        <input type="password" placeholder="Password confirmation" name="password_confirmation">
                         @if ($errors->has('password_confirmation'))
                             <div class="text-danger mt-1">{{ $errors->first('password_confirmation') }}</div>
                         @endif
-                        <div id="showmatkhau" style="margin-left: 350px; font-size: 14px; margin-top: 5px; cursor: pointer">Hiển thị mật khẩu</div>
+                        <div id="showmatkhau" style="margin-left: 170px; font-size: 14px; margin-top: 5px; cursor: pointer">Hiển thị mật khẩu</div>
 
                         @if (isset($email) && $email != "")
                             <p style="margin-top: 5px; ">Chúng tôi đã gửi xác nhận đăng ký tài khoản về email {{$email}}</p>
@@ -113,11 +113,9 @@
     <script>
         const showmatkhau = document.getElementById('showmatkhau');
         const password = document.getElementById('password');
-        const password_confirm = document.getElementById('password_confirm');
         showmatkhau.addEventListener('click', function() {
             let isPassword = password.type === 'password';
             password.type = isPassword ? 'text' : 'password';
-            password_confirm.type = isPassword ? 'text' : 'password';
             showmatkhau.textContent = isPassword ? 'Ẩn mật khẩu' : 'Hiển thị mật khẩu' ;
         });
 

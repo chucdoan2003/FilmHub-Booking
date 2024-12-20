@@ -239,19 +239,19 @@ class ClientBookingController extends Controller
 
 
         $selectedSeats2 = SelectedSeat::where('user_id', $user_id)
-            ->where('showtime_id', $showtime_id)
+            ->where('showtime_id', $showtimeId)
             ->with(['seat', 'seat.rows', 'seat.types'])
             ->get();
 
         if ($selectedSeats2->isNotEmpty()) {
             // Lấy room_id từ showtime_id
-            $roomId = Showtime::where('room_id', $showtime_id)->value('room_id');
+            $roomId = Showtime::where('id', $showtimeId)->value('room_id');
 
             // Lấy toàn bộ ghế theo room_id
             $allSeats = Seat::where('room_id', $roomId)->get();
 
             // Lấy giá trị của normal_price và vip_price từ showtime
-            $showtime = Showtime::find($showtime_id);
+            $showtime = Showtime::find($showtimeId);
 
             // Gắn giá dựa trên loại ghế
             $selectedSeats2->transform(function ($selectedSeat) use ($showtime, $allSeats) {
@@ -259,9 +259,9 @@ class ClientBookingController extends Controller
 
                 // Tìm loại ghế và gắn giá tương ứng
                 $typeId = $seat->type_id; // Lấy type_id từ seat
-                if ($typeId == 1) {
+                if ($typeId == 'normal') {
                     $selectedSeat->price = $showtime->normal_price;
-                } elseif ($typeId == 2 ) {
+                } elseif ($typeId == 'vip') {
                     $selectedSeat->price = $showtime->vip_price;
                 } else {
                     $selectedSeat->price = 0; // Giá mặc định nếu không phải normal hoặc vip
